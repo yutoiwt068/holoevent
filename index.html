@@ -7,8 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Hololive EXPO 2026">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
     <title>Hololive EXPO 2026 イベント管理</title>
     <style>
         * {
@@ -36,6 +35,50 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin-bottom: 30px;
+        }
+        
+        .next-event-countdown {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .next-event-countdown h3 {
+            font-size: 1em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .next-event-countdown .event-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            text-align: center;
+        }
+        
+        .countdown-number {
+            font-size: 3em;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .countdown-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
         }
         
         h1 {
@@ -326,6 +369,50 @@
             margin-top: 10px;
         }
         
+        .countdown-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .countdown-badge.today {
+            background: #e74c3c;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .countdown-badge.tomorrow {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .countdown-badge.soon {
+            background: #3498db;
+            color: white;
+        }
+        
+        .countdown-badge.upcoming {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .countdown-badge.past {
+            background: #7f8c8d;
+            color: white;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
         .status-badge {
             display: inline-block;
             padding: 5px 15px;
@@ -539,6 +626,291 @@
         
         .btn-delete:hover {
             box-shadow: 0 5px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        .checklist-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .checklist-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .checklist-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .checklist-item.completed {
+            opacity: 0.6;
+        }
+        
+        .checklist-item.completed .checklist-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .checklist-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+        
+        .checklist-text {
+            flex: 1;
+            color: #333;
+        }
+        
+        .checklist-delete {
+            padding: 5px 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s;
+        }
+        
+        .checklist-delete:hover {
+            background: #c0392b;
+        }
+        
+        .add-checklist-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .add-checklist-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        .add-checklist-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .add-checklist-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .add-checklist-btn:hover {
+            background: #5568d3;
+        }
+        
+        .checklist-progress {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+        
+        .checklist-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .map-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .map-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .map-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .map-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .map-btn.google-maps {
+            background: #4285f4;
+        }
+        
+        .map-btn.google-maps:hover {
+            background: #357ae8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+        }
+        
+        .map-btn.yahoo-transit {
+            background: #ff0033;
+        }
+        
+        .map-btn.yahoo-transit:hover {
+            background: #cc0029;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 0, 51, 0.4);
+        }
+        
+        .map-btn.street-view {
+            background: #34a853;
+        }
+        
+        .map-btn.street-view:hover {
+            background: #2d8e47;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 168, 83, 0.4);
+        }
+        
+        .venue-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .venue-info-item {
+            display: flex;
+            align-items: start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .venue-info-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .venue-info-icon {
+            font-size: 1.2em;
+            min-width: 24px;
+        }
+        
+        .venue-info-text {
+            flex: 1;
+            line-height: 1.5;
+        }
+        
+        .venue-info-text strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .travel-time {
+            display: inline-block;
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .home-location-setting {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .home-location-setting label {
+            display: block;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .home-location-setting input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        
+        .home-location-setting input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .home-location-setting small {
+            display: block;
+            color: #999;
+            margin-top: 5px;
+            font-size: 0.85em;
         }
         
         .event-actions {
@@ -870,6 +1242,7 @@
     <div class="container">
         <header>
             <h1>🎪 Hololive EXPO 2026 イベント管理</h1>
+            <div id="nextEventCountdown" class="next-event-countdown" style="display: none;"></div>
             <div class="summary" id="summary"></div>
         </header>
         
@@ -879,7 +1252,7 @@
             <input type="text" 
                    id="artistSearchInput" 
                    class="artist-search-input" 
-                   placeholder="アーティスト名を入力... (例: 風真いろは、Kazama Iroha)">
+                   placeholder="アーティスト名を入力... (例: さくらみこ、Sakura Miko)">
             <div id="searchResults" class="search-results"></div>
         </div>
         
@@ -1061,7 +1434,7 @@
                 date: "2026-03-06",
                 price: 6600,
                 url: "hololivesuperEXPO公式",
-                description: "hololive time-warp をテーマに、時空を超えてhololiveの広大な世界を体験できる3日間のイベント初日。",
+                description: "hololive time-warp をテーマに、時空を超えてhololiveの広大な世界を体験できる3日間のイベント初日です。",
                 officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/expo/"
             },
             {
@@ -1072,7 +1445,7 @@
                 date: "2026-03-06",
                 price: 11000,
                 url: "Hololive expo in 2026 （共）",
-                description: "hololive 7th fes. Ridin' on Dreams の初日公演。",
+                description: "hololive 7th fes. Ridin' on Dreams の初日公演。hololiveの7回目となる大規模ライブコンサートです。",
                 officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage1",
                 artists: artistsData.STAGE1
             },
@@ -1084,7 +1457,7 @@
                 date: "2026-03-07",
                 price: 6600,
                 url: "当日行程表（改） （個）",
-                description: "EXPO 2日目。PARALLEL、BLAST、FUTURE の3つのメインエリアでhololiveの世界を多角的に楽しめる。",
+                description: "EXPO 2日目。PARALLEL、BLAST、FUTURE の3つのメインエリアでhololiveの世界を多角的に楽しめます。",
                 officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/expo/"
             },
             {
@@ -1095,7 +1468,7 @@
                 date: "2026-03-07",
                 price: 11000,
                 url: "Hololive EXPO Infor （共）",
-                description: "7th fes. 2日目の昼公演。",
+                description: "7th fes. 2日目の昼公演。新たなキャストによるステージパフォーマンスをお届けします。",
                 officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage2",
                 artists: artistsData.STAGE2
             },
@@ -1107,7 +1480,7 @@
                 date: "2026-03-07",
                 price: 11000,
                 url: "Hololive expo 2026 予算 （共）",
-                description: "7th fes. 2日目の夕方公演。",
+                description: "7th fes. 2日目の夕方公演。迫力あるステージとパフォーマンスをお楽しみください。",
                 officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage3",
                 artists: artistsData.STAGE3
             },
@@ -1119,7 +1492,7 @@
                 date: "2026-03-08",
                 price: 6600,
                 url: "Hololive 7th Fes EXPO - 2026 （共）",
-                description: "EXPO最終日。3日間の集大成として、特別な展示やイベントが用意されている。",
+                description: "EXPO最終日。3日間の集大成として、特別な展示やイベントが用意されています。",
                 officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/expo/"
             },
             {
@@ -1130,7 +1503,7 @@
                 date: "2026-03-08",
                 price: 11000,
                 url: "当日予定案 （共）",
-                description: "7th fes. 最終日公演。",
+                description: "7th fes. 最終日公演。3日間のイベントを締めくくる特別なステージをお届けします。",
                 officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage4",
                 artists: artistsData.STAGE4
             },
@@ -1168,6 +1541,44 @@
         
         let currentView = 'calendar';
         let customEvents = [];
+        let eventChecklists = {}; // イベントIDをキーにしたチェックリスト
+        let homeLocation = ''; // 自宅の住所
+        
+        // 会場情報データベース
+        const venueDatabase = {
+            '国際展示場4-8&イベントホール': {
+                name: '幕張メッセ 国際展示場4-8ホール & イベントホール',
+                address: '〒261-8550 千葉県千葉市美浜区中瀬2-1',
+                station: 'JR京葉線 海浜幕張駅',
+                walkTime: '徒歩約5分',
+                lat: 35.64824,
+                lng: 140.03443,
+                tips: '国際展示場エリアは広いため、事前に会場図を確認することをおすすめします。'
+            },
+            '国際展示場1-3': {
+                name: '幕張メッセ 国際展示場1-3ホール',
+                address: '〒261-8550 千葉県千葉市美浜区中瀬2-1',
+                station: 'JR京葉線 海浜幕張駅',
+                walkTime: '徒歩約5分',
+                lat: 35.64791,
+                lng: 140.03285,
+                tips: 'ライブ会場は音響設備が優れています。開演30分前には到着することをおすすめします。'
+            }
+        };
+        
+        // ローカルストレージから自宅住所を読み込む
+        function loadHomeLocation() {
+            const saved = localStorage.getItem('homeLocation');
+            if (saved) {
+                homeLocation = saved;
+            }
+        }
+        
+        // 自宅住所を保存
+        function saveHomeLocation(location) {
+            homeLocation = location;
+            localStorage.setItem('homeLocation', location);
+        }
         
         // ローカルストレージから予定を読み込む
         function loadCustomEvents() {
@@ -1176,6 +1587,28 @@
                 customEvents = JSON.parse(saved);
                 console.log('カスタム予定を読み込み:', customEvents.length);
             }
+        }
+        
+        // チェックリストを読み込む
+        function loadChecklists() {
+            const saved = localStorage.getItem('eventChecklists');
+            if (saved) {
+                eventChecklists = JSON.parse(saved);
+                console.log('チェックリストを読み込み');
+            }
+        }
+        
+        // チェックリストを保存
+        function saveChecklists() {
+            localStorage.setItem('eventChecklists', JSON.stringify(eventChecklists));
+        }
+        
+        // イベントのチェックリストを取得
+        function getChecklist(eventId) {
+            if (!eventChecklists[eventId]) {
+                eventChecklists[eventId] = [];
+            }
+            return eventChecklists[eventId];
         }
         
         // ローカルストレージに保存
@@ -1191,8 +1624,118 @@
         
         function init() {
             loadCustomEvents();
+            loadChecklists();
+            loadHomeLocation();
+            renderNextEventCountdown();
             renderSummary();
             renderView();
+            
+            // 毎分更新してカウントダウンをリアルタイムに
+            setInterval(() => {
+                renderNextEventCountdown();
+            }, 60000); // 60秒ごと
+        }
+        
+        // 日数計算
+        function getDaysUntil(dateStr) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const eventDate = new Date(dateStr);
+            eventDate.setHours(0, 0, 0, 0);
+            const diffTime = eventDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+        
+        // カウントダウン表示テキスト
+        function getCountdownText(days) {
+            if (days < 0) return '終了';
+            if (days === 0) return '今日';
+            if (days === 1) return '明日';
+            if (days <= 7) return `あと${days}日`;
+            if (days <= 30) return `あと${days}日`;
+            const weeks = Math.floor(days / 7);
+            return `あと${weeks}週間`;
+        }
+        
+        // カウントダウンバッジのクラス
+        function getCountdownClass(days) {
+            if (days < 0) return 'past';
+            if (days === 0) return 'today';
+            if (days === 1) return 'tomorrow';
+            if (days <= 7) return 'soon';
+            return 'upcoming';
+        }
+        
+        // 次のイベントカウントダウン
+        function renderNextEventCountdown() {
+            const allEvents = getAllEvents();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // 未来のイベントを取得
+            const upcomingEvents = allEvents
+                .filter(e => {
+                    const eventDate = new Date(e.date);
+                    eventDate.setHours(0, 0, 0, 0);
+                    return eventDate >= today;
+                })
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            const countdownDiv = document.getElementById('nextEventCountdown');
+            
+            if (upcomingEvents.length === 0) {
+                countdownDiv.style.display = 'none';
+                return;
+            }
+            
+            const nextEvent = upcomingEvents[0];
+            const days = getDaysUntil(nextEvent.date);
+            
+            let countdownHTML = `
+                <h3>📅 次のイベント</h3>
+                <div class="event-name">${nextEvent.name}</div>
+            `;
+            
+            if (days === 0) {
+                countdownHTML += `
+                    <div class="countdown-display">
+                        <div class="countdown-item">
+                            <div class="countdown-number">🎉</div>
+                            <div class="countdown-label">今日開催！</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 日・時間・分のカウントダウン
+                const eventDate = new Date(nextEvent.date);
+                const now = new Date();
+                const diff = eventDate - now;
+                
+                const daysLeft = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hoursLeft = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutesLeft = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                countdownHTML += `
+                    <div class="countdown-display">
+                        <div class="countdown-item">
+                            <div class="countdown-number">${daysLeft}</div>
+                            <div class="countdown-label">日</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-number">${hoursLeft}</div>
+                            <div class="countdown-label">時間</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="countdown-number">${minutesLeft}</div>
+                            <div class="countdown-label">分</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            countdownDiv.innerHTML = countdownHTML;
+            countdownDiv.style.display = 'block';
         }
         
         // アーティスト検索機能
@@ -1340,6 +1883,13 @@
             const type = event.name.includes('EXPO') ? 'expo' : 
                         event.name.includes('STAGE') ? 'stage' : 'other';
             
+            // イベントIDを取得（カスタムイベントはid、それ以外はnameを使用）
+            const eventId = event.id || event.name;
+            const checklist = getChecklist(eventId);
+            const completedCount = checklist.filter(item => item.completed).length;
+            const checklistBadge = checklist.length > 0 ? 
+                `<span class="checklist-badge">✓ ${completedCount}/${checklist.length}</span>` : '';
+            
             const customBadge = event.isCustom ? '<span class="custom-event-badge">マイ予定</span>' : '';
             const editButtons = event.isCustom ? `
                 <div class="event-actions">
@@ -1348,10 +1898,17 @@
                 </div>
             ` : '';
             
+            // カウントダウン表示
+            const days = getDaysUntil(event.date);
+            const countdownText = getCountdownText(days);
+            const countdownClass = getCountdownClass(days);
+            const countdownBadge = `<span class="countdown-badge ${countdownClass}">${countdownText}</span>`;
+            
             return `
                 <div class="event-card ${type}" onclick="showEventDetail(${eventIndex})">
-                    <div class="event-title">${event.name}${customBadge}</div>
+                    <div class="event-title">${event.name}${customBadge}${checklistBadge}</div>
                     ${event.status && event.status !== '---------' ? `<span class="status-badge">${event.status}</span>` : ''}
+                    ${countdownBadge}
                     <div class="event-details">
                         ${event.time && event.time !== '---------' ? `
                         <div class="event-detail">
@@ -1421,6 +1978,7 @@
             const allEvents = getAllEvents();
             const event = allEvents[index];
             const modal = document.getElementById('eventModal');
+            const eventId = event.id || event.name;
             
             document.getElementById('modalTitle').textContent = event.name;
             document.getElementById('modalDate').textContent = formatDate(event.date);
@@ -1490,6 +2048,10 @@
                     ` : ''}
                 </div>
                 
+                ${renderChecklistSection(eventId)}
+                
+                ${renderMapSection(event)}
+                
                 ${event.isCustom ? `
                     <div class="form-actions">
                         <button class="btn-secondary btn-edit" onclick="closeModal(); editCustomEvent('${event.id}')">✏️ 編集</button>
@@ -1506,6 +2068,259 @@
             
             document.getElementById('modalBody').innerHTML = bodyHtml;
             modal.style.display = 'block';
+        }
+        
+        // チェックリストセクションをレンダリング
+        function renderChecklistSection(eventId) {
+            const checklist = getChecklist(eventId);
+            const completedCount = checklist.filter(item => item.completed).length;
+            const totalCount = checklist.length;
+            const progress = totalCount > 0 ? (completedCount / totalCount * 100).toFixed(0) : 0;
+            
+            return `
+                <div class="checklist-section">
+                    <h4>
+                        ✓ 準備チェックリスト
+                        ${totalCount > 0 ? `<span style="font-size: 0.9em; color: #999;">(${completedCount}/${totalCount}完了)</span>` : ''}
+                    </h4>
+                    
+                    ${totalCount > 0 ? `
+                        <div class="checklist-progress">
+                            <div style="color: #667eea; font-weight: bold;">${progress}% 完了</div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: ${progress}%"></div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="checklist-items" id="checklistItems-${eventId}">
+                        ${checklist.map((item, index) => `
+                            <div class="checklist-item ${item.completed ? 'completed' : ''}">
+                                <input type="checkbox" 
+                                       class="checklist-checkbox" 
+                                       ${item.completed ? 'checked' : ''}
+                                       onchange="toggleChecklistItem('${eventId}', ${index})">
+                                <span class="checklist-text">${item.text}</span>
+                                <button class="checklist-delete" onclick="deleteChecklistItem('${eventId}', ${index})">削除</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="add-checklist-form">
+                        <input type="text" 
+                               class="add-checklist-input" 
+                               id="checklistInput-${eventId}" 
+                               placeholder="例: チケットを印刷する"
+                               onkeypress="if(event.key === 'Enter') addChecklistItem('${eventId}')">
+                        <button class="add-checklist-btn" onclick="addChecklistItem('${eventId}')">追加</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // チェックリストアイテムを追加
+        function addChecklistItem(eventId) {
+            const input = document.getElementById(`checklistInput-${eventId}`);
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            const checklist = getChecklist(eventId);
+            checklist.push({
+                text: text,
+                completed: false,
+                createdAt: new Date().toISOString()
+            });
+            
+            saveChecklists();
+            input.value = '';
+            
+            // モーダルを再レンダリング
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+            }
+            
+            // カードも更新
+            renderView();
+        }
+        
+        // チェックリストアイテムをトグル
+        function toggleChecklistItem(eventId, index) {
+            const checklist = getChecklist(eventId);
+            checklist[index].completed = !checklist[index].completed;
+            saveChecklists();
+            
+            // モーダルを再レンダリング
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+            }
+            
+            // カードも更新
+            renderView();
+        }
+        
+        // チェックリストアイテムを削除
+        function deleteChecklistItem(eventId, index) {
+            if (!confirm('このチェック項目を削除しますか？')) return;
+            
+            const checklist = getChecklist(eventId);
+            checklist.splice(index, 1);
+            saveChecklists();
+            
+            // モーダルを再レンダリング
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+            }
+            
+            // カードも更新
+            renderView();
+        }
+        
+        // マップセクションをレンダリング
+        function renderMapSection(event) {
+            // 会場情報を取得
+            const venueKey = Object.keys(venueDatabase).find(key => 
+                event.venue && event.venue.includes(key.split('&')[0].trim())
+            );
+            
+            if (!venueKey && (!event.venue || event.venue === '---------')) {
+                return '';
+            }
+            
+            const venueInfo = venueDatabase[venueKey];
+            
+            // 基本的なマップセクション
+            let mapHTML = `
+                <div class="map-section">
+                    <h4>🗺️ アクセス・地図</h4>
+            `;
+            
+            // 会場情報がある場合
+            if (venueInfo) {
+                const encodedAddress = encodeURIComponent(venueInfo.address);
+                const encodedVenue = encodeURIComponent(venueInfo.name);
+                const fromLocation = homeLocation ? encodeURIComponent(homeLocation) : '';
+                
+                mapHTML += `
+                    <div class="venue-info">
+                        <div class="venue-info-item">
+                            <span class="venue-info-icon">📍</span>
+                            <div class="venue-info-text">
+                                <strong>住所</strong>
+                                ${venueInfo.address}
+                            </div>
+                        </div>
+                        <div class="venue-info-item">
+                            <span class="venue-info-icon">🚃</span>
+                            <div class="venue-info-text">
+                                <strong>最寄り駅</strong>
+                                ${venueInfo.station} ${venueInfo.walkTime}
+                            </div>
+                        </div>
+                        <div class="venue-info-item">
+                            <span class="venue-info-icon">💡</span>
+                            <div class="venue-info-text">
+                                <strong>アドバイス</strong>
+                                ${venueInfo.tips}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="map-buttons">
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodedAddress}" 
+                           target="_blank" 
+                           class="map-btn google-maps">
+                            🗺️ Google Maps
+                        </a>
+                        
+                        ${fromLocation ? `
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=${fromLocation}&destination=${encodedAddress}&travelmode=transit" 
+                           target="_blank" 
+                           class="map-btn google-maps">
+                            🚃 経路検索（自宅から）
+                        </a>
+                        ` : ''}
+                        
+                        <a href="https://transit.yahoo.co.jp/search/result?from=&to=${encodedVenue}" 
+                           target="_blank" 
+                           class="map-btn yahoo-transit">
+                            🚉 Yahoo!乗換案内
+                        </a>
+                        
+                        <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${venueInfo.lat},${venueInfo.lng}" 
+                           target="_blank" 
+                           class="map-btn street-view">
+                            👁️ ストリートビュー
+                        </a>
+                    </div>
+                    
+                    ${!homeLocation ? `
+                    <div class="home-location-setting">
+                        <label>🏠 自宅住所を設定すると、経路検索がもっと便利に！</label>
+                        <input type="text" 
+                               id="homeLocationInput" 
+                               placeholder="例: 東京都渋谷区"
+                               value="${homeLocation}">
+                        <small>設定すると「自宅からの経路」ボタンが表示されます</small>
+                        <button onclick="saveHomeLocationFromInput()" 
+                                style="margin-top: 10px; padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            保存
+                        </button>
+                    </div>
+                    ` : `
+                    <div class="travel-time">
+                        🏠 自宅: ${homeLocation} 
+                        <span style="cursor: pointer; margin-left: 10px;" onclick="clearHomeLocation()">✕</span>
+                    </div>
+                    `}
+                `;
+            } else {
+                // カスタムイベントなど、会場情報がない場合
+                const searchQuery = event.venue ? encodeURIComponent(event.venue) : '';
+                mapHTML += `
+                    <div class="map-buttons">
+                        <a href="https://www.google.com/maps/search/?api=1&query=${searchQuery}" 
+                           target="_blank" 
+                           class="map-btn google-maps">
+                            🗺️ 会場を検索
+                        </a>
+                    </div>
+                `;
+            }
+            
+            mapHTML += `</div>`;
+            return mapHTML;
+        }
+        
+        // 自宅住所を入力から保存
+        function saveHomeLocationFromInput() {
+            const input = document.getElementById('homeLocationInput');
+            if (input && input.value.trim()) {
+                saveHomeLocation(input.value.trim());
+                alert('自宅住所を保存しました！');
+                
+                // モーダルを再描画
+                const modal = document.getElementById('eventModal');
+                if (modal.style.display === 'block') {
+                    // 現在開いているイベントを再表示
+                    location.reload(); // 簡易的にリロード
+                }
+            }
+        }
+        
+        // 自宅住所をクリア
+        function clearHomeLocation() {
+            if (confirm('自宅住所の設定を削除しますか？')) {
+                saveHomeLocation('');
+                alert('自宅住所を削除しました');
+                location.reload();
+            }
         }
         
         function closeModal() {
@@ -1559,6 +2374,7 @@
             
             saveCustomEventsToStorage();
             closeAddEventModal();
+            renderNextEventCountdown();
             renderSummary();
             renderView();
             
@@ -1589,6 +2405,7 @@
             
             customEvents = customEvents.filter(e => e.id !== id);
             saveCustomEventsToStorage();
+            renderNextEventCountdown();
             renderSummary();
             renderView();
             
