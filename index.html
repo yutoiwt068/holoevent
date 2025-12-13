@@ -913,6 +913,289 @@
             font-size: 0.85em;
         }
         
+        .tags-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .tags-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .tag.removable {
+            padding-right: 8px;
+            cursor: pointer;
+        }
+        
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .tag-remove:hover {
+            opacity: 1;
+        }
+        
+        .tag-input-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .tag-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        .tag-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .tag-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        
+        .tag-suggestion {
+            padding: 5px 10px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tag-suggestion:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tag-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tag-filter-item {
+            padding: 8px 15px;
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tag-filter-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .tag-filter-item:hover {
+            border-color: #667eea;
+        }
+        
+        .schedule-optimization {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .schedule-optimization h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .optimization-options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .optimization-card {
+            padding: 15px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .optimization-card h4 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .optimization-card p {
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .optimization-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #48c774;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-top: 8px;
+        }
+        
+        .optimization-badge.warning {
+            background: #f39c12;
+        }
+        
+        .optimization-badge.info {
+            background: #3498db;
+        }
+        
+        .conflict-warning {
+            padding: 15px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .conflict-warning h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .weather-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%);
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .weather-section h4 {
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+        
+        .weather-info {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .weather-icon {
+            font-size: 4em;
+            text-align: center;
+        }
+        
+        .weather-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .weather-temp {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .weather-description {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .weather-extra {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .weather-extra-item {
+            text-align: center;
+        }
+        
+        .weather-extra-item .label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .weather-extra-item .value {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .weather-advice {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+        
+        .weather-loading {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        .weather-error {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
         .event-actions {
             display: flex;
             gap: 10px;
@@ -1239,7 +1522,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+            <div class="container">
         <header>
             <h1>🎪 Hololive EXPO 2026 イベント管理</h1>
             <div id="nextEventCountdown" class="next-event-countdown" style="display: none;"></div>
@@ -1277,6 +1560,12 @@
             <button onclick="switchView('list')">📋 リストビュー</button>
             <button class="add-event-btn" onclick="openAddEventModal()">➕ 予定を追加</button>
         </div>
+        
+        <!-- タグフィルター -->
+        <div id="tagFilter" class="tag-filter" style="display: none;"></div>
+        
+        <!-- スケジュール最適化 -->
+        <div id="scheduleOptimization" class="schedule-optimization" style="display: none;"></div>
         
         <div id="calendarView" class="calendar-view">
             <div style="text-align: center; padding: 50px; color: white;">
@@ -1468,7 +1757,7 @@
                 date: "2026-03-07",
                 price: 11000,
                 url: "Hololive EXPO Infor （共）",
-                description: "7th fes. 2日目の昼公演。新たなキャストによるステージパフォーマンスをお届けします。",
+                description: "7th fes. 2日目の昼公演。",
                 officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage2",
                 artists: artistsData.STAGE2
             },
@@ -1543,6 +1832,24 @@
         let customEvents = [];
         let eventChecklists = {}; // イベントIDをキーにしたチェックリスト
         let homeLocation = ''; // 自宅の住所
+        let eventTags = {}; // イベントIDをキーにしたタグ配列
+        let activeTagFilter = null; // アクティブなタグフィルター
+        let darkMode = false; // ダークモード
+        let currentTheme = 'default'; // 現在のテーマ
+        
+        // タグの候補リスト
+        const tagSuggestions = [
+            '🎤 推し出演',
+            '🎫 チケット確保済み',
+            '⭐ 優先度高',
+            '🛍️ 物販のみ',
+            '📷 撮影OK',
+            '👥 友達と参加',
+            '🏨 宿泊必要',
+            '🎁 グッズ購入予定',
+            '🎵 初参戦',
+            '💖 絶対行く'
+        ];
         
         // 会場情報データベース
         const venueDatabase = {
@@ -1578,6 +1885,36 @@
         function saveHomeLocation(location) {
             homeLocation = location;
             localStorage.setItem('homeLocation', location);
+        }
+        
+        // タグを読み込む
+        function loadTags() {
+            const saved = localStorage.getItem('eventTags');
+            if (saved) {
+                eventTags = JSON.parse(saved);
+            }
+        }
+        
+        // タグを保存
+        function saveTags() {
+            localStorage.setItem('eventTags', JSON.stringify(eventTags));
+        }
+        
+        // イベントのタグを取得
+        function getTags(eventId) {
+            if (!eventTags[eventId]) {
+                eventTags[eventId] = [];
+            }
+            return eventTags[eventId];
+        }
+        
+        // すべてのタグを取得（重複なし）
+        function getAllTags() {
+            const allTags = new Set();
+            Object.values(eventTags).forEach(tags => {
+                tags.forEach(tag => allTags.add(tag));
+            });
+            return Array.from(allTags);
         }
         
         // ローカルストレージから予定を読み込む
@@ -1626,8 +1963,12 @@
             loadCustomEvents();
             loadChecklists();
             loadHomeLocation();
+            loadTags();
+            loadThemeSettings();
             renderNextEventCountdown();
             renderSummary();
+            renderTagFilter();
+            renderScheduleOptimization();
             renderView();
             
             // 毎分更新してカウントダウンをリアルタイムに
@@ -1635,6 +1976,104 @@
                 renderNextEventCountdown();
             }, 60000); // 60秒ごと
         }
+        
+        // テーマ設定を読み込む
+        function loadThemeSettings() {
+            const savedDarkMode = localStorage.getItem('darkMode');
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedDarkMode === 'true') {
+                darkMode = true;
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').checked = true;
+            }
+            
+            if (savedTheme) {
+                currentTheme = savedTheme;
+                applyTheme(savedTheme);
+            }
+        }
+        
+        // ダークモードを切り替え
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', darkMode);
+        }
+        
+        // テーマを変更
+        function changeTheme(theme) {
+            // 前のテーマを削除
+            document.body.classList.remove('theme-blue', 'theme-pink', 'theme-green', 'theme-orange', 'theme-red');
+            
+            // 新しいテーマを適用
+            if (theme !== 'default') {
+                document.body.classList.add(`theme-${theme}`);
+            }
+            
+            currentTheme = theme;
+            localStorage.setItem('theme', theme);
+            
+            // アクティブ表示を更新
+            document.querySelectorAll('.theme-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            document.querySelector(`.theme-option.${theme}`).classList.add('active');
+        }
+        
+        // テーマを適用
+        function applyTheme(theme) {
+            if (theme !== 'default') {
+                document.body.classList.add(`theme-${theme}`);
+            }
+            
+            // アクティブ表示を更新
+            document.querySelectorAll('.theme-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            const themeElement = document.querySelector(`.theme-option.${theme}`);
+            if (themeElement) {
+                themeElement.classList.add('active');
+            }
+        }
+        
+        // 設定パネルを切り替え
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            console.log('設定ボタンがクリックされました');
+            console.log('パネル要素:', panel);
+            
+            if (panel) {
+                const wasActive = panel.classList.contains('active');
+                panel.classList.toggle('active');
+                
+                console.log('パネルを' + (wasActive ? '閉じました' : '開きました'));
+                console.log('パネルのクラス:', panel.className);
+                console.log('パネルの位置:', {
+                    top: panel.style.top || 'CSSによる',
+                    right: panel.style.right || 'CSSによる',
+                    display: window.getComputedStyle(panel).display,
+                    visibility: window.getComputedStyle(panel).visibility,
+                    opacity: window.getComputedStyle(panel).opacity
+                });
+            } else {
+                console.error('設定パネルが見つかりません');
+            }
+        }
+        
+        // 設定パネル外をクリックしたら閉じる（initの後に設定）
+        setTimeout(() => {
+            document.addEventListener('click', function(event) {
+                const panel = document.getElementById('settingsPanel');
+                const button = document.querySelector('.settings-button');
+                
+                if (panel && button && panel.classList.contains('active')) {
+                    if (!panel.contains(event.target) && !button.contains(event.target)) {
+                        panel.classList.remove('active');
+                    }
+                }
+            });
+        }, 100);
         
         // 日数計算
         function getDaysUntil(dateStr) {
@@ -1836,6 +2275,14 @@
             let filtered = allEvents.filter(e => {
                 if (searchTerm && !e.name.toLowerCase().includes(searchTerm)) return false;
                 if (dateFilter && e.date !== dateFilter) return false;
+                
+                // タグフィルター適用
+                if (activeTagFilter) {
+                    const eventId = e.id || e.name;
+                    const tags = getTags(eventId);
+                    if (!tags.includes(activeTagFilter)) return false;
+                }
+                
                 return true;
             });
             
@@ -1883,12 +2330,19 @@
             const type = event.name.includes('EXPO') ? 'expo' : 
                         event.name.includes('STAGE') ? 'stage' : 'other';
             
-            // イベントIDを取得（カスタムイベントはid、それ以外はnameを使用）
+            // イベントIDを取得
             const eventId = event.id || event.name;
             const checklist = getChecklist(eventId);
             const completedCount = checklist.filter(item => item.completed).length;
             const checklistBadge = checklist.length > 0 ? 
                 `<span class="checklist-badge">✓ ${completedCount}/${checklist.length}</span>` : '';
+            
+            // タグ表示
+            const tags = getTags(eventId);
+            const tagsDisplay = tags.length > 0 ? 
+                `<div class="tags-container" style="margin-top: 10px;">
+                    ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>` : '';
             
             const customBadge = event.isCustom ? '<span class="custom-event-badge">マイ予定</span>' : '';
             const editButtons = event.isCustom ? `
@@ -1909,6 +2363,7 @@
                     <div class="event-title">${event.name}${customBadge}${checklistBadge}</div>
                     ${event.status && event.status !== '---------' ? `<span class="status-badge">${event.status}</span>` : ''}
                     ${countdownBadge}
+                    ${tagsDisplay}
                     <div class="event-details">
                         ${event.time && event.time !== '---------' ? `
                         <div class="event-detail">
@@ -2051,6 +2506,10 @@
                 ${renderChecklistSection(eventId)}
                 
                 ${renderMapSection(event)}
+                
+                ${renderWeatherSection(event)}
+                
+                ${renderTagsSection(eventId)}
                 
                 ${event.isCustom ? `
                     <div class="form-actions">
@@ -2265,7 +2724,7 @@
                         <label>🏠 自宅住所を設定すると、経路検索がもっと便利に！</label>
                         <input type="text" 
                                id="homeLocationInput" 
-                               placeholder="例: 東京都新宿区"
+                               placeholder="例: 東京都渋谷区"
                                value="${homeLocation}">
                         <small>設定すると「自宅からの経路」ボタンが表示されます</small>
                         <button onclick="saveHomeLocationFromInput()" 
@@ -2321,6 +2780,402 @@
                 alert('自宅住所を削除しました');
                 location.reload();
             }
+        }
+        
+        // タグセクションをレンダリング
+        function renderTagsSection(eventId) {
+            const tags = getTags(eventId);
+            
+            return `
+                <div class="tags-section">
+                    <h4>🏷️ タグ</h4>
+                    
+                    ${tags.length > 0 ? `
+                        <div class="tags-container">
+                            ${tags.map(tag => `
+                                <span class="tag removable" onclick="event.stopPropagation(); removeTag('${eventId}', '${tag.replace(/'/g, "\\'")}')">
+                                    ${tag}
+                                    <span class="tag-remove">×</span>
+                                </span>
+                            `).join('')}
+                        </div>
+                    ` : '<p style="color: #999; font-size: 0.9em;">タグがありません</p>'}
+                    
+                    <div class="tag-input-form">
+                        <input type="text" 
+                               class="tag-input" 
+                               id="tagInput-${eventId}" 
+                               placeholder="タグを入力..."
+                               onkeypress="if(event.key === 'Enter') addTag('${eventId}')">
+                        <button class="add-checklist-btn" onclick="addTag('${eventId}')">追加</button>
+                    </div>
+                    
+                    <div class="tag-suggestions">
+                        <small style="color: #999; display: block; margin-bottom: 8px;">よく使うタグ:</small>
+                        ${tagSuggestions.map(tag => `
+                            <span class="tag-suggestion" onclick="addSuggestedTag('${eventId}', '${tag.replace(/'/g, "\\'")}')">
+                                ${tag}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // タグを追加
+        function addTag(eventId) {
+            const input = document.getElementById(`tagInput-${eventId}`);
+            const tagText = input.value.trim();
+            
+            if (!tagText) return;
+            
+            const tags = getTags(eventId);
+            if (tags.includes(tagText)) {
+                alert('このタグは既に追加されています');
+                return;
+            }
+            
+            tags.push(tagText);
+            saveTags();
+            input.value = '';
+            
+            // モーダルとビューを更新
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+            }
+            renderTagFilter();
+            renderView();
+        }
+        
+        // 提案タグを追加
+        function addSuggestedTag(eventId, tag) {
+            const tags = getTags(eventId);
+            if (tags.includes(tag)) {
+                alert('このタグは既に追加されています');
+                return;
+            }
+            
+            tags.push(tag);
+            saveTags();
+            
+            // モーダルとビューを更新
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+            }
+            renderTagFilter();
+            renderView();
+        }
+        
+        // タグを削除
+        function removeTag(eventId, tag) {
+            const tags = getTags(eventId);
+            const index = tags.indexOf(tag);
+            if (index > -1) {
+                tags.splice(index, 1);
+                saveTags();
+                
+                // モーダルとビューを更新
+                const allEvents = getAllEvents();
+                const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+                if (eventIndex >= 0) {
+                    showEventDetail(eventIndex);
+                }
+                renderTagFilter();
+                renderView();
+            }
+        }
+        
+        // タグフィルターをレンダリング
+        function renderTagFilter() {
+            const allTags = getAllTags();
+            const filterDiv = document.getElementById('tagFilter');
+            
+            if (allTags.length === 0) {
+                filterDiv.style.display = 'none';
+                return;
+            }
+            
+            let html = `
+                <div class="tag-filter-item ${!activeTagFilter ? 'active' : ''}" onclick="setTagFilter(null)">
+                    🔍 すべて
+                </div>
+            `;
+            
+            allTags.forEach(tag => {
+                html += `
+                    <div class="tag-filter-item ${activeTagFilter === tag ? 'active' : ''}" 
+                         onclick="setTagFilter('${tag.replace(/'/g, "\\'")}')">
+                        ${tag}
+                    </div>
+                `;
+            });
+            
+            filterDiv.innerHTML = html;
+            filterDiv.style.display = 'flex';
+        }
+        
+        // タグフィルターを設定
+        function setTagFilter(tag) {
+            activeTagFilter = tag;
+            renderTagFilter();
+            renderView();
+        }
+        
+        // スケジュール最適化を表示
+        function renderScheduleOptimization() {
+            const allEvents = getAllEvents();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // 未来のイベントのみ
+            const upcomingEvents = allEvents
+                .filter(e => new Date(e.date) >= today)
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            if (upcomingEvents.length === 0) {
+                document.getElementById('scheduleOptimization').style.display = 'none';
+                return;
+            }
+            
+            // 時間が重複しているイベントを検出
+            const conflicts = [];
+            for (let i = 0; i < upcomingEvents.length; i++) {
+                for (let j = i + 1; j < upcomingEvents.length; j++) {
+                    if (upcomingEvents[i].date === upcomingEvents[j].date) {
+                        // 同じ日のイベントで時間が重複している可能性
+                        conflicts.push({
+                            event1: upcomingEvents[i],
+                            event2: upcomingEvents[j]
+                        });
+                    }
+                }
+            }
+            
+            // 連続イベントを検出（2日以上連続）
+            const consecutiveDays = [];
+            for (let i = 0; i < upcomingEvents.length - 1; i++) {
+                const date1 = new Date(upcomingEvents[i].date);
+                const date2 = new Date(upcomingEvents[i + 1].date);
+                const diffDays = (date2 - date1) / (1000 * 60 * 60 * 24);
+                
+                if (diffDays === 1) {
+                    consecutiveDays.push({
+                        events: [upcomingEvents[i], upcomingEvents[i + 1]]
+                    });
+                }
+            }
+            
+            const optDiv = document.getElementById('scheduleOptimization');
+            let html = '<h3>📅 スケジュール最適化</h3>';
+            
+            // 重複警告
+            if (conflicts.length > 0) {
+                html += '<div class="conflict-warning">';
+                html += '<h4>⚠️ 時間が重複している可能性があります</h4>';
+                conflicts.forEach(c => {
+                    html += `<p>• ${c.event1.name} と ${c.event2.name} が同じ日（${formatDate(c.event1.date)}）</p>`;
+                });
+                html += '</div>';
+            }
+            
+            html += '<div class="optimization-options">';
+            
+            // 連続イベントのアドバイス
+            if (consecutiveDays.length > 0) {
+                html += `
+                    <div class="optimization-card">
+                        <h4>🏨 宿泊を検討してみては？</h4>
+                        <p>連続するイベントがあります。宿泊すると移動が楽になります。</p>
+                        <span class="optimization-badge info">${consecutiveDays.length}件の連続イベント</span>
+                    </div>
+                `;
+            }
+            
+            // 予算アドバイス
+            const totalCost = upcomingEvents.reduce((sum, e) => sum + e.price, 0);
+            if (totalCost > 50000) {
+                html += `
+                    <div class="optimization-card">
+                        <h4>💰 予算管理のアドバイス</h4>
+                        <p>今後のイベントで合計 ¥${totalCost.toLocaleString()} の支出が予定されています。</p>
+                        <span class="optimization-badge warning">高額</span>
+                    </div>
+                `;
+            }
+            
+            // 準備期間のアドバイス
+            if (upcomingEvents.length > 0) {
+                const nextEvent = upcomingEvents[0];
+                const daysUntil = getDaysUntil(nextEvent.date);
+                
+                if (daysUntil <= 7 && daysUntil > 0) {
+                    html += `
+                        <div class="optimization-card">
+                            <h4>⏰ もうすぐです！</h4>
+                            <p>${nextEvent.name} まであと ${daysUntil}日。チェックリストの確認をお忘れなく！</p>
+                            <span class="optimization-badge">準備期間</span>
+                        </div>
+                    `;
+                }
+            }
+            
+            html += '</div>';
+            
+            optDiv.innerHTML = html;
+            optDiv.style.display = 'block';
+        }
+        
+        // 天気予報セクションをレンダリング
+        function renderWeatherSection(event) {
+            const eventDate = new Date(event.date);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            eventDate.setHours(0, 0, 0, 0);
+            
+            const daysUntil = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+            
+            // 過去のイベントまたは16日以上先のイベントは天気予報を表示しない
+            if (daysUntil < 0 || daysUntil > 16) {
+                return '';
+            }
+            
+            // 会場の位置情報を取得
+            const venueKey = Object.keys(venueDatabase).find(key => 
+                event.venue && event.venue.includes(key.split('&')[0].trim())
+            );
+            
+            const venueInfo = venueDatabase[venueKey];
+            const lat = venueInfo ? venueInfo.lat : 35.6812;
+            const lon = venueInfo ? venueInfo.lng : 139.7671;
+            const eventId = (event.id || event.name).replace(/\s/g, '-').replace(/['"]/g, '');
+            const eventDateStr = event.date;
+            
+            // 天気予報を別のscriptタグで非同期実行
+            setTimeout(() => {
+                fetchWeather(eventId, lat, lon, eventDateStr, daysUntil);
+            }, 100);
+            
+            return `
+                <div class="weather-section" id="weather-${eventId}">
+                    <h4>☁️ 天気予報（${daysUntil === 0 ? '今日' : daysUntil === 1 ? '明日' : `${daysUntil}日後`}）</h4>
+                    <div class="weather-loading">
+                        読み込み中...
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 天気情報を取得
+        function fetchWeather(eventId, lat, lon, targetDate, daysUntil) {
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&timezone=Asia/Tokyo&forecast_days=16`)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherDiv = document.getElementById('weather-' + eventId);
+                    if (!weatherDiv) return;
+                    
+                    const dateIndex = data.daily.time.findIndex(d => d === targetDate);
+                    
+                    if (dateIndex === -1) {
+                        weatherDiv.innerHTML = `
+                            <h4>☁️ 天気予報</h4>
+                            <div class="weather-error">天気予報データが取得できませんでした</div>
+                        `;
+                        return;
+                    }
+                    
+                    const weatherCode = data.daily.weathercode[dateIndex];
+                    const tempMax = Math.round(data.daily.temperature_2m_max[dateIndex]);
+                    const tempMin = Math.round(data.daily.temperature_2m_min[dateIndex]);
+                    const precipitation = data.daily.precipitation_probability_max[dateIndex];
+                    const windSpeed = Math.round(data.daily.windspeed_10m_max[dateIndex]);
+                    
+                    const weatherInfo = getWeatherInfo(weatherCode);
+                    
+                    let advice = '';
+                    if (precipitation > 70) {
+                        advice = '☔ 雨の可能性が高いです。傘を忘れずに！';
+                    } else if (precipitation > 40) {
+                        advice = '🌂 雨が降るかもしれません。折りたたみ傘があると安心です。';
+                    } else if (tempMax > 30) {
+                        advice = '🥵 暑くなりそうです。水分補給を忘れずに！';
+                    } else if (tempMax < 10) {
+                        advice = '🧥 寒くなりそうです。暖かい服装で！';
+                    } else if (windSpeed > 40) {
+                        advice = '💨 風が強くなりそうです。帽子など飛ばされないように注意！';
+                    } else {
+                        advice = '😊 良い天気になりそうです！楽しんできてください！';
+                    }
+                    
+                    weatherDiv.innerHTML = `
+                        <h4>☁️ 天気予報（${daysUntil === 0 ? '今日' : daysUntil === 1 ? '明日' : `${daysUntil}日後`}）</h4>
+                        <div class="weather-info">
+                            <div class="weather-icon">${weatherInfo.icon}</div>
+                            <div class="weather-details">
+                                <div class="weather-temp">${tempMax}° / ${tempMin}°</div>
+                                <div class="weather-description">${weatherInfo.description}</div>
+                            </div>
+                        </div>
+                        <div class="weather-extra">
+                            <div class="weather-extra-item">
+                                <span class="label">降水確率</span>
+                                <span class="value">${precipitation}%</span>
+                            </div>
+                            <div class="weather-extra-item">
+                                <span class="label">風速</span>
+                                <span class="value">${windSpeed}km/h</span>
+                            </div>
+                        </div>
+                        <div class="weather-advice">
+                            💡 ${advice}
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('天気予報の取得に失敗:', error);
+                    const weatherDiv = document.getElementById('weather-' + eventId);
+                    if (weatherDiv) {
+                        weatherDiv.innerHTML = `
+                            <h4>☁️ 天気予報</h4>
+                            <div class="weather-error">天気予報の取得に失敗しました</div>
+                        `;
+                    }
+                });
+        }
+        
+        // 天気コードを絵文字と説明に変換
+        function getWeatherInfo(code) {
+            const weatherMap = {
+                0: { icon: '☀️', description: '快晴' },
+                1: { icon: '🌤️', description: '晴れ' },
+                2: { icon: '⛅', description: '曇り時々晴れ' },
+                3: { icon: '☁️', description: '曇り' },
+                45: { icon: '🌫️', description: '霧' },
+                48: { icon: '🌫️', description: '霧氷' },
+                51: { icon: '🌧️', description: '小雨' },
+                53: { icon: '🌧️', description: '雨' },
+                55: { icon: '🌧️', description: '大雨' },
+                61: { icon: '🌧️', description: '小雨' },
+                63: { icon: '🌧️', description: '雨' },
+                65: { icon: '🌧️', description: '大雨' },
+                71: { icon: '🌨️', description: '小雪' },
+                73: { icon: '🌨️', description: '雪' },
+                75: { icon: '🌨️', description: '大雪' },
+                77: { icon: '🌨️', description: 'みぞれ' },
+                80: { icon: '🌦️', description: 'にわか雨' },
+                81: { icon: '🌦️', description: '強いにわか雨' },
+                82: { icon: '🌦️', description: '激しいにわか雨' },
+                85: { icon: '🌨️', description: '小雪' },
+                86: { icon: '🌨️', description: '大雪' },
+                95: { icon: '⛈️', description: '雷雨' },
+                96: { icon: '⛈️', description: '雷雨と雹' },
+                99: { icon: '⛈️', description: '激しい雷雨' }
+            };
+            
+            return weatherMap[code] || { icon: '🌤️', description: '天気不明' };
         }
         
         function closeModal() {
