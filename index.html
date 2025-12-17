@@ -1522,7 +1522,7 @@
     </style>
 </head>
 <body>
-            <div class="container">
+    <div class="container">
         <header>
             <h1>🎪 Hololive EXPO 2026 イベント管理</h1>
             <div id="nextEventCountdown" class="next-event-countdown" style="display: none;"></div>
@@ -1542,7 +1542,9 @@
         <div class="update-notice">
             <h4>📝 使い方</h4>
             <p>• イベントカードをクリックすると詳細情報・出演者が表示されます<br>
-            • アーティスト検索で出演ステージを確認できます</p>
+            • アーティスト検索で出演ステージを確認できます<br>
+            • 対応エリア: 幕張・有明・渋谷・新宿・池袋・秋葉原・横浜（会場名は正式名称で入力）<br>
+            • 対応駅: 上記エリア（最後に「駅」をつけること）</p>
         </div>
         
         <div class="filters">
@@ -1616,7 +1618,7 @@
                     
                     <div class="form-group">
                         <label for="eventVenue">場所</label>
-                        <input type="text" id="eventVenue" placeholder="例: 渋谷駅">
+                        <input type="text" id="eventVenue" placeholder="例: 渋谷駅、有明、横浜">
                     </div>
                     
                     <div class="form-group">
@@ -1724,7 +1726,7 @@
                 price: 6600,
                 url: "hololivesuperEXPO公式",
                 description: "hololive time-warp をテーマに、時空を超えてhololiveの広大な世界を体験できる3日間のイベント初日。",
-                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/expo/"
+                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/expo/"
             },
             {
                 name: "hololive STAGE1",
@@ -1734,8 +1736,8 @@
                 date: "2026-03-06",
                 price: 11000,
                 url: "Hololive expo in 2026 （共）",
-                description: "hololive 7th fes. Ridin' on Dreams の初日公演。",
-                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage1",
+                description: "hololive 7th fes. Ridin' on Dreams の初日公演。。",
+                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/fes/cast/?tab=stage1",
                 artists: artistsData.STAGE1
             },
             {
@@ -1747,7 +1749,7 @@
                 price: 6600,
                 url: "当日行程表（改） （個）",
                 description: "EXPO 2日目。PARALLEL、BLAST、FUTURE の3つのメインエリアでhololiveの世界を多角的に楽しめる。",
-                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/expo/"
+                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/expo/"
             },
             {
                 name: "hololive STAGE2",
@@ -1758,7 +1760,7 @@
                 price: 11000,
                 url: "Hololive EXPO Infor （共）",
                 description: "7th fes. 2日目の昼公演。",
-                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage2",
+                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/fes/cast/?tab=stage2",
                 artists: artistsData.STAGE2
             },
             {
@@ -1770,7 +1772,7 @@
                 price: 11000,
                 url: "Hololive expo 2026 予算 （共）",
                 description: "7th fes. 2日目の夕方公演。",
-                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage3",
+                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/fes/cast/?tab=stage3",
                 artists: artistsData.STAGE3
             },
             {
@@ -1782,7 +1784,7 @@
                 price: 6600,
                 url: "Hololive 7th Fes EXPO - 2026 （共）",
                 description: "EXPO最終日。3日間の集大成として、特別な展示やイベントが用意されている。",
-                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/expo/"
+                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/expo/"
             },
             {
                 name: "hololive STAGE4",
@@ -1793,7 +1795,7 @@
                 price: 11000,
                 url: "当日予定案 （共）",
                 description: "7th fes. 最終日公演。",
-                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/en/fes/cast/?tab=stage4",
+                officialUrl: "https://hololivesuperexpo.hololivepro.com/2026/fes/cast/?tab=stage4",
                 artists: artistsData.STAGE4
             },
             {
@@ -1830,14 +1832,11 @@
         
         let currentView = 'calendar';
         let customEvents = [];
-        let eventChecklists = {}; // イベントIDをキーにしたチェックリスト
-        let homeLocation = ''; // 自宅の住所
-        let eventTags = {}; // イベントIDをキーにしたタグ配列
-        let activeTagFilter = null; // アクティブなタグフィルター
-        let darkMode = false; // ダークモード
-        let currentTheme = 'default'; // 現在のテーマ
+        let eventChecklists = {};
+        let homeLocation = '';
+        let eventTags = {};
+        let activeTagFilter = null;
         
-        // タグの候補リスト
         const tagSuggestions = [
             '🎤 推し出演',
             '🎫 チケット確保済み',
@@ -1851,8 +1850,9 @@
             '💖 絶対行く'
         ];
         
-        // 会場情報データベース
+        // 会場情報データベース（拡張版）
         const venueDatabase = {
+            // 幕張
             '国際展示場4-8&イベントホール': {
                 name: '幕張メッセ 国際展示場4-8ホール & イベントホール',
                 address: '〒261-8550 千葉県千葉市美浜区中瀬2-1',
@@ -1870,10 +1870,192 @@
                 lat: 35.64791,
                 lng: 140.03285,
                 tips: 'ライブ会場は音響設備が優れています。開演30分前には到着することをおすすめします。'
+            },
+            '幕張': {
+                name: '幕張エリア',
+                address: '千葉県千葉市美浜区',
+                station: 'JR京葉線 海浜幕張駅',
+                walkTime: '駅周辺',
+                lat: 35.6489,
+                lng: 140.0339,
+                tips: '幕張新都心エリアは広いので、時間に余裕を持って移動しましょう。'
+            },
+            
+            // 有明（東京ビッグサイト・有明アリーナなど）
+            '有明': {
+                name: '有明エリア（東京ビッグサイト・有明アリーナ周辺）',
+                address: '〒135-0063 東京都江東区有明',
+                station: 'りんかい線 国際展示場駅 / ゆりかもめ 有明駅',
+                walkTime: '駅から徒歩約3-7分',
+                lat: 35.6298,
+                lng: 139.7946,
+                tips: 'ビッグサイトは広大です。東・西・南ホールの位置を事前確認しましょう。'
+            },
+            '東京ビッグサイト': {
+                name: '東京ビッグサイト（東京国際展示場）',
+                address: '〒135-0063 東京都江東区有明3-11-1',
+                station: 'りんかい線 国際展示場駅',
+                walkTime: '徒歩約7分',
+                lat: 35.6298,
+                lng: 139.7946,
+                tips: '東京最大級の展示場。各ホールへの移動に時間がかかることがあります。'
+            },
+            '有明アリーナ': {
+                name: '有明アリーナ',
+                address: '〒135-0063 東京都江東区有明1-11-1',
+                station: 'ゆりかもめ 有明テニスの森駅',
+                walkTime: '徒歩約8分',
+                lat: 35.6334,
+                lng: 139.7928,
+                tips: '大型アリーナ。開演時間に合わせた混雑を予想して早めの到着を。'
+            },
+            '東京ガーデンシアター': {
+                name: '東京ガーデンシアター',
+                address: '〒135-0063 東京都江東区有明1-3-25',
+                station: 'ゆりかもめ 有明駅',
+                walkTime: '徒歩約4分',
+                lat: 35.6329,
+                lng: 139.7915,
+                tips: '有明ガーデン内の劇場型ホール。座席が近く臨場感のある会場です。'
+            },
+            
+            // 渋谷
+            '渋谷': {
+                name: '渋谷エリア',
+                address: '東京都渋谷区',
+                station: 'JR・東急・京王・メトロ 渋谷駅',
+                walkTime: '駅周辺',
+                lat: 35.6595,
+                lng: 139.7004,
+                tips: '渋谷駅は複雑です。出口を事前に確認しておくとスムーズです。'
+            },
+            '渋谷駅': {
+                name: '渋谷駅周辺',
+                address: '東京都渋谷区道玄坂',
+                station: '渋谷駅',
+                walkTime: '駅直結',
+                lat: 35.6595,
+                lng: 139.7004,
+                tips: '駅構内は広く、迷いやすいので時間に余裕を持ちましょう。'
+            },
+            
+            // 新宿
+            '新宿': {
+                name: '新宿エリア',
+                address: '東京都新宿区',
+                station: 'JR・小田急・京王・メトロ 新宿駅',
+                walkTime: '駅周辺',
+                lat: 35.6896,
+                lng: 139.7006,
+                tips: '新宿駅は世界一の利用者数。出口番号を確認して移動しましょう。'
+            },
+            '新宿駅': {
+                name: '新宿駅周辺',
+                address: '東京都新宿区西新宿',
+                station: '新宿駅',
+                walkTime: '駅直結',
+                lat: 35.6896,
+                lng: 139.7006,
+                tips: '東口・西口・南口で雰囲気が全く違います。目的地の最寄り口を確認を。'
+            },
+            
+            // 池袋
+            '池袋': {
+                name: '池袋エリア',
+                address: '東京都豊島区',
+                station: 'JR・東武・西武・メトロ 池袋駅',
+                walkTime: '駅周辺',
+                lat: 35.7295,
+                lng: 139.7109,
+                tips: '東口・西口で雰囲気が異なります。サンシャインシティへは東口が便利。'
+            },
+            '池袋駅': {
+                name: '池袋駅周辺',
+                address: '東京都豊島区南池袋',
+                station: '池袋駅',
+                walkTime: '駅直結',
+                lat: 35.7295,
+                lng: 139.7109,
+                tips: '東口はアニメイトなどのサブカル施設が充実しています。'
+            },
+            
+            // 秋葉原
+            '秋葉原': {
+                name: '秋葉原エリア',
+                address: '東京都千代田区外神田',
+                station: 'JR・つくばエクスプレス・メトロ 秋葉原駅',
+                walkTime: '駅周辺',
+                lat: 35.6984,
+                lng: 139.7731,
+                tips: 'グッズ販売店が多く存在し、土日は特に混雑します。'
+            },
+            '秋葉原駅': {
+                name: '秋葉原駅周辺',
+                address: '東京都千代田区外神田1丁目',
+                station: '秋葉原駅',
+                walkTime: '駅直結',
+                lat: 35.6984,
+                lng: 139.7731,
+                tips: '電気街口が便利。週末は歩行者天国が実施されることも。'
+            },
+            
+            // 横浜
+            '横浜': {
+                name: '横浜エリア',
+                address: '神奈川県横浜市',
+                station: 'JR・京急・相鉄・市営地下鉄 横浜駅',
+                walkTime: '駅周辺',
+                lat: 35.4657,
+                lng: 139.6220,
+                tips: '横浜駅は広く、みなとみらいやベイエリアへの移動は徒歩またはバスで。'
+            },
+            '横浜駅': {
+                name: '横浜駅周辺',
+                address: '神奈川県横浜市西区',
+                station: '横浜駅',
+                walkTime: '駅直結',
+                lat: 35.4657,
+                lng: 139.6220,
+                tips: '東口・西口で大きく雰囲気が変わります。目的地を確認しましょう。'
+            },
+            'みなとみらい': {
+                name: 'みなとみらいエリア',
+                address: '神奈川県横浜市西区みなとみらい',
+                station: 'みなとみらい線 みなとみらい駅',
+                walkTime: '駅周辺',
+                lat: 35.4564,
+                lng: 139.6316,
+                tips: 'パシフィコ横浜やぴあアリーナMMなど大型施設が集中しています。'
+            },
+            'パシフィコ横浜': {
+                name: 'パシフィコ横浜（横浜国際平和会議場）',
+                address: '〒220-0012 神奈川県横浜市西区みなとみらい1-1-1',
+                station: 'みなとみらい線 みなとみらい駅',
+                walkTime: '徒歩約5分',
+                lat: 35.4564,
+                lng: 139.6316,
+                tips: '海沿いの大型コンベンションセンター。展示ホール・会議センターなど複数施設があります。'
+            },
+            'Kアリーナ横浜': {
+                name: 'Kアリーナ横浜',
+                address: '〒220-0012 神奈川県横浜市西区みなとみらい6-2-14',
+                station: 'みなとみらい線 新高島駅',
+                walkTime: '徒歩約3分',
+                lat: 35.4622,
+                lng: 139.6254,
+                tips: '2023年開業の最新大型アリーナ。最大2万人収容の国内最大級施設です。'
+            },
+            'ぴあアリーナMM': {
+                name: 'ぴあアリーナMM',
+                address: '〒220-0012 神奈川県横浜市西区みなとみらい3-2-9',
+                station: 'みなとみらい線 みなとみらい駅',
+                walkTime: '徒歩約2分',
+                lat: 35.4592,
+                lng: 139.6281,
+                tips: '1万人収容の音楽特化型アリーナ。音響にこだわった設計が特徴です。'
             }
         };
         
-        // ローカルストレージから自宅住所を読み込む
         function loadHomeLocation() {
             const saved = localStorage.getItem('homeLocation');
             if (saved) {
@@ -1881,13 +2063,11 @@
             }
         }
         
-        // 自宅住所を保存
         function saveHomeLocation(location) {
             homeLocation = location;
             localStorage.setItem('homeLocation', location);
         }
         
-        // タグを読み込む
         function loadTags() {
             const saved = localStorage.getItem('eventTags');
             if (saved) {
@@ -1895,12 +2075,10 @@
             }
         }
         
-        // タグを保存
         function saveTags() {
             localStorage.setItem('eventTags', JSON.stringify(eventTags));
         }
         
-        // イベントのタグを取得
         function getTags(eventId) {
             if (!eventTags[eventId]) {
                 eventTags[eventId] = [];
@@ -1908,7 +2086,6 @@
             return eventTags[eventId];
         }
         
-        // すべてのタグを取得（重複なし）
         function getAllTags() {
             const allTags = new Set();
             Object.values(eventTags).forEach(tags => {
@@ -1917,30 +2094,24 @@
             return Array.from(allTags);
         }
         
-        // ローカルストレージから予定を読み込む
         function loadCustomEvents() {
             const saved = localStorage.getItem('customEvents');
             if (saved) {
                 customEvents = JSON.parse(saved);
-                console.log('カスタム予定を読み込み:', customEvents.length);
             }
         }
         
-        // チェックリストを読み込む
         function loadChecklists() {
             const saved = localStorage.getItem('eventChecklists');
             if (saved) {
                 eventChecklists = JSON.parse(saved);
-                console.log('チェックリストを読み込み');
             }
         }
         
-        // チェックリストを保存
         function saveChecklists() {
             localStorage.setItem('eventChecklists', JSON.stringify(eventChecklists));
         }
         
-        // イベントのチェックリストを取得
         function getChecklist(eventId) {
             if (!eventChecklists[eventId]) {
                 eventChecklists[eventId] = [];
@@ -1948,13 +2119,10 @@
             return eventChecklists[eventId];
         }
         
-        // ローカルストレージに保存
         function saveCustomEventsToStorage() {
             localStorage.setItem('customEvents', JSON.stringify(customEvents));
-            console.log('カスタム予定を保存:', customEvents.length);
         }
         
-        // 全イベントデータを取得（元データ + カスタム予定）
         function getAllEvents() {
             return [...eventsData, ...customEvents];
         }
@@ -1964,118 +2132,17 @@
             loadChecklists();
             loadHomeLocation();
             loadTags();
-            loadThemeSettings();
             renderNextEventCountdown();
             renderSummary();
             renderTagFilter();
             renderScheduleOptimization();
             renderView();
             
-            // 毎分更新してカウントダウンをリアルタイムに
             setInterval(() => {
                 renderNextEventCountdown();
-            }, 60000); // 60秒ごと
+            }, 60000);
         }
         
-        // テーマ設定を読み込む
-        function loadThemeSettings() {
-            const savedDarkMode = localStorage.getItem('darkMode');
-            const savedTheme = localStorage.getItem('theme');
-            
-            if (savedDarkMode === 'true') {
-                darkMode = true;
-                document.body.classList.add('dark-mode');
-                document.getElementById('darkModeToggle').checked = true;
-            }
-            
-            if (savedTheme) {
-                currentTheme = savedTheme;
-                applyTheme(savedTheme);
-            }
-        }
-        
-        // ダークモードを切り替え
-        function toggleDarkMode() {
-            darkMode = !darkMode;
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', darkMode);
-        }
-        
-        // テーマを変更
-        function changeTheme(theme) {
-            // 前のテーマを削除
-            document.body.classList.remove('theme-blue', 'theme-pink', 'theme-green', 'theme-orange', 'theme-red');
-            
-            // 新しいテーマを適用
-            if (theme !== 'default') {
-                document.body.classList.add(`theme-${theme}`);
-            }
-            
-            currentTheme = theme;
-            localStorage.setItem('theme', theme);
-            
-            // アクティブ表示を更新
-            document.querySelectorAll('.theme-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            document.querySelector(`.theme-option.${theme}`).classList.add('active');
-        }
-        
-        // テーマを適用
-        function applyTheme(theme) {
-            if (theme !== 'default') {
-                document.body.classList.add(`theme-${theme}`);
-            }
-            
-            // アクティブ表示を更新
-            document.querySelectorAll('.theme-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            const themeElement = document.querySelector(`.theme-option.${theme}`);
-            if (themeElement) {
-                themeElement.classList.add('active');
-            }
-        }
-        
-        // 設定パネルを切り替え
-        function toggleSettings() {
-            const panel = document.getElementById('settingsPanel');
-            console.log('設定ボタンがクリックされました');
-            console.log('パネル要素:', panel);
-            
-            if (panel) {
-                const wasActive = panel.classList.contains('active');
-                panel.classList.toggle('active');
-                
-                console.log('パネルを' + (wasActive ? '閉じました' : '開きました'));
-                console.log('パネルのクラス:', panel.className);
-                console.log('パネルの位置:', {
-                    top: panel.style.top || 'CSSによる',
-                    right: panel.style.right || 'CSSによる',
-                    display: window.getComputedStyle(panel).display,
-                    visibility: window.getComputedStyle(panel).visibility,
-                    opacity: window.getComputedStyle(panel).opacity
-                });
-            } else {
-                console.error('設定パネルが見つかりません');
-            }
-        }
-        
-        // 設定パネル外をクリックしたら閉じる（initの後に設定）
-        setTimeout(() => {
-            document.addEventListener('click', function(event) {
-                const panel = document.getElementById('settingsPanel');
-                const button = document.querySelector('.settings-button');
-                
-                if (panel && button && panel.classList.contains('active')) {
-                    if (!panel.contains(event.target) && !button.contains(event.target)) {
-                        panel.classList.remove('active');
-                    }
-                }
-            });
-        }, 100);
-        
-        // 日数計算
         function getDaysUntil(dateStr) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -2086,7 +2153,6 @@
             return diffDays;
         }
         
-        // カウントダウン表示テキスト
         function getCountdownText(days) {
             if (days < 0) return '終了';
             if (days === 0) return '今日';
@@ -2097,7 +2163,6 @@
             return `あと${weeks}週間`;
         }
         
-        // カウントダウンバッジのクラス
         function getCountdownClass(days) {
             if (days < 0) return 'past';
             if (days === 0) return 'today';
@@ -2106,13 +2171,11 @@
             return 'upcoming';
         }
         
-        // 次のイベントカウントダウン
         function renderNextEventCountdown() {
             const allEvents = getAllEvents();
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             
-            // 未来のイベントを取得
             const upcomingEvents = allEvents
                 .filter(e => {
                     const eventDate = new Date(e.date);
@@ -2146,7 +2209,6 @@
                     </div>
                 `;
             } else {
-                // 日・時間・分のカウントダウン
                 const eventDate = new Date(nextEvent.date);
                 const now = new Date();
                 const diff = eventDate - now;
@@ -2177,7 +2239,6 @@
             countdownDiv.style.display = 'block';
         }
         
-        // アーティスト検索機能
         document.getElementById('artistSearchInput').addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase().trim();
             const resultsDiv = document.getElementById('searchResults');
@@ -2269,14 +2330,11 @@
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const dateFilter = document.getElementById('dateFilter').value;
             
-            console.log('renderCalendarView 開始', { searchTerm, dateFilter });
-            
             const allEvents = getAllEvents();
             let filtered = allEvents.filter(e => {
                 if (searchTerm && !e.name.toLowerCase().includes(searchTerm)) return false;
                 if (dateFilter && e.date !== dateFilter) return false;
                 
-                // タグフィルター適用
                 if (activeTagFilter) {
                     const eventId = e.id || e.name;
                     const tags = getTags(eventId);
@@ -2285,8 +2343,6 @@
                 
                 return true;
             });
-            
-            console.log('フィルター後:', filtered.length);
             
             const grouped = {};
             filtered.forEach(event => {
@@ -2317,10 +2373,8 @@
             const calendarView = document.getElementById('calendarView');
             if (html) {
                 calendarView.innerHTML = html;
-                console.log('カレンダー表示完了');
             } else {
                 calendarView.innerHTML = '<p style="text-align:center;color:white;padding:50px;">イベントが見つかりません</p>';
-                console.log('イベントなし');
             }
         }
         
@@ -2330,14 +2384,12 @@
             const type = event.name.includes('EXPO') ? 'expo' : 
                         event.name.includes('STAGE') ? 'stage' : 'other';
             
-            // イベントIDを取得
             const eventId = event.id || event.name;
             const checklist = getChecklist(eventId);
             const completedCount = checklist.filter(item => item.completed).length;
             const checklistBadge = checklist.length > 0 ? 
                 `<span class="checklist-badge">✓ ${completedCount}/${checklist.length}</span>` : '';
             
-            // タグ表示
             const tags = getTags(eventId);
             const tagsDisplay = tags.length > 0 ? 
                 `<div class="tags-container" style="margin-top: 10px;">
@@ -2352,7 +2404,6 @@
                 </div>
             ` : '';
             
-            // カウントダウン表示
             const days = getDaysUntil(event.date);
             const countdownText = getCountdownText(days);
             const countdownClass = getCountdownClass(days);
