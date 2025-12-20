@@ -226,7 +226,6 @@
         }
         
         .add-event-btn {
-            margin-left: auto;
             padding: 12px 24px;
             border: none;
             background: linear-gradient(135deg, #48c774 0%, #34a85a 100%);
@@ -237,11 +236,47 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: all 0.3s;
             font-weight: bold;
-        }
+}
         
         .add-event-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(72, 199, 116, 0.4);
+        }
+
+        .notification-btn {
+            padding: 12px 24px;
+            border: none;
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+            color: white;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(254, 202, 87, 0.4);
+        }
+
+        .route-btn {
+            padding: 12px 24px;
+            border: none;
+            background: linear-gradient(135deg, #48c6ef 0%, #6f86d6 100%);
+            color: white;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .route-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 198, 239, 0.4);
         }
         .theme-btn {
             padding: 12px 24px;
@@ -254,126 +289,340 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: all 0.3s;
             font-weight: bold;
-            margin-left: 10px;
         }
 
-.theme-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
-}
+        .notification-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #48c774;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            z-index: 10;
+        }
 
-.theme-modal-content {
-    background: white;
-    margin: 5% auto;
-    padding: 0;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 700px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    animation: slideIn 0.3s;
-}
+        .notification-settings {
+            display: grid;
+            gap: 20px;
+        }
 
-.theme-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    padding: 20px;
-}
+        .notification-item {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
 
-.theme-card {
-    height: 120px;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    position: relative;
-    overflow: hidden;
-}
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-.theme-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
+        .notification-header h4 {
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
 
-.theme-card.active::after {
-    content: '✓';
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: white;
-    color: #333;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2em;
-    line-height: 30px;
-    text-align: center;
-}
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
 
-.custom-color-section {
-    padding: 20px;
-    border-top: 2px solid #f0f0f0;
-    background: #f8f9fa;
-}
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-.custom-color-section h4 {
-    color: #667eea;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-}
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
 
-.color-picker-group {
-    display: flex;
-    gap: 15px;
-    align-items: flex-end;
-    flex-wrap: wrap;
-}
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
 
-.color-picker-item {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+        input:checked + .slider {
+            background-color: #48c774;
+        }
 
-.color-picker-item label {
-    font-size: 0.9em;
-    color: #666;
-    font-weight: bold;
-}
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
 
-.color-picker-item input[type="color"] {
-    width: 100px;
-    height: 50px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    cursor: pointer;
-}
+        .notification-desc {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
 
-.apply-custom-btn {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-size: 1em;
-}
+        .notification-options {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-.apply-custom-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-}
+        .notification-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .notification-options label:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .notification-options input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+        
+
+        .route-optimization {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .route-optimization h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .route-step {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #48c6ef;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .route-number {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #48c6ef 0%, #6f86d6 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+
+        .route-info {
+            flex: 1;
+        }
+
+        .route-info h5 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .route-info p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .route-summary {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #48c6ef 0%, #6f86d6 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .route-summary h4 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .route-summary p {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .route-detail {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .route-detail-item {
+            text-align: center;
+        }
+
+        .route-detail-item .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .route-detail-item .value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+                .theme-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
+                }
+
+        .theme-modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .theme-card {
+            height: 120px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .theme-card.active::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            color: #333;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        .custom-color-section {
+            padding: 20px;
+            border-top: 2px solid #f0f0f0;
+            background: #f8f9fa;
+        }
+
+        .custom-color-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .color-picker-group {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .color-picker-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .color-picker-item label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .color-picker-item input[type="color"] {
+            width: 100px;
+            height: 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .apply-custom-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1em;
+        }
+
+        .apply-custom-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
 
         .view-toggle button {
             padding: 12px 24px;
@@ -385,13 +634,14 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: all 0.3s;
+            font-weight: bold;
         }
-        
+
         .view-toggle button.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        
+
         .view-toggle button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
@@ -1243,7 +1493,7 @@
             border-radius: 10px;
             color: white;
         }
-        
+
         .weather-section h4 {
             color: white;
             margin-bottom: 15px;
@@ -1252,80 +1502,161 @@
             gap: 10px;
             font-size: 1.1em;
         }
-        
-        .weather-info {
+
+        .weather-current {
             display: grid;
             grid-template-columns: auto 1fr;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
         }
-        
-        .weather-icon {
-            font-size: 4em;
+
+        .weather-icon-large {
+            font-size: 5em;
             text-align: center;
         }
-        
-        .weather-details {
+
+        .weather-main-info {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-        
-        .weather-temp {
-            font-size: 2.5em;
+
+        .weather-temp-large {
+            font-size: 3em;
             font-weight: bold;
         }
-        
-        .weather-description {
-            font-size: 1.1em;
+
+        .weather-description-large {
+            font-size: 1.3em;
             opacity: 0.9;
         }
-        
-        .weather-extra {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .weather-extra-item {
-            text-align: center;
-        }
-        
-        .weather-extra-item .label {
-            font-size: 0.85em;
+
+        .weather-feels-like {
+            font-size: 0.95em;
             opacity: 0.8;
-            display: block;
-            margin-bottom: 4px;
         }
-        
-        .weather-extra-item .value {
-            font-size: 1.1em;
-            font-weight: bold;
+
+        .hourly-weather {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
-        
-        .weather-advice {
-            margin-top: 15px;
-            padding: 12px;
+
+        .hour-item {
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .hour-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .hour-item .time {
+            font-weight: bold;
+            margin-bottom: 8px;
             font-size: 0.95em;
         }
-        
-        .weather-loading {
-            text-align: center;
-            padding: 20px;
-            color: white;
-            opacity: 0.8;
+
+        .hour-item .icon {
+            font-size: 2.5em;
+            margin: 8px 0;
         }
-        
-        .weather-error {
+
+        .hour-item .temp {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .hour-item .rain {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .weather-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .weather-detail-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .weather-detail-item .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .weather-detail-item .value {
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        .clothing-advice {
+            margin-top: 20px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            border-radius: 10px;
+        }
+
+        .clothing-advice h5 {
+            color: white;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .clothing-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .clothing-item {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+
+        .clothing-item:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .weather-loading {
             text-align: center;
+            padding: 30px;
+            color: white;
+            opacity: 0.8;
+            font-size: 1.1em;
+        }
+
+        .weather-error {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            text-align: center;
+            color: white;
         }
         
         .event-actions {
@@ -1650,7 +1981,41 @@
                 font-size: 0.8em;
                 padding: 4px 12px;
             }
+            .notification-btn,
+            .route-btn,
+            .theme-btn {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            
+            .hourly-weather {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+            
+            .hour-item {
+                padding: 10px 5px;
+            }
+            
+            .hour-item .icon {
+                font-size: 2em;
+            }
+            
+            .weather-details-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .weather-current {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .weather-temp-large {
+                font-size: 2.5em;
+            }
         }
+        
         .theme-btn {
         width: 100%;
         margin-left: 0;
@@ -1735,6 +2100,8 @@
         <div class="view-toggle">
             <button class="active" onclick="switchView('calendar')">📅 カレンダービュー</button>
             <button onclick="switchView('list')">📋 リストビュー</button>
+            <button class="notification-btn" onclick="openNotificationModal()">🔔 通知設定</button>
+            <button class="route-btn" onclick="openRouteModal()">🗺️ ルート最適化</button>
             <button class="theme-btn" onclick="openThemeModal()">🎨 テーマ変更</button>
             <button class="add-event-btn" onclick="openAddEventModal()">➕ 予定を追加</button>
         </div>
@@ -1817,6 +2184,33 @@
             </div>
         </div>
     </div>
+
+    <!-- 通知設定モーダル -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeNotificationModal()">&times;</span>
+                <h2>🔔 通知設定</h2>
+                <p style="font-size: 0.9em; opacity: 0.9; margin-top: 10px;">イベントごとに通知をカスタマイズできます</p>
+            </div>
+            <div class="modal-body">
+                <div class="notification-settings" id="notificationSettings"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ルート最適化モーダル -->
+    <div id="routeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeRouteModal()">&times;</span>
+                <h2>🗺️ ルート最適化</h2>
+                <p style="font-size: 0.9em; opacity: 0.9; margin-top: 10px;">効率的な移動ルートを提案します</p>
+            </div>
+            <div class="modal-body" id="routeOptimizationContent"></div>
+        </div>
+    </div>
+
     <!-- テーマ変更モーダル -->
     <div id="themeModal" class="modal">
         <div class="modal-content theme-modal-content">
@@ -1847,6 +2241,8 @@
     </div>
 
     <script>
+        // 通知設定
+        let notificationSettings = {};
         // テーマデータ
         const themes = [
             { name: 'デフォルト（紫）', color1: '#667eea', color2: '#764ba2', emoji: '💜' },
@@ -2284,6 +2680,41 @@
             }
         }
 
+        function loadNotificationSettings() {
+            const saved = localStorage.getItem('notificationSettings');
+            if (saved) {
+                notificationSettings = JSON.parse(saved);
+            } else {
+                // デフォルト設定（全イベントに適用）
+                const allEvents = getAllEvents();
+                allEvents.forEach(event => {
+                    const eventId = event.id || event.name;
+                    notificationSettings[eventId] = {
+                        enabled: true,
+                        threeDaysBefore: true,
+                        oneDayBefore: true,
+                        morning: true
+                    };
+                });
+            }
+        }
+
+        function saveNotificationSettings() {
+            localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
+        }
+
+        function getNotificationSetting(eventId) {
+            if (!notificationSettings[eventId]) {
+                notificationSettings[eventId] = {
+                    enabled: true,
+                    threeDaysBefore: true,
+                    oneDayBefore: true,
+                    morning: true
+                };
+            }
+            return notificationSettings[eventId];
+        }
+
         function loadTheme() {
             const saved = localStorage.getItem('appTheme');
             if (saved) {
@@ -2364,6 +2795,286 @@
         function getAllEvents() {
             return [...eventsData, ...customEvents];
         }
+
+        // 通知権限をリクエスト
+function requestNotificationPermission() {
+    if ('Notification' in window) {
+        if (Notification.permission === 'default') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    console.log('✅ 通知権限が許可されました');
+                    showWelcomeNotification();
+                } else {
+                    console.log('❌ 通知権限が拒否されました');
+                }
+            });
+        } else if (Notification.permission === 'granted') {
+            console.log('✅ 通知権限は既に許可されています');
+        }
+    } else {
+        console.log('⚠️ このブラウザは通知をサポートしていません');
+    }
+}
+
+// ウェルカム通知を表示
+function showWelcomeNotification() {
+    if (Notification.permission === 'granted') {
+        const notification = new Notification('🎪 Hololive EXPO 2026', {
+            body: '通知機能が有効になりました！イベント前にリマインドします。',
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">🎪</text></svg>',
+            tag: 'welcome',
+            requireInteraction: false
+        });
+        
+        notification.onclick = function() {
+            window.focus();
+            notification.close();
+        };
+    }
+}
+
+// 通知をチェックして送信
+function checkAndSendNotifications() {
+    if (Notification.permission !== 'granted') {
+        return;
+    }
+    
+    const now = new Date();
+    const allEvents = getAllEvents();
+    
+    allEvents.forEach(event => {
+        const eventId = event.id || event.name;
+        const setting = getNotificationSetting(eventId);
+        
+        // 通知が無効ならスキップ
+        if (!setting.enabled) {
+            return;
+        }
+        
+        const eventDate = new Date(event.date);
+        
+        // 通知履歴をチェック（同じ通知を何度も送らないように）
+        const notificationHistory = getNotificationHistory();
+        
+        // 3日前の通知（朝9時）
+        if (setting.threeDaysBefore) {
+            const threeDaysBefore = new Date(eventDate);
+            threeDaysBefore.setDate(threeDaysBefore.getDate() - 3);
+            threeDaysBefore.setHours(9, 0, 0, 0);
+            
+            if (shouldSendNotification(now, threeDaysBefore, eventId, '3days', notificationHistory)) {
+                sendEventNotification(event, '📅 3日前のリマインド', `${event.name}まであと3日です！準備を始めましょう。`);
+                saveNotificationHistory(eventId, '3days');
+            }
+        }
+        
+        // 1日前の通知（夜8時）
+        if (setting.oneDayBefore) {
+            const oneDayBefore = new Date(eventDate);
+            oneDayBefore.setDate(oneDayBefore.getDate() - 1);
+            oneDayBefore.setHours(20, 0, 0, 0);
+            
+            if (shouldSendNotification(now, oneDayBefore, eventId, '1day', notificationHistory)) {
+                sendEventNotification(event, '📅 明日のリマインド', `${event.name}は明日です！チケットや持ち物の確認をお忘れなく。`);
+                saveNotificationHistory(eventId, '1day');
+            }
+        }
+        
+        // 当日朝の通知（朝7時）
+        if (setting.morning) {
+            const morningTime = new Date(eventDate);
+            morningTime.setHours(7, 0, 0, 0);
+            
+            if (shouldSendNotification(now, morningTime, eventId, 'morning', notificationHistory)) {
+                const venue = event.venue || '会場';
+                const time = event.time || '';
+                sendEventNotification(event, '🌅 今日のイベント', `今日は${event.name}の日です！\n📍 ${venue} ${time}\nいってらっしゃい！`);
+                saveNotificationHistory(eventId, 'morning');
+            }
+        }
+    });
+}
+
+// 通知を送信すべきかチェック
+function shouldSendNotification(now, targetTime, eventId, type, history) {
+    // 目標時刻の前後10分以内かチェック
+    const timeDiff = now - targetTime;
+    const tenMinutes = 10 * 60 * 1000;
+    
+    // 目標時刻から10分以内で、かつまだ送信していない
+    if (timeDiff >= 0 && timeDiff <= tenMinutes) {
+        const key = `${eventId}-${type}`;
+        return !history[key];
+    }
+    
+    return false;
+}
+
+// イベント通知を送信
+function sendEventNotification(event, title, message) {
+    const notification = new Notification(title, {
+        body: message,
+        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">🎪</text></svg>',
+        tag: `${event.id || event.name}-notification`,
+        requireInteraction: false,
+        data: {
+            eventId: event.id || event.name,
+            eventName: event.name,
+            eventDate: event.date,
+            eventTime: event.time
+        }
+    });
+    
+    // 通知をクリックした時の処理
+    notification.onclick = function(e) {
+        e.preventDefault();
+        window.focus();
+        
+        // イベント詳細を表示
+        const allEvents = getAllEvents();
+        const eventIndex = allEvents.findIndex(ev => 
+            (ev.id || ev.name) === (event.id || event.name)
+        );
+        
+        if (eventIndex >= 0) {
+            showEventDetail(eventIndex);
+        }
+        
+        notification.close();
+    };
+    
+    console.log(`📢 通知送信: ${title} - ${message}`);
+}
+
+        // 通知履歴を取得
+        function getNotificationHistory() {
+            const saved = localStorage.getItem('notificationHistory');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return {};
+        }
+
+        // 通知履歴を保存
+        function saveNotificationHistory(eventId, type) {
+            const history = getNotificationHistory();
+            const key = `${eventId}-${type}`;
+            history[key] = new Date().toISOString();
+            localStorage.setItem('notificationHistory', JSON.stringify(history));
+        }
+
+        // 通知履歴をクリア（テスト用）
+        function clearNotificationHistory() {
+            localStorage.removeItem('notificationHistory');
+            console.log('🗑️ 通知履歴をクリアしました');
+        }
+
+        // テスト通知を送信（開発用）
+        function sendTestNotification() {
+            if (Notification.permission !== 'granted') {
+                alert('通知権限が許可されていません。ブラウザの設定で通知を許可してください。');
+                return;
+            }
+            
+            const notification = new Notification('🧪 テスト通知', {
+                body: 'これはテスト通知です。実際のイベント通知はこのように表示されます。',
+                icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">🔔</text></svg>',
+                tag: 'test-notification'
+            });
+            
+            notification.onclick = function() {
+                window.focus();
+                notification.close();
+            };
+        }
+
+        // アプリ起動時に過去の未送信通知をチェック
+        function checkMissedNotifications() {
+            if (Notification.permission !== 'granted') {
+                return;
+            }
+            
+            console.log('🔍 未送信の通知をチェック中...');
+            
+            const now = new Date();
+            const allEvents = getAllEvents();
+            const notificationHistory = getNotificationHistory();
+            let missedCount = 0;
+            
+            allEvents.forEach(event => {
+                const eventId = event.id || event.name;
+                const setting = getNotificationSetting(eventId);
+                
+                // 通知が無効ならスキップ
+                if (!setting.enabled) {
+                    return;
+                }
+                
+                const eventDate = new Date(event.date);
+                
+                // 3日前の通知をチェック
+                if (setting.threeDaysBefore) {
+                    const threeDaysBefore = new Date(eventDate);
+                    threeDaysBefore.setDate(threeDaysBefore.getDate() - 3);
+                    threeDaysBefore.setHours(9, 0, 0, 0);
+                    
+                    // 通知時刻を過ぎているか、かつ未送信か
+                    if (now > threeDaysBefore && !notificationHistory[`${eventId}-3days`]) {
+                        // イベントがまだ終わっていない場合のみ通知
+                        if (now < eventDate) {
+                            sendEventNotification(event, '📅 リマインド（遅延）', `${event.name}まであと数日です！準備を始めましょう。`);
+                            saveNotificationHistory(eventId, '3days');
+                            missedCount++;
+                        }
+                    }
+                }
+                
+                // 1日前の通知をチェック
+                if (setting.oneDayBefore) {
+                    const oneDayBefore = new Date(eventDate);
+                    oneDayBefore.setDate(oneDayBefore.getDate() - 1);
+                    oneDayBefore.setHours(20, 0, 0, 0);
+                    
+                    if (now > oneDayBefore && !notificationHistory[`${eventId}-1day`]) {
+                        if (now < eventDate) {
+                            const hoursLeft = Math.round((eventDate - now) / (1000 * 60 * 60));
+                            sendEventNotification(event, '📅 リマインド（遅延）', `${event.name}まであと${hoursLeft}時間です！準備はOKですか？`);
+                            saveNotificationHistory(eventId, '1day');
+                            missedCount++;
+                        }
+                    }
+                }
+                
+                // 当日朝の通知をチェック
+                if (setting.morning) {
+                    const morningTime = new Date(eventDate);
+                    morningTime.setHours(7, 0, 0, 0);
+                    
+                    if (now > morningTime && !notificationHistory[`${eventId}-morning`]) {
+                        // イベント開始時刻を取得
+                        const eventTime = event.time || '';
+                        const timeMatch = eventTime.match(/(\d+):(\d+)/);
+                        let eventStartTime = new Date(eventDate);
+                        if (timeMatch) {
+                            eventStartTime.setHours(parseInt(timeMatch[1]), parseInt(timeMatch[2]));
+                        }
+                        
+                        // イベントがまだ始まっていない場合のみ通知
+                        if (now < eventStartTime) {
+                            sendEventNotification(event, '🌅 今日のイベント', `今日は${event.name}の日です！\n📍 ${event.venue || ''} ${event.time || ''}\nいってらっしゃい！`);
+                            saveNotificationHistory(eventId, 'morning');
+                            missedCount++;
+                        }
+                    }
+                }
+            });
+            
+            if (missedCount > 0) {
+                console.log(`✅ ${missedCount}件の未送信通知を送信しました`);
+            } else {
+                console.log('✅ 未送信の通知はありません');
+            }
+        }
         
         function init() {
             loadCustomEvents();
@@ -2371,17 +3082,28 @@
             loadHomeLocation();
             loadTags();
             loadTheme();  // ← この行を追加
+            loadNotificationSettings();  
+            // 通知権限をリクエスト
+            requestNotificationPermission();
             renderNextEventCountdown();
             renderSummary();
             renderTagFilter();
             renderScheduleOptimization();
             renderView();
+
+            // 🆕 アプリ起動時に未送信の通知をチェック
+            checkMissedNotifications();
             
+            // 通知チェックを定期的に実行（1分ごと）
             setInterval(() => {
                 renderNextEventCountdown();
+                checkAndSendNotifications();
             }, 60000);
-        }
         
+            // 初回の通知チェック
+            checkAndSendNotifications();
+        }
+
         function getDaysUntil(dateStr) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -2540,6 +3262,7 @@
             const totalEvents = allEvents.filter(e => !e.name.includes('交通費') && !e.name.includes('グッズ')).length;
             const totalCost = allEvents.reduce((sum, e) => sum + e.price, 0) + 67609;
             const upcomingEvents = allEvents.filter(e => e.status === '開始前' || e.isCustom).length;
+            const notificationsOn = Object.values(notificationSettings).filter(s => s.enabled).length;
             
             document.getElementById('summary').innerHTML = `
                 <div class="summary-card">
@@ -2553,6 +3276,10 @@
                 <div class="summary-card">
                     <h3>開始前</h3>
                     <div class="value">${upcomingEvents}</div>
+                </div>
+                <div class="summary-card">
+                    <h3>通知ON</h3>
+                    <div class="value">${notificationsOn}</div>
                 </div>
             `;
         }
@@ -2648,6 +3375,69 @@
             const countdownClass = getCountdownClass(days);
             const countdownBadge = `<span class="countdown-badge ${countdownClass}">${countdownText}</span>`;
             
+            function renderEventCard(event) {
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.indexOf(event);
+            const type = event.name.includes('EXPO') ? 'expo' : 
+                        event.name.includes('STAGE') ? 'stage' : 'other';
+            
+            const eventId = event.id || event.name;
+            const checklist = getChecklist(eventId);
+            const completedCount = checklist.filter(item => item.completed).length;
+            const checklistBadge = checklist.length > 0 ? 
+                `<span class="checklist-badge">✓ ${completedCount}/${checklist.length}</span>` : '';
+            
+            const tags = getTags(eventId);
+            const tagsDisplay = tags.length > 0 ? 
+                `<div class="tags-container" style="margin-top: 10px;">
+                    ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>` : '';
+            
+            const customBadge = event.isCustom ? '<span class="custom-event-badge">マイ予定</span>' : '';
+            const editButtons = event.isCustom ? `
+                <div class="event-actions">
+                    <button class="btn-small btn-edit" onclick="editCustomEvent('${event.id}')">✏️ 編集</button>
+                    <button class="btn-small btn-delete" onclick="deleteCustomEvent('${event.id}')">🗑️ 削除</button>
+                </div>
+            ` : '';
+            
+            const days = getDaysUntil(event.date);
+            const countdownText = getCountdownText(days);
+            const countdownClass = getCountdownClass(days);
+            const countdownBadge = `<span class="countdown-badge ${countdownClass}">${countdownText}</span>`;
+            
+            // 通知バッジ
+            const notifSetting = getNotificationSetting(eventId);
+            const notificationBadge = notifSetting.enabled ? 
+                '<span class="notification-badge">🔔</span>' : '';
+            
+    return `
+        <div class="event-card ${type}" onclick="showEventDetail(${eventIndex})">
+            ${notificationBadge}
+            <div class="event-title">${event.name}${customBadge}${checklistBadge}</div>
+            ${event.status && event.status !== '---------' ? `<span class="status-badge">${event.status}</span>` : ''}
+            ${countdownBadge}
+            ${tagsDisplay}
+            <div class="event-details">
+                ${event.time && event.time !== '---------' ? `
+                <div class="event-detail">
+                    <span class="icon">🕐</span>
+                    <span class="label">${event.time}</span>
+                </div>
+                ` : ''}
+                ${event.venue && event.venue !== '---------' ? `
+                <div class="event-detail">
+                    <span class="icon">📍</span>
+                    <span class="label">${event.venue}</span>
+                </div>
+                ` : ''}
+            </div>
+            <div class="event-price">¥${event.price.toLocaleString()}</div>
+            ${editButtons}
+        </div>
+    `;
+}
+
             return `
                 <div class="event-card ${type}" onclick="showEventDetail(${eventIndex})">
                     <div class="event-title">${event.name}${customBadge}${checklistBadge}</div>
@@ -3320,6 +4110,7 @@
         }
         
         // 天気予報セクションをレンダリング
+        // 天気予報セクションをレンダリング（詳細版）
         function renderWeatherSection(event) {
             const eventDate = new Date(event.date);
             const today = new Date();
@@ -3346,17 +4137,179 @@
             
             // 天気予報を別のscriptタグで非同期実行
             setTimeout(() => {
-                fetchWeather(eventId, lat, lon, eventDateStr, daysUntil);
+                fetchDetailedWeather(eventId, lat, lon, eventDateStr, daysUntil);
             }, 100);
             
             return `
                 <div class="weather-section" id="weather-${eventId}">
-                    <h4>☁️ 天気予報（${daysUntil === 0 ? '今日' : daysUntil === 1 ? '明日' : `${daysUntil}日後`}）</h4>
+                    <h4>🌤️ 詳細天気予報（${daysUntil === 0 ? '今日' : daysUntil === 1 ? '明日' : `${daysUntil}日後`}）</h4>
                     <div class="weather-loading">
                         読み込み中...
                     </div>
                 </div>
             `;
+        }
+
+        // 詳細天気情報を取得
+        function fetchDetailedWeather(eventId, lat, lon, targetDate, daysUntil) {
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation_probability,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&timezone=Asia/Tokyo&forecast_days=16`)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherDiv = document.getElementById('weather-' + eventId);
+                    if (!weatherDiv) return;
+                    
+                    const dateIndex = data.daily.time.findIndex(d => d === targetDate);
+                    
+                    if (dateIndex === -1) {
+                        weatherDiv.innerHTML = `
+                            <h4>🌤️ 詳細天気予報</h4>
+                            <div class="weather-error">天気予報データが取得できませんでした</div>
+                        `;
+                        return;
+                    }
+                    
+                    // 日次データ
+                    const weatherCode = data.daily.weathercode[dateIndex];
+                    const tempMax = Math.round(data.daily.temperature_2m_max[dateIndex]);
+                    const tempMin = Math.round(data.daily.temperature_2m_min[dateIndex]);
+                    const precipitation = data.daily.precipitation_probability_max[dateIndex];
+                    const windSpeed = Math.round(data.daily.windspeed_10m_max[dateIndex]);
+                    
+                    const weatherInfo = getWeatherInfo(weatherCode);
+                    
+                    // 時間ごとのデータ（9時、12時、15時、18時）
+                    const targetHours = [9, 12, 15, 18];
+                    const hourlyData = [];
+                    
+                    data.hourly.time.forEach((time, index) => {
+                        const timeDate = new Date(time);
+                        if (timeDate.toISOString().split('T')[0] === targetDate) {
+                            const hour = timeDate.getHours();
+                            if (targetHours.includes(hour)) {
+                                hourlyData.push({
+                                    hour: hour,
+                                    temp: Math.round(data.hourly.temperature_2m[index]),
+                                    precipitation: data.hourly.precipitation_probability[index],
+                                    weatherCode: data.hourly.weathercode[index],
+                                    windSpeed: Math.round(data.hourly.windspeed_10m[index])
+                                });
+                            }
+                        }
+                    });
+                    
+                    // 服装アドバイス
+                    const clothingAdvice = getClothingAdvice(tempMax, tempMin, precipitation, windSpeed);
+                    
+                    // 体感温度の計算（簡易版）
+                    const feelsLike = Math.round(tempMax - (windSpeed * 0.5));
+                    
+                    weatherDiv.innerHTML = `
+                        <h4>🌤️ 詳細天気予報（${daysUntil === 0 ? '今日' : daysUntil === 1 ? '明日' : `${daysUntil}日後`}）</h4>
+                        
+                        <div class="weather-current">
+                            <div class="weather-icon-large">${weatherInfo.icon}</div>
+                            <div class="weather-main-info">
+                                <div class="weather-temp-large">${tempMax}°</div>
+                                <div class="weather-description-large">${weatherInfo.description}</div>
+                                <div class="weather-feels-like">体感温度 ${feelsLike}°</div>
+                            </div>
+                        </div>
+                        
+                        <h5 style="color: white; margin-bottom: 10px; font-size: 1em;">⏰ 時間ごとの予報</h5>
+                        <div class="hourly-weather">
+                            ${hourlyData.map(h => {
+                                const hWeather = getWeatherInfo(h.weatherCode);
+                                return `
+                                    <div class="hour-item">
+                                        <div class="time">${h.hour}:00</div>
+                                        <div class="icon">${hWeather.icon}</div>
+                                        <div class="temp">${h.temp}°</div>
+                                        <div class="rain">💧${h.precipitation}%</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <div class="weather-details-grid">
+                            <div class="weather-detail-item">
+                                <div class="label">最高 / 最低</div>
+                                <div class="value">${tempMax}° / ${tempMin}°</div>
+                            </div>
+                            <div class="weather-detail-item">
+                                <div class="label">降水確率</div>
+                                <div class="value">${precipitation}%</div>
+                            </div>
+                            <div class="weather-detail-item">
+                                <div class="label">風速</div>
+                                <div class="value">${windSpeed}km/h</div>
+                            </div>
+                        </div>
+                        
+                        <div class="clothing-advice">
+                            <h5>👔 服装アドバイス</h5>
+                            <div class="clothing-items">
+                                ${clothingAdvice.map(item => `<span class="clothing-item">${item}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('天気予報の取得に失敗:', error);
+                    const weatherDiv = document.getElementById('weather-' + eventId);
+                    if (weatherDiv) {
+                        weatherDiv.innerHTML = `
+                            <h4>🌤️ 詳細天気予報</h4>
+                            <div class="weather-error">天気予報の取得に失敗しました</div>
+                        `;
+                    }
+                });
+        }
+
+        // 服装アドバイスを取得
+        function getClothingAdvice(tempMax, tempMin, precipitation, windSpeed) {
+            const advice = [];
+            
+            // 気温による服装
+            if (tempMax > 30) {
+                advice.push('🥵 薄着・通気性の良い服');
+                advice.push('🧢 帽子');
+                advice.push('😎 サングラス');
+            } else if (tempMax > 25) {
+                advice.push('👕 半袖でOK');
+                advice.push('🧢 帽子があると快適');
+            } else if (tempMax > 20) {
+                advice.push('👔 長袖シャツ');
+                advice.push('🧥 薄手の上着');
+            } else if (tempMax > 15) {
+                advice.push('🧥 ジャケット');
+                advice.push('👖 長ズボン');
+            } else if (tempMax > 10) {
+                advice.push('🧥 コート');
+                advice.push('🧣 マフラー');
+            } else {
+                advice.push('🧥 厚手のコート');
+                advice.push('🧣 マフラー');
+                advice.push('🧤 手袋');
+            }
+            
+            // 降水確率による装備
+            if (precipitation > 70) {
+                advice.push('☔ 傘必須');
+                advice.push('🥾 防水の靴');
+            } else if (precipitation > 40) {
+                advice.push('🌂 折りたたみ傘');
+            }
+            
+            // 風速による注意
+            if (windSpeed > 40) {
+                advice.push('💨 風対策（帽子注意）');
+            }
+            
+            // 共通アイテム
+            advice.push('👟 歩きやすい靴');
+            advice.push('💧 水分補給用の飲み物');
+            
+            return advice;
         }
         
         // 天気情報を取得
@@ -3561,6 +4514,8 @@
             const eventModal = document.getElementById('eventModal');
             const addEventModal = document.getElementById('addEventModal');
             const themeModal = document.getElementById('themeModal');  // ← 追加
+            const notificationModal = document.getElementById('notificationModal');  // ← 追加
+            const routeModal = document.getElementById('routeModal');  // ← 追加
             if (event.target == eventModal) {
                 closeModal();
             }
@@ -3569,6 +4524,12 @@
             }
             if (event.target == themeModal) {  // ← 追加
                 closeThemeModal();
+            }
+            if (event.target == notificationModal) {  // ← 追加
+                closeNotificationModal();
+            }
+            if (event.target == routeModal) {  // ← 追加
+                closeRouteModal();
             }
         }
         
@@ -3703,6 +4664,195 @@
             renderThemeGrid();
             alert('✨ カスタムテーマを適用しました！');
         }
+
+        // 通知設定モーダル関連
+function openNotificationModal() {
+    renderNotificationSettings();
+    document.getElementById('notificationModal').style.display = 'block';
+}
+
+function closeNotificationModal() {
+    document.getElementById('notificationModal').style.display = 'none';
+}
+
+function renderNotificationSettings() {
+    const allEvents = getAllEvents();
+    let html = '';
+    
+    // 通知権限の状態を表示
+    const permissionStatus = Notification.permission;
+    
+    if (permissionStatus === 'granted') {
+        html += `
+            <div style="background: #d4edda; color: #155724; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #28a745;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <strong>✅ 通知が有効です</strong><br>
+                        <small>イベント前にブラウザ通知でお知らせします</small>
+                    </div>
+                    <button onclick="sendTestNotification()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                        🔔 テスト通知
+                    </button>
+                </div>
+            </div>
+        `;
+    } else if (permissionStatus === 'denied') {
+        html += `
+            <div style="background: #f8d7da; color: #721c24; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #dc3545;">
+                <strong>❌ 通知が拒否されています</strong><br>
+                <small>ブラウザの設定から通知を許可してください</small>
+            </div>
+        `;
+    } else {
+        html += `
+            <div style="background: #fff3cd; color: #856404; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #ffc107;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <strong>⚠️ 通知が未設定です</strong><br>
+                        <small>通知を受け取るには許可が必要です</small>
+                    </div>
+                    <button onclick="requestNotificationPermission()" style="padding: 10px 20px; background: #ffc107; color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                        🔔 通知を許可
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+    
+    allEvents.forEach(event => {
+        const eventId = event.id || event.name;
+        const setting = getNotificationSetting(eventId);
+        
+        html += `
+            <div class="notification-item">
+                <div class="notification-header">
+                    <h4>${event.name}</h4>
+                    <label class="toggle-switch">
+                        <input type="checkbox" 
+                               ${setting.enabled ? 'checked' : ''} 
+                               onchange="toggleNotification('${eventId}')">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="notification-desc">
+                    📅 ${formatDate(event.date)} ${event.time || ''}
+                </div>
+                <div class="notification-options" id="notif-options-${eventId}" 
+                     style="display: ${setting.enabled ? 'flex' : 'none'}">
+                    <label>
+                        <input type="checkbox" 
+                               ${setting.threeDaysBefore ? 'checked' : ''} 
+                               onchange="updateNotificationOption('${eventId}', 'threeDaysBefore')">
+                        📅 3日前（朝9時）
+                    </label>
+                    <label>
+                        <input type="checkbox" 
+                               ${setting.oneDayBefore ? 'checked' : ''} 
+                               onchange="updateNotificationOption('${eventId}', 'oneDayBefore')">
+                        📅 1日前（夜8時）
+                    </label>
+                    <label>
+                        <input type="checkbox" 
+                               ${setting.morning ? 'checked' : ''} 
+                               onchange="updateNotificationOption('${eventId}', 'morning')">
+                        🌅 当日朝（朝7時）
+                    </label>
+                </div>
+            </div>
+        `;
+    });
+    
+    document.getElementById('notificationSettings').innerHTML = html;
+}
+
+function toggleNotification(eventId) {
+    const setting = getNotificationSetting(eventId);
+    setting.enabled = !setting.enabled;
+    
+    const options = document.getElementById(`notif-options-${eventId}`);
+    if (options) {
+        options.style.display = setting.enabled ? 'flex' : 'none';
+    }
+    
+    saveNotificationSettings();
+    renderSummary();
+    renderView();
+}
+
+function updateNotificationOption(eventId, option) {
+    const setting = getNotificationSetting(eventId);
+    setting[option] = !setting[option];
+    saveNotificationSettings();
+}
+
+// ルート最適化モーダル関連
+function openRouteModal() {
+    renderRouteOptimization();
+    document.getElementById('routeModal').style.display = 'block';
+}
+
+function closeRouteModal() {
+    document.getElementById('routeModal').style.display = 'none';
+}
+
+function renderRouteOptimization() {
+    const allEvents = getAllEvents();
+    
+    // 日時順にソート
+    const sortedEvents = allEvents
+        .filter(e => e.date && !e.name.includes('交通費') && !e.name.includes('グッズ'))
+        .sort((a, b) => {
+            const dateA = new Date(a.date + ' ' + (a.time || '00:00'));
+            const dateB = new Date(b.date + ' ' + (b.time || '00:00'));
+            return dateA - dateB;
+        });
+    
+    let html = '<div class="route-optimization">';
+    html += '<h4>📍 最適な移動ルート（日時順）</h4>';
+    
+    sortedEvents.forEach((event, index) => {
+        html += `
+            <div class="route-step">
+                <div class="route-number">${index + 1}</div>
+                <div class="route-info">
+                    <h5>${event.name}</h5>
+                    <p>📅 ${formatDate(event.date)} ${event.time || ''}</p>
+                    <p>📍 ${event.venue || '会場情報なし'}</p>
+                </div>
+            </div>
+        `;
+    });
+    
+    // 移動時間の概算（仮に各イベント間15分と想定）
+    const totalMoveTime = (sortedEvents.length - 1) * 15;
+    const totalPrice = sortedEvents.reduce((sum, e) => sum + (e.price || 0), 0);
+    
+    html += `
+        <div class="route-summary">
+            <h4>📊 ルートサマリー</h4>
+            <div class="route-detail">
+                <div class="route-detail-item">
+                    <div class="label">総イベント数</div>
+                    <div class="value">${sortedEvents.length}</div>
+                </div>
+                <div class="route-detail-item">
+                    <div class="label">移動回数</div>
+                    <div class="value">${sortedEvents.length - 1}回</div>
+                </div>
+                <div class="route-detail-item">
+                <div class="label">予想移動時間</div>
+                <div class="value">${totalMoveTime}分</div>
+                </div>
+                <div class="route-detail-item">
+                <div class="label">合計金額</div>
+                <div class="value">¥${totalPrice.toLocaleString()}</div>
+                </div>
+                </div>
+                </div>
+                `;
+                html += '</div>';
+                document.getElementById('routeOptimizationContent').innerHTML = html;}
+
         init();
     </script>
 </body>
