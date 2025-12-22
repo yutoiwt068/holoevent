@@ -2083,7 +2083,7 @@
             <h4>📝 使い方</h4>
             <p>• イベントカードをクリックすると詳細情報・出演者が表示されます<br>
             • アーティスト検索で出演ステージを確認できます<br>
-            • 対応エリア: 幕張・有明・渋谷・新宿・池袋・秋葉原・横浜（会場名は正式名称で入力）<br>
+            • 対応エリア: 幕張・有明・渋谷・新宿・池袋・秋葉原・横浜・みなとみらい（会場名は正式名称で入力）<br>
             • 対応駅: 上記エリア（最後に「駅」をつけること）</p>
         </div>
         
@@ -2506,7 +2506,7 @@
                 walkTime: '駅から徒歩約3-7分',
                 lat: 35.6298,
                 lng: 139.7946,
-                tips: 'ビッグサイトは広大です。東・西・南ホールの位置を事前確認しましょう。'
+                tips: '有明エリアはビッグサイト、有明アリーナ、東京ガーデンシアターなど大型施設が集中しています。施設間の移動時間も考慮しましょう。'
             },
             '東京ビッグサイト': {
                 name: '東京ビッグサイト（東京国際展示場）',
@@ -4779,79 +4779,1112 @@ function toggleNotification(eventId) {
     renderView();
 }
 
-function updateNotificationOption(eventId, option) {
-    const setting = getNotificationSetting(eventId);
-    setting[option] = !setting[option];
-    saveNotificationSettings();
-}
+    function updateNotificationOption(eventId, option) {
+        const setting = getNotificationSetting(eventId);
+        setting[option] = !setting[option];
+        saveNotificationSettings();
+    }
 
-// ルート最適化モーダル関連
-function openRouteModal() {
-    renderRouteOptimization();
-    document.getElementById('routeModal').style.display = 'block';
-}
+    // ルート最適化モーダル関連
+    function openRouteModal() {
+        renderRouteOptimization();
+        document.getElementById('routeModal').style.display = 'block';
+    }
 
-function closeRouteModal() {
-    document.getElementById('routeModal').style.display = 'none';
-}
+    function closeRouteModal() {
+        document.getElementById('routeModal').style.display = 'none';
+    }
 
-function renderRouteOptimization() {
-    const allEvents = getAllEvents();
-    
-    // 日時順にソート
-    const sortedEvents = allEvents
-        .filter(e => e.date && !e.name.includes('交通費') && !e.name.includes('グッズ'))
-        .sort((a, b) => {
-            const dateA = new Date(a.date + ' ' + (a.time || '00:00'));
-            const dateB = new Date(b.date + ' ' + (b.time || '00:00'));
+    // 最適化対象のイベントをフィルタリング
+    function filterOptimizableEvents(events) {
+        if (events.length === 0) return [];
+        
+        // 今日以降のイベントのみ（過去は除外）
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const futureEvents = events.filter(e => {
+            const eventDate = new Date(e.date);
+            eventDate.setHours(0, 0, 0, 0);
+            return eventDate >= today; // 今日以降のみ
+        });
+        
+        if (futureEvents.length === 0) return [];
+        
+        // 条件：同じ日に2つ以上のイベント
+        const sameDayEvents = [];
+        const dateGroups = {};
+        
+        futureEvents.forEach(event => {
+            if (!dateGroups[event.date]) {
+                dateGroups[event.date] = [];
+            }
+            dateGroups[event.date].push(event);
+        });
+        
+        // 同日に2つ以上のイベントがある日付を抽出
+        Object.values(dateGroups).forEach(group => {
+            if (group.length >= 2) {
+                sameDayEvents.push(...group);
+            }
+        });
+        
+        // 重複を除いてユニーク化
+        const uniqueEvents = Array.from(new Map(sameDayEvents.map(e => [(e.id || e.name), e])).values());
+        
+        // 日時順にソート（時系列順）
+        return uniqueEvents.sort((a, b) => {
+            const dateA = new Date(a.date + ' ' + (a.time?.split('~')[0].replace(/[^0-9:]/g, '') || '00:00'));
+            const dateB = new Date(b.date + ' ' + (b.time?.split('~')[0].replace(/[^0-9:]/g, '') || '00:00'));
             return dateA - dateB;
         });
-    
-    let html = '<div class="route-optimization">';
-    html += '<h4>📍 最適な移動ルート（日時順）</h4>';
-    
-    sortedEvents.forEach((event, index) => {
-        html += `
-            <div class="route-step">
-                <div class="route-number">${index + 1}</div>
-                <div class="route-info">
-                    <h5>${event.name}</h5>
-                    <p>📅 ${formatDate(event.date)} ${event.time || ''}</p>
-                    <p>📍 ${event.venue || '会場情報なし'}</p>
+    }
+
+        function renderRouteOptimization() {
+        const allEvents = getAllEvents();
+        
+        // イベントのみをフィルター（交通費・グッズを除外）
+        const events = allEvents.filter(e => 
+            e.date && 
+            !e.name.includes('交通費') && 
+            !e.name.includes('グッズ')
+        );
+        
+        // 時系列順にソート（マイ予定も含めて）
+        const sortedEvents = events.sort((a, b) => {
+            // 日付と時刻を組み合わせてソート
+            const getDateTime = (event) => {
+            if (!event.time) {
+                return new Date(event.date + ' 00:00:00');
+            }
+            
+            // 時刻を抽出（"9時~18時" → "09:00", "17:00(場)18:30(演)" → "17:00"）
+            let timeStr = event.time;
+            
+            // パターン1: "9時~18時" のような形式
+            const hourMatch = timeStr.match(/(\d+)時/);
+            if (hourMatch) {
+                const hour = hourMatch[1].padStart(2, '0');
+                timeStr = `${hour}:00`;
+            } else {
+                // パターン2: "17:00(場)18:30(演)" のような形式
+                const timeMatch = timeStr.match(/(\d+):(\d+)/);
+                if (timeMatch) {
+                    timeStr = `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}`;
+                } else {
+                    timeStr = '00:00';
+                }
+            }
+            
+            return new Date(event.date + ' ' + timeStr + ':00');
+        };
+            
+            return getDateTime(a) - getDateTime(b);
+        });
+
+        
+        
+        // 連続イベントまたは同日複数イベントのみを抽出
+        const optimizableEvents = filterOptimizableEvents(sortedEvents);
+        console.log('最適化対象イベント数:', optimizableEvents.length);
+
+        // 最適化対象イベントを再度時系列順にソート（マイ予定含む）
+        optimizableEvents.sort((a, b) => {
+            const getDateTime = (event) => {
+            if (!event.time) {
+                return new Date(event.date + ' 00:00:00');
+            }
+            
+            // 時刻を抽出（"9時~18時" → "09:00", "17:00(場)18:30(演)" → "17:00"）
+            let timeStr = event.time;
+            
+            // パターン1: "9時~18時" のような形式
+            const hourMatch = timeStr.match(/(\d+)時/);
+            if (hourMatch) {
+                const hour = hourMatch[1].padStart(2, '0');
+                timeStr = `${hour}:00`;
+            } else {
+                // パターン2: "17:00(場)18:30(演)" のような形式
+                const timeMatch = timeStr.match(/(\d+):(\d+)/);
+                if (timeMatch) {
+                    timeStr = `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}`;
+                } else {
+                    timeStr = '00:00';
+                }
+            }
+            
+            return new Date(event.date + ' ' + timeStr + ':00');
+        };
+            
+            return getDateTime(a) - getDateTime(b);
+        });
+        
+        let html = '<div class="route-optimization">';
+        
+        // 最適化対象がない場合
+        if (optimizableEvents.length === 0) {
+            html += `
+                <div style="text-align: center; padding: 50px 20px;">
+                    <div style="font-size: 4em; margin-bottom: 20px;">📅</div>
+                    <h3 style="color: #667eea; margin-bottom: 15px;">ルート最適化の対象がありません</h3>
+                    <p style="color: #666; line-height: 1.8;">
+                        ルート最適化は以下の条件で表示されます：<br>
+                        • 同じ日に2つ以上のイベント<br>
+                        • 2日以上連続するイベント
+                    </p>
+                    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; display: inline-block;">
+                        <p style="color: #666; margin: 0;">
+                            💡 予定を追加すると、効率的な移動ルートを提案します
+                        </p>
+                    </div>
                 </div>
+            `;
+            html += '</div>';
+            document.getElementById('routeOptimizationContent').innerHTML = html;
+            return;
+        }
+        
+        html += '<h4>📍 最適ルート（時系列順）</h4>';
+        html += '<p style="color: #666; font-size: 0.9em; margin-bottom: 20px;">効率的な移動順序と必要な情報を表示しています</p>';
+
+        
+        
+        // 統計情報の初期化
+        let previousVenue = null;
+        let sameVenueCount = 0;
+        let totalWalkTime = 0;
+        let totalDistance = 0;
+        let totalTransitCost = 0;
+
+        // 最終的な時系列順ソート（この直後にループ開始）
+        optimizableEvents.sort((a, b) => {
+            const getDateTime = (event) => {
+            if (!event.time) {
+                return new Date(event.date + ' 00:00:00');
+            }
+            
+            // 時刻を抽出（"9時~18時" → "09:00", "17:00(場)18:30(演)" → "17:00"）
+            let timeStr = event.time;
+            
+            // パターン1: "9時~18時" のような形式
+            const hourMatch = timeStr.match(/(\d+)時/);
+            if (hourMatch) {
+                const hour = hourMatch[1].padStart(2, '0');
+                timeStr = `${hour}:00`;
+            } else {
+                // パターン2: "17:00(場)18:30(演)" のような形式
+                const timeMatch = timeStr.match(/(\d+):(\d+)/);
+                if (timeMatch) {
+                    timeStr = `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}`;
+                } else {
+                    timeStr = '00:00';
+                }
+            }
+            
+            return new Date(event.date + ' ' + timeStr + ':00');
+        };
+        
+    
+    return getDateTime(a) - getDateTime(b);
+});
+
+console.log('=== 最終ソート後 ===');
+optimizableEvents.forEach(e => console.log(`${e.date} ${e.time || '時刻なし'} - ${e.name}`));
+
+
+// 日付ごとにグループ化
+let currentDate = null;
+let eventCounter = 0;
+
+
+        optimizableEvents.forEach((event, index) => {
+
+            eventCounter++;
+    
+        // 日付が変わったら日付ヘッダーを表示
+        if (currentDate !== event.date) {
+            currentDate = event.date;
+            const eventDate = new Date(event.date);
+            const days = ['日', '月', '火', '水', '木', '金', '土'];
+            const dayOfWeek = days[eventDate.getDay()];
+            
+            html += `
+                <div style="margin: 40px 0 20px 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                    <h3 style="color: white; margin: 0; font-size: 1.5em; display: flex; align-items: center; gap: 10px;">
+                        📅 ${eventDate.getFullYear()}年${eventDate.getMonth() + 1}月${eventDate.getDate()}日（${dayOfWeek}）
+                    </h3>
+                </div>
+            `;
+        }
+    
+        
+        
+            const nextEvent = optimizableEvents[index + 1];
+            
+            // 会場間の移動情報を計算
+            let moveInfo = '';
+            let waitTime = '';
+            
+            // 前のイベントと日付が異なる場合は移動情報を表示しない
+            const prevEvent = index > 0 ? optimizableEvents[index - 1] : null;
+            const isSameDay = prevEvent && prevEvent.date === event.date;
+
+            if (previousVenue && event.venue && isSameDay) {
+                const prevVenueNormalized = normalizeVenueName(previousVenue);
+                const currentVenueNormalized = normalizeVenueName(event.venue);
+                            
+                if (prevVenueNormalized === currentVenueNormalized) {
+                    moveInfo = `
+                        <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-radius: 8px; margin: 10px 0;">
+                            <div style="color: #155724; font-weight: bold;">📍 同じ会場内</div>
+                            <div style="color: #155724; font-size: 0.85em; margin-top: 4px;">移動なし・そのまま滞在</div>
+                        </div>
+                    `;
+                    sameVenueCount++;
+                } else {
+                    // 会場が違う場合の移動情報
+                    const moveData = calculateMovement(prevVenueNormalized, currentVenueNormalized);
+                    totalWalkTime += moveData.time;
+                    totalDistance += moveData.distance;
+                    totalTransitCost += moveData.cost || 0;
+                    
+                    moveInfo = `
+                        <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #cfe2ff 0%, #b6d4fe 100%); border-radius: 8px; margin: 10px 0; border-left: 4px solid #0d6efd;">
+                            <div style="color: #084298; font-size: 0.85em; margin-bottom: 5px;">移動</div>
+                            <div style="font-weight: bold; color: #084298; font-size: 1.1em;">
+                                ${moveData.method}
+                            </div>
+                            <div style="color: #084298; font-size: 0.9em; margin-top: 8px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                                <span>⏱️ ${moveData.time}分</span>
+                                <span>📏 ${moveData.distance}km</span>
+                                ${moveData.cost ? `<span>💰 ¥${moveData.cost}</span>` : ''}
+                            </div>
+                            ${moveData.route ? `<div style="color: #666; font-size: 0.85em; margin-top: 8px;">${moveData.route}</div>` : ''}
+                        </div>
+                    `;
+                }
+            }
+            
+            
+            // 待ち時間を計算
+            if (index > 0) {
+                const prevEvent = optimizableEvents[index - 1];
+                const prevEndTime = getEventEndTime(prevEvent);
+                const currentStartTime = getEventStartTime(event);
+                
+                if (prevEndTime && currentStartTime) {
+                    let waitMinutes = Math.floor((currentStartTime - prevEndTime) / (1000 * 60));
+                    
+                    // 移動時間を引く（同日で会場が違う場合のみ）
+                    let travelTimeMinutes = 0;
+                    if (isSameDay && previousVenue && event.venue) {
+                        const prevVenueNormalized = normalizeVenueName(previousVenue);
+                        const currentVenueNormalized = normalizeVenueName(event.venue);
+                        
+                        if (prevVenueNormalized !== currentVenueNormalized) {
+                            const moveData = calculateMovement(prevVenueNormalized, currentVenueNormalized);
+                            travelTimeMinutes = moveData.time;
+                            waitMinutes = waitMinutes - travelTimeMinutes; // 移動時間を引く
+                        }
+                    }
+                    if (waitMinutes > 0) {
+                        const hours = Math.floor(waitMinutes / 60);
+                        const mins = waitMinutes % 60;
+                        
+                        let waitColor = waitMinutes > 180 ? '#ffc107' : waitMinutes > 60 ? '#17a2b8' : '#6c757d';
+                        let waitBg = waitMinutes > 180 ? '#fff3cd' : waitMinutes > 60 ? '#d1ecf1' : '#e2e3e5';
+                        
+                        waitTime = `
+                        <div style="margin-top: 10px; padding: 12px; background: ${waitBg}; border-radius: 6px; border-left: 3px solid ${waitColor};">
+                            <div style="color: ${waitColor}; font-weight: bold; margin-bottom: 5px;">
+                                ⏰ 自由時間: ${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}
+                                ${travelTimeMinutes > 0 ? `<span style="font-size: 0.85em; opacity: 0.8;"> (移動${travelTimeMinutes}分を除く)</span>` : ''}
+                            </div>
+                                ${waitMinutes > 180 ? `
+                                    <div style="color: #856404; font-size: 0.85em; margin-top: 5px;">
+                                        💡 長時間の待機 - 近くで食事や休憩をおすすめ
+                                    </div>
+                                ` : waitMinutes > 60 ? `
+                                    <div style="color: #0c5460; font-size: 0.85em; margin-top: 5px;">
+                                        ☕ カフェや観光の時間があります
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }
+                }
+            }
+            
+            // 会場の詳細情報を取得
+            const venueInfo = getVenueInfo(event.venue);
+            
+            html += `
+                ${index > 0 ? moveInfo : ''}
+                
+                <div class="route-step" style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div class="route-number">${eventCounter}</div>
+                    <div class="route-info" style="flex: 1;">
+                        <h5 style="font-size: 1.2em; margin-bottom: 10px; color: #2c3e50;">${event.name}</h5>
+                        <div style="display: grid; gap: 8px; font-size: 0.95em;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #667eea;">📅</span>
+                                <span style="color: #555;">${formatDate(event.date)} ${event.time || ''}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #667eea;">📍</span>
+                                <span style="color: #555;">${venueInfo.displayName || event.venue || '会場未定'}</span>
+                            </div>
+                            ${venueInfo.station ? `
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="color: #667eea;">🚃</span>
+                                    <span style="color: #555; font-size: 0.9em;">${venueInfo.station}</span>
+                                </div>
+                            ` : ''}
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #e74c3c;">💰</span>
+                                <span style="color: #e74c3c; font-weight: bold; font-size: 1.1em;">¥${event.price.toLocaleString()}</span>
+                            </div>
+                        </div>
+                        ${waitTime}
+                    </div>
+                </div>
+            `;
+            
+            previousVenue = event.venue;
+        });
+        
+        // サマリー計算
+        const totalPrice = optimizableEvents.reduce((sum, e) => sum + (e.price || 0), 0);
+        const dateRange = getDateRange(optimizableEvents);
+        const needsAccommodation = checkNeedsAccommodation(optimizableEvents);
+        const moveCount = optimizableEvents.length - sameVenueCount - 1;
+        
+        html += `
+            <div class="route-summary">
+                <h4 style="margin-bottom: 20px;">📊 ルートサマリー</h4>
+                <div class="route-detail">
+                    <div class="route-detail-item">
+                        <div class="label">📅 開催期間</div>
+                        <div class="value" style="font-size: 0.9em;">${dateRange}</div>
+                    </div>
+                    <div class="route-detail-item">
+                        <div class="label">🎫 総イベント数</div>
+                        <div class="value">${optimizableEvents.length}件</div>
+                    </div>
+                    <div class="route-detail-item">
+                        <div class="label">🏢 訪問会場数</div>
+                        <div class="value">${[...new Set(optimizableEvents.map(e => normalizeVenueName(e.venue)))].length}箇所</div>
+                    </div>
+                    <div class="route-detail-item">
+                        <div class="label">🚶 会場間移動</div>
+                        <div class="value">${moveCount}回</div>
+                    </div>
+                    <div class="route-detail-item">
+                        <div class="label">⏱️ 総移動時間</div>
+                        <div class="value">${totalWalkTime}分</div>
+                    </div>
+                    <div class="route-detail-item">
+                        <div class="label">📏 総移動距離</div>
+                        <div class="value">${totalDistance.toFixed(1)}km</div>
+                    </div>
+                    <div class="route-detail-item">
+                        <div class="label">🚃 交通費</div>
+                        <div class="value">¥${totalTransitCost.toLocaleString()}</div>
+                    </div>
+                    <div class="route-detail-item">
+                        <div class="label">💰 イベント代</div>
+                        <div class="value">¥${totalPrice.toLocaleString()}</div>
+                    </div>
+                    <div class="route-detail-item" style="grid-column: 1 / -1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px;">
+                        <div class="label" style="color: white;">💵 総費用（交通費込）</div>
+                        <div class="value" style="font-size: 1.8em;">¥${(totalPrice + totalTransitCost).toLocaleString()}</div>
+                    </div>
+                </div>
+                
+                ${needsAccommodation ? `
+                    <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 8px; border-left: 4px solid #ffc107;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                            <span style="font-size: 1.5em;">🏨</span>
+                            <strong style="color: #856404;">宿泊推奨</strong>
+                        </div>
+                        <div style="color: #856404; font-size: 0.9em; line-height: 1.6;">
+                            連日のイベントです。会場近くのホテル予約をおすすめします。<br>
+                            早めの予約でお得なプランを見つけましょう！
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+            
+            <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f2 100%); border-radius: 10px; border-left: 4px solid #17a2b8;">
+                <h4 style="color: #0c5460; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <span>💡</span> おすすめポイント
+                </h4>
+                <ul style="color: #0c5460; font-size: 0.95em; line-height: 2; padding-left: 20px; margin: 0;">
+                    ${generateRecommendations(optimizableEvents, sameVenueCount, totalWalkTime)}
+                </ul>
             </div>
         `;
-    });
-    
-    // 移動時間の概算（仮に各イベント間15分と想定）
-    const totalMoveTime = (sortedEvents.length - 1) * 15;
-    const totalPrice = sortedEvents.reduce((sum, e) => sum + (e.price || 0), 0);
-    
-    html += `
-        <div class="route-summary">
-            <h4>📊 ルートサマリー</h4>
-            <div class="route-detail">
-                <div class="route-detail-item">
-                    <div class="label">総イベント数</div>
-                    <div class="value">${sortedEvents.length}</div>
-                </div>
-                <div class="route-detail-item">
-                    <div class="label">移動回数</div>
-                    <div class="value">${sortedEvents.length - 1}回</div>
-                </div>
-                <div class="route-detail-item">
-                <div class="label">予想移動時間</div>
-                <div class="value">${totalMoveTime}分</div>
-                </div>
-                <div class="route-detail-item">
-                <div class="label">合計金額</div>
-                <div class="value">¥${totalPrice.toLocaleString()}</div>
-                </div>
-                </div>
-                </div>
-                `;
-                html += '</div>';
-                document.getElementById('routeOptimizationContent').innerHTML = html;}
+        
+        html += '</div>';
+        document.getElementById('routeOptimizationContent').innerHTML = html;
+    }
+
+    // 会場名を正規化（マッチングしやすくする）
+    function normalizeVenueName(venue) {
+        if (!venue) return '';
+        
+        const normalized = venue.toLowerCase()
+            .replace(/[&＆]/g, '')
+            .replace(/\s+/g, '')
+            .replace(/ホール/g, '')
+            .replace(/駅/g, '');
+        
+        // エリアごとにグループ化（詳細→エリアへの自動マッピング）
+        
+        // 幕張エリア
+        if (normalized.includes('国際展示場') || normalized.includes('幕張メッセ') || normalized.includes('幕張')) {
+            return '幕張メッセ';
+        }
+        
+        // 有明エリア（ビッグサイト、アリーナ、ガーデンシアターを統合）
+        if (normalized.includes('ビッグサイト') || normalized.includes('東京国際展示場')) {
+            return '有明エリア';
+        }
+        if (normalized.includes('有明アリーナ')) {
+            return '有明エリア';
+        }
+        if (normalized.includes('ガーデンシアター')) {
+            return '有明エリア';
+        }
+        if (normalized.includes('有明')) {
+            return '有明エリア';
+        }
+        
+        // 横浜エリア（みなとみらいに統合）
+        if (normalized.includes('パシフィコ')) {
+            return 'みなとみらい';
+        }
+        if (normalized.includes('kアリーナ')) {
+            return 'みなとみらい';
+        }
+        if (normalized.includes('ぴあアリーナ')) {
+            return 'みなとみらい';
+        }
+        if (normalized.includes('みなとみらい')) {
+            return 'みなとみらい';
+        }
+        if (normalized.includes('横浜')) {
+            return '横浜';
+        }
+        
+        // 都心エリア
+        if (normalized.includes('渋谷')) return '渋谷';
+        if (normalized.includes('新宿')) return '新宿';
+        if (normalized.includes('池袋')) return '池袋';
+        if (normalized.includes('秋葉原')) return '秋葉原';
+        
+        return venue;
+    }
+
+    // 会場情報を取得
+    function getVenueInfo(venue) {
+        const venueKey = Object.keys(venueDatabase).find(key => 
+            venue && venue.includes(key.split('&')[0].trim())
+        );
+        
+        if (venueKey && venueDatabase[venueKey]) {
+            return {
+                displayName: venueDatabase[venueKey].name,
+                station: venueDatabase[venueKey].station,
+                address: venueDatabase[venueKey].address
+            };
+        }
+        
+        return { displayName: venue, station: null, address: null };
+    }
+
+    // 会場間の移動情報を計算（全エリア対応・完全版）
+    function calculateMovement(from, to) {
+        // 移動データベース（実際の所要時間・距離・料金）
+        const movements = {
+            // ========== 幕張メッセ内 ==========
+            '幕張メッセ_幕張メッセ': { 
+                method: '🚶 徒歩（館内移動）', 
+                time: 5, 
+                distance: 0.3, 
+                cost: 0,
+                route: '国際展示場4-8ホール ⇔ 1-3ホール'
+            },
+            
+            // ========== 有明エリア内 ==========
+            
+            
+            // ========== 横浜エリア内 ==========
+            '横浜_みなとみらい': { 
+                method: '🚃 みなとみらい線', 
+                time: 5, 
+                distance: 2, 
+                cost: 193,
+                route: '横浜駅 → みなとみらい駅'
+            },
+            'みなとみらい_横浜': { 
+                method: '🚃 みなとみらい線', 
+                time: 5, 
+                distance: 2, 
+                cost: 193,
+                route: 'みなとみらい駅 → 横浜駅'
+            },
+            
+            
+            
+            
+            
+            
+            
+            // ========== 都心部（渋谷・新宿・池袋・秋葉原） ==========
+            '渋谷_新宿': { 
+                method: '🚃 JR山手線', 
+                time: 7, 
+                distance: 4, 
+                cost: 167,
+                route: '渋谷駅 → 新宿駅（山手線）'
+            },
+            '新宿_渋谷': { 
+                method: '🚃 JR山手線', 
+                time: 7, 
+                distance: 4, 
+                cost: 167,
+                route: '新宿駅 → 渋谷駅（山手線）'
+            },
+            '新宿_池袋': { 
+                method: '🚃 JR埼京線（JR湘南新宿ライン）', 
+                time: 5, 
+                distance: 5, 
+                cost: 167,
+                route: '新宿駅 → 池袋駅'
+            },
+            '池袋_新宿': { 
+                method: '🚃 JR埼京線（JR湘南新宿ライン）', 
+                time: 5, 
+                distance: 5, 
+                cost: 167,
+                route: '池袋駅 → 新宿駅'
+            },
+            '池袋_秋葉原': { 
+                method: '🚃 JR山手線', 
+                time: 20, 
+                distance: 8, 
+                cost: 208,
+                route: '池袋駅 → 秋葉原駅（山手線）'
+            },
+            '秋葉原_池袋': { 
+                method: '🚃 JR山手線', 
+                time: 20, 
+                distance: 8, 
+                cost: 208,
+                route: '秋葉原駅 → 池袋駅（山手線）'
+            },
+            '渋谷_池袋': { 
+                method: '🚃 JR埼京線（JR湘南新宿ライン）', 
+                time: 11, 
+                distance: 9, 
+                cost: 178,
+                route: '渋谷駅 → 池袋駅'
+            },
+            '池袋_渋谷': { 
+                method: '🚃 JR埼京線（JR湘南新宿ライン）', 
+                time: 11, 
+                distance: 9, 
+                cost: 178,
+                route: '池袋駅 → 渋谷駅'
+            },
+            '渋谷_秋葉原': { 
+                method: '🚃 JR山手線→JR総武線', 
+                time: 25, 
+                distance: 10, 
+                cost: 208,
+                route: '渋谷駅 → 代々木 → 秋葉原駅（総武線）'
+            },
+            '秋葉原_渋谷': { 
+                method: '🚃 JR総武線→JR山手線', 
+                time: 25, 
+                distance: 10, 
+                cost: 208,
+                route: '秋葉原駅（総武線）→ 代々木 → 渋谷'
+            },
+            '新宿_秋葉原': { 
+                method: '🚃 JR中央線→JR総武線', 
+                time: 14, 
+                distance: 10, 
+                cost: 178,
+                route: '新宿駅 → 御茶ノ水駅 → 秋葉原駅（総武線）'
+            },
+            '秋葉原_新宿': { 
+                method: '🚃 JR総武線→JR中央線', 
+                time: 14, 
+                distance: 10, 
+                cost: 178,
+                route: '秋葉原駅（総武線）→ 御茶ノ水駅 → 新宿'
+            },
+            
+            // ========== 主要エリア間の移動 ==========
+            
+            // 幕張 ⇔ 有明
+            '幕張メッセ_有明エリア': { 
+                method: '🚃 JR京葉線→りんかい線', 
+                time: 35, 
+                distance: 30, 
+                cost: 678,
+                route: '海浜幕張 → 新木場 → 国際展示場'
+            },
+            '有明エリア_幕張メッセ': { 
+                method: '🚃 りんかい線→JR京葉線', 
+                time: 35, 
+                distance: 30, 
+                cost: 678,
+                route: '国際展示場 → 新木場 → 海浜幕張'
+            },
+            
+            
+            // 渋谷・新宿 ⇔ 有明
+            '渋谷_有明エリア': { 
+                method: '🚃 りんかい線', 
+                time: 25, 
+                distance: 12, 
+                cost: 502,
+                route: '渋谷 → 国際展示場'
+            },
+            '有明エリア_渋谷': { 
+                method: '🚃 りんかい線', 
+                time: 25, 
+                distance: 12, 
+                cost: 502,
+                route: '国際展示場 → 渋谷'
+            },
+            '新宿_有明エリア': { 
+                method: '🚃 りんかい線', 
+                time: 27, 
+                distance: 15, 
+                cost: 513,
+                route: '新宿 → 国際展示場'
+            },
+            '有明エリア_新宿': { 
+                method: '🚃 りんかい線', 
+                time: 27, 
+                distance: 15, 
+                cost: 513,
+                route: '国際展示場 → 新宿'
+            },
+            
+            
+            // 渋谷・新宿 ⇔ 横浜
+            '渋谷_横浜': { 
+                method: '🚃 東急東横線', 
+                time: 46, 
+                distance: 25, 
+                cost: 309,
+                route: '渋谷 → 横浜（東急東横線）'
+            },
+            '横浜_渋谷': { 
+                method: '🚃 東急東横線', 
+                time: 46, 
+                distance: 25, 
+                cost: 309,
+                route: '横浜 → 渋谷（東急東横線）'
+            },
+            '新宿_横浜': { 
+                method: '🚃 JR山手線・東急東横線', 
+                time: 45, 
+                distance: 28, 
+                cost: 476,
+                route: '新宿 → 渋谷 → 横浜（東急東横線）'
+            },
+            '横浜_新宿': { 
+                method: '🚃 東急東横線→JR山手線', 
+                time: 45, 
+                distance: 28, 
+                cost: 476,
+                route: '横浜（東急東横線）→ 渋谷 → 新宿'
+            },
+            '渋谷_みなとみらい': { 
+                method: '🚃 東急東横線→みなとみらい線', 
+                time: 35, 
+                distance: 27, 
+                cost: 502,
+                route: '渋谷 → みなとみらい（みなとみらい線直通）'
+            },
+            'みなとみらい_渋谷': { 
+                method: '🚃 みなとみらい線→東急東横線', 
+                time: 35, 
+                distance: 27, 
+                cost: 502,
+                route: 'みなとみらい → 渋谷（東急東横線直通）'
+            },
+            
+            // 有明 ⇔ 横浜
+            '有明エリア_横浜': { 
+                method: '🚃 りんかい線→JR京浜東北線', 
+                time: 43, 
+                distance: 35, 
+                cost: 638,
+                route: '国際展示場 → 大井町 → 横浜'
+            },
+            '横浜_有明エリア': { 
+                method: '🚃 JR京浜東北線→りんかい線', 
+                time: 43, 
+                distance: 35, 
+                cost: 638,
+                route: '横浜 → 大井町 → 国際展示場'
+            },
+            
+            '有明エリア_みなとみらい': { 
+                method: '🚃 りんかい線→JR京浜東北線→みなとみらい線', 
+                time: 55, 
+                distance: 37, 
+                cost: 831,
+                route: '国際展示場 → 大井町 → 横浜 → みなとみらい'
+            },
+            'みなとみらい_有明エリア': { 
+                method: '🚃 みなとみらい線→JR京浜東北線→りんかい線', 
+                time: 55, 
+                distance: 37, 
+                cost: 831,
+                route: 'みなとみらい → 横浜 → 大井町 → 国際展示場'
+            },
+            
+            // 幕張 ⇔ 横浜
+            '幕張メッセ_横浜': { 
+                method: '🚃 JR京葉線→JR東海道線→京急本線', 
+                time: 80, 
+                distance: 55, 
+                cost: 972,
+                route: '海浜幕張 → 東京 → 品川 → 横浜'
+            },
+            '横浜_幕張メッセ': { 
+                method: '🚃 京急本線→JR東海道線→JR京葉線', 
+                time: 80, 
+                distance: 55, 
+                cost: 972,
+                route: '横浜 → 東京 → 海浜幕張'
+            },
+            '幕張メッセ_みなとみらい': { 
+                method: '🚃 JR京葉線→JR東海道線（JR山手線）→京急本線→みなとみらい線', 
+                time: 85, 
+                distance: 57, 
+                cost: 1165,
+                route: '海浜幕張 → 東京 → 品川 → 横浜 → みなとみらい'
+            },
+            'みなとみらい_幕張メッセ': { 
+                method: '🚃 みなとみらい線→京急本線→JR東海道線（JR山手線）→JR京葉線', 
+                time: 85, 
+                distance: 57, 
+                cost: 1170,
+                route: 'みなとみらい → 横浜 → 品川 → 東京 → 海浜幕張'
+            },
+            
+            // 池袋・秋葉原 ⇔ 有明
+            '池袋_有明エリア': { 
+                method: '🚃 JR埼京線→りんかい線', 
+                time: 33, 
+                distance: 18, 
+                cost: 543,
+                route: '池袋 → 国際展示場'
+            },
+            '有明エリア_池袋': { 
+                method: '🚃 りんかい線→JR埼京線', 
+                time: 33, 
+                distance: 18, 
+                cost: 543,
+                route: '国際展示場 → 池袋'
+            },
+            '秋葉原_有明エリア': { 
+                method: '🚃 JR山手線→りんかい線', 
+                time: 39, 
+                distance: 12, 
+                cost: 543,
+                route: '秋葉原 → 大崎 → 国際展示場'
+            },
+            '有明エリア_秋葉原': { 
+                method: '🚃 りんかい線→JR山手線', 
+                time: 39, 
+                distance: 12, 
+                cost: 543,
+                route: '国際展示場 → 大崎 → 秋葉原'
+            },
+
+            // 幕張エリア
+            '幕張メッセ_新宿': { 
+                method: '🚃 JR京葉線→JR中央線', 
+                time: 56, 
+                distance: 42, 
+                cost: 659,
+                route: '海浜幕張 → 東京 → 新宿'
+            },
+            '新宿_幕張メッセ': { 
+                method: '🚃 JR中央線→JR京葉線', 
+                time: 56, 
+                distance: 42, 
+                cost: 659,
+                route: '新宿 → 東京 → 海浜幕張'
+            },
+            '幕張メッセ_渋谷': { 
+                method: '🚃 JR京葉線→JR山手線', 
+                time: 70, 
+                distance: 45, 
+                cost: 736,
+                route: '海浜幕張 → 東京 → 渋谷'
+            },
+            '渋谷_幕張メッセ': { 
+                method: '🚃 JR山手線→JR京葉線', 
+                time: 70, 
+                distance: 45, 
+                cost: 736,
+                route: '渋谷 → 東京 → 海浜幕張'
+            },
+            '幕張メッセ_池袋': { 
+                method: '🚃 JR京葉線→東京メトロ有楽町線', 
+                time: 70, 
+                distance: 41, 
+                cost: 658,
+                route: '海浜幕張 → 新木場 → 池袋'
+            },
+            '池袋_幕張メッセ': { 
+                method: '🚃 東京メトロ有楽町線→JR京葉線', 
+                time: 70, 
+                distance: 41, 
+                cost: 658,
+                route: '池袋 → 東京 → 海浜幕張'
+            },
+            '幕張メッセ_秋葉原': { 
+                method: '🚃 JR京葉線→JR京浜東北線', 
+                time: 55, 
+                distance: 33, 
+                cost: 571,
+                route: '海浜幕張 → 東京 → 秋葉原'
+            },
+            '秋葉原_幕張メッセ': { 
+                method: '🚃 JR京浜東北線→JR京葉線', 
+                time: 55, 
+                distance: 33, 
+                cost: 571,
+                route: '海浜幕張 → 東京 → 新宿'
+            },
+            // 横浜→首都圏
+            '新宿_みなとみらい': { 
+                method: '🚃 JR山手線（JR埼京線・JR湘南新宿ライン）→東急東横線（みなとみらい線直通）', 
+                time: 55, 
+                distance: 29, 
+                cost: 669,
+                route: '新宿 → 渋谷 → みなとみらい'
+            },
+            'みなとみらい_新宿': { 
+                method: '🚃 みなとみらい線（東急東横線直通）→JR山手線（JR埼京線・JR湘南新宿ライン）', 
+                time: 55, 
+                distance: 29, 
+                cost: 669,
+                route: 'みなとみらい → 渋谷 → 新宿'
+            },
+            '秋葉原_横浜': { 
+                method: '🚃 JR京浜東北線→京急本線', 
+                time: 47, 
+                distance: 31, 
+                cost: 491,
+                route: '秋葉原 → 品川 → 横浜'
+            },
+            '横浜_秋葉原': { 
+                method: '🚃 京急本線→JR京浜東北線', 
+                time: 47, 
+                distance: 31, 
+                cost: 491,
+                route: '横浜 → 品川 → 秋葉原'
+            },
+            '秋葉原_みなとみらい': { 
+                method: '🚃 JR山手線→京急本線→みなとみらい線', 
+                time: 55, 
+                distance: 32, 
+                cost: 684,
+                route: '秋葉原 → 品川 → 横浜 → みなとみらい'
+            },
+            'みなとみらい_秋葉原': { 
+                method: '🚃 みなとみらい線→京急本線→JR山手線', 
+                time: 55, 
+                distance: 32, 
+                cost: 684,
+                route: 'みなとみらい → 横浜 → 品川 → 秋葉原'
+            },
+            '池袋_横浜': { 
+                method: '🚃 東京メトロ副都心線（東急東横線直通）', 
+                time: 45, 
+                distance: 33, 
+                cost: 518,
+                route: '池袋 → 横浜'
+            },
+            '横浜_池袋': { 
+                method: '🚃 東急東横線（東京メトロ副都心線直通）', 
+                time: 45, 
+                distance: 33, 
+                cost: 518,
+                route: '横浜 → 池袋'
+            },
+            '池袋_みなとみらい': { 
+                method: '🚃 JR埼京線→東急東横線（みなとみらい線直通）', 
+                time: 60, 
+                distance: 34, 
+                cost: 680,
+                route: '池袋 → 渋谷 → みなとみらい'
+            },
+            'みなとみらい_池袋': { 
+                method: '🚃 みなとみらい線（東急東横線直通）→JR埼京線', 
+                time: 60, 
+                distance: 34, 
+                cost: 680,
+                route: 'みなとみらい→ 渋谷 → 池袋'
+            }
+        };
+        
+        // 完全一致を探す
+        const key = `${from}_${to}`;
+        if (movements[key]) {
+            return movements[key];
+        }
+        
+        // デフォルト（データがない場合）
+        console.warn(`移動データが未定義: ${from} → ${to}`);
+        return { 
+            method: '🚃 電車', 
+            time: 30, 
+            distance: 15, 
+            cost: 400,
+            route: '経路を確認してください'
+        };
+    }
+
+    // イベントの終了時刻を取得
+    function getEventEndTime(event) {
+        if (!event.time || !event.date) return null;
+        const endTimeMatch = event.time.match(/[~〜～](\d+):(\d+)/);
+        if (!endTimeMatch) {
+            // 終了時刻がない場合は開始から3時間後と仮定
+            const startTime = getEventStartTime(event);
+            if (startTime) {
+                const endTime = new Date(startTime);
+                endTime.setHours(endTime.getHours() + 3);
+                return endTime;
+            }
+            return null;
+        }
+        
+        const date = new Date(event.date);
+        let hours = parseInt(endTimeMatch[1]);
+        const minutes = parseInt(endTimeMatch[2]);
+        
+        // 24時を超える場合（例: 25:00 = 翌1:00）
+        if (hours >= 24) {
+            date.setDate(date.getDate() + 1);
+            hours = hours - 24;
+        }
+        
+        date.setHours(hours, minutes, 0, 0);
+        return date;
+    }
+
+    // イベントの開始時刻を取得
+    function getEventStartTime(event) {
+        if (!event.time || !event.date) return null;
+        
+        // 「場」「演」などの表記を除去
+        const timeStr = event.time.replace(/[(（]場[)）]|[(（]演[)）]/g, '');
+        const startTimeMatch = timeStr.match(/(\d+):(\d+)/);
+        if (!startTimeMatch) return null;
+        
+        const date = new Date(event.date);
+        date.setHours(parseInt(startTimeMatch[1]), parseInt(startTimeMatch[2]), 0, 0);
+        return date;
+    }
+
+    // 開催期間を取得
+    function getDateRange(events) {
+        if (events.length === 0) return '-';
+        const dates = events.map(e => new Date(e.date)).sort((a, b) => a - b);
+        const first = dates[0];
+        const last = dates[dates.length - 1];
+        
+        if (first.getTime() === last.getTime()) {
+            return `${first.getMonth() + 1}月${first.getDate()}日`;
+        }
+        
+        const days = Math.ceil((last - first) / (1000 * 60 * 60 * 24)) + 1;
+        return `${first.getMonth() + 1}月${first.getDate()}日～${last.getMonth() + 1}月${last.getDate()}日（${days}日間）`;
+    }
+
+    // 宿泊が必要かチェック
+    function checkNeedsAccommodation(events) {
+        const dates = [...new Set(events.map(e => e.date))].sort();
+        if (dates.length <= 1) return false;
+        
+        // 連続する日付があるかチェック
+        for (let i = 0; i < dates.length - 1; i++) {
+            const diff = (new Date(dates[i + 1]) - new Date(dates[i])) / (1000 * 60 * 60 * 24);
+            if (diff === 1) return true;
+        }
+        return false;
+    }
+
+    // おすすめポイントを生成
+    function generateRecommendations(events, sameVenueCount, totalWalkTime) {
+        const recommendations = [];
+        
+        // 同じ会場でのイベント
+        if (sameVenueCount > 0) {
+            recommendations.push(`<li>✅ ${sameVenueCount + 1}イベントが同じ会場で効率的です</li>`);
+        }
+        
+        // 会場別の推奨
+        const venues = [...new Set(events.map(e => normalizeVenueName(e.venue)))];
+        if (venues.length === 1) {
+            recommendations.push(`<li>✅ すべて同じエリアで完結するので移動が楽です</li>`);
+        }
+        
+        if (venues.includes('幕張メッセ')) {
+            recommendations.push(`<li>🏨 幕張エリア: 海浜幕張駅周辺のホテルが便利</li>`);
+            recommendations.push(`<li>🍴 幕張エリア: イオンモール幕張新都心で食事・買い物ができます</li>`);
+        }
+        
+        if (venues.includes('有明エリア') || venues.includes('東京ビッグサイト')) {
+            recommendations.push(`<li>🏨 有明エリア: 国際展示場駅・有明駅周辺のホテルがおすすめ</li>`);
+            recommendations.push(`<li>🍴 有明エリア: 有明ガーデンで食事・休憩ができます</li>`);
+        }
+        
+        if (venues.includes('みなとみらい') || venues.includes('横浜')) {
+            recommendations.push(`<li>🏨 横浜エリア: みなとみらい・桜木町周辺のホテルが便利</li>`);
+            recommendations.push(`<li>🍴 横浜エリア: みなとみらいは飲食店が充実しています</li>`);
+        }
+        
+        if (venues.includes('渋谷') || venues.includes('新宿') || venues.includes('池袋')) {
+            recommendations.push(`<li>🚃 都心部は電車移動が便利 - ICカードの残高確認を</li>`);
+        }
+        
+        // 移動時間によるアドバイス
+        if (totalWalkTime > 60) {
+            recommendations.push(`<li>👟 移動時間が長めです - 歩きやすい靴がおすすめ</li>`);
+        }
+        
+        // 同日に複数イベント
+        const sameDay = events.filter((e, i, arr) => 
+            arr.filter(ev => ev.date === e.date).length > 1
+        );
+        
+        if (sameDay.length > 0) {
+            recommendations.push(`<li>⚠️ 同日に複数イベントあり - 体力配分と時間管理に注意</li>`);
+        }
+        
+        // 一般的なアドバイス
+        recommendations.push(`<li>💡 チェックリストで持ち物を事前確認しましょう</li>`);
+        recommendations.push(`<li>🗺️ 各会場のアクセス方法を事前にチェック</li>`);
+        recommendations.push(`<li>📱 スマホの充電器を忘れずに</li>`);
+        
+        return recommendations.join('');
+    }
 
         init();
     </script>
