@@ -2474,7 +2474,7 @@
                 name: '幕張メッセ 国際展示場4-8ホール & イベントホール',
                 address: '〒261-8550 千葉県千葉市美浜区中瀬2-1',
                 station: 'JR京葉線 海浜幕張駅',
-                walkTime: '徒歩約5分',
+                walkTime: '徒歩約11分',
                 lat: 35.64824,
                 lng: 140.03443,
                 tips: '国際展示場エリアは広いため、事前に会場図を確認することをおすすめします。'
@@ -2483,7 +2483,7 @@
                 name: '幕張メッセ 国際展示場1-3ホール',
                 address: '〒261-8550 千葉県千葉市美浜区中瀬2-1',
                 station: 'JR京葉線 海浜幕張駅',
-                walkTime: '徒歩約5分',
+                walkTime: '徒歩約11分',
                 lat: 35.64791,
                 lng: 140.03285,
                 tips: 'ライブ会場は音響設備が優れています。開演30分前には到着することをおすすめします。'
@@ -2496,6 +2496,24 @@
                 lat: 35.6489,
                 lng: 140.0339,
                 tips: '幕張新都心エリアは広いので、時間に余裕を持って移動しましょう。'
+            },
+            '幕張メッセ': {
+                name: '幕張エリア',
+                address: '千葉県千葉市美浜区',
+                station: 'JR京葉線 海浜幕張駅',
+                walkTime: '徒歩約11分',
+                lat: 35.64803,
+                lng: 140.03542,
+                tips: '千葉県千葉市美浜区にある日本最大級のコンベンション施設。'
+            },
+            '海浜幕張駅': {
+                name: '海浜幕張駅',
+                address: '千葉県千葉市美浜区',
+                station: 'JR京葉線 海浜幕張駅',
+                walkTime: '駅周辺',
+                lat: 34.64852,
+                lng: 140.04198,
+                tips: '幕張メッセ・ZOZOマリンスタジアムは南口、飲食店やゲームセンターは北口に集中しています。'
             },
             
             // 有明（東京ビッグサイト・有明アリーナなど）
@@ -3474,6 +3492,34 @@ function sendEventNotification(event, title, message) {
                 if (dateFilter && e.date !== dateFilter) return false;
                 return true;
             });
+            // 時系列順にソート
+            filtered.sort((a, b) => {
+                const getDateTime = (event) => {
+                    if (!event.time) {
+                        return new Date(event.date + ' 00:00:00');
+                    }
+                    
+                    let timeStr = event.time;
+                    
+                    // パターン1: "9時~18時" のような形式
+                    const hourMatch = timeStr.match(/(\d+)時/);
+                    if (hourMatch) {
+                        const hour = hourMatch[1].padStart(2, '0');
+                        timeStr = `${hour}:00`;
+                    } else {
+                        // パターン2: "17:00(場)18:30(演)" のような形式
+                        const timeMatch = timeStr.match(/(\d+):(\d+)/);
+                        if (timeMatch) {
+                            timeStr = `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}`;
+                        } else {
+                            timeStr = '00:00';
+                        }
+                    }
+                    
+                    return new Date(event.date + ' ' + timeStr + ':00');
+                };
+                return getDateTime(a) - getDateTime(b);
+            });
             
             let html = `
                 <table>
@@ -3723,10 +3769,17 @@ function sendEventNotification(event, title, message) {
         
         // マップセクションをレンダリング
         function renderMapSection(event) {
-            // 会場情報を取得
-            const venueKey = Object.keys(venueDatabase).find(key => 
-                event.venue && event.venue.includes(key.split('&')[0].trim())
+        // 会場情報を取得（より具体的なものを優先）
+        let venueKey = null;
+        
+        if (event.venue) {
+            // キーの長さでソート（長い=具体的なものを優先）
+            const sortedKeys = Object.keys(venueDatabase).sort((a, b) => b.length - a.length);
+            
+            venueKey = sortedKeys.find(key => 
+                event.venue.includes(key.split('&')[0].trim())
             );
+        }
             
             if (!venueKey && (!event.venue || event.venue === '---------')) {
                 return '';
