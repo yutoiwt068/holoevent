@@ -6531,6 +6531,7 @@ let eventCounter = 0;
         init();
 
     // 位置情報機能の初期化
+    // 位置情報機能の初期化
     function initLocationFeatures() {
         if ('geolocation' in navigator) {
             console.log('✅ 位置情報機能が利用可能です');
@@ -6540,21 +6541,23 @@ let eventCounter = 0;
                 (position) => {
                     console.log('📍 現在地取得成功:', position.coords.latitude, position.coords.longitude);
                     
-                    // 定期的に位置情報をチェック（5分ごと）
-                    setInterval(() => {
-                        checkNearbyEvents();
-                    }, 5 * 60 * 1000);
-                    
                     // 初回チェック
                     checkNearbyEvents();
+                    
+                    // 定期的に位置情報をチェック（1分ごと）
+                    setInterval(() => {
+                        checkNearbyEvents();
+                    }, 60 * 1000); // 1分ごと
                 },
                 (error) => {
                     console.log('⚠️ 位置情報の取得に失敗:', error.message);
+                    console.log('エラーコード:', error.code);
+                    console.log('エラーメッセージ:', error.message);
                 },
                 {
-                    enableHighAccuracy: false,
+                    enableHighAccuracy: true, // 高精度モードON
                     timeout: 10000,
-                    maximumAge: 300000 // 5分間キャッシュ
+                    maximumAge: 0 // キャッシュを使わない
                 }
             );
         } else {
@@ -6563,46 +6566,108 @@ let eventCounter = 0;
     }
 
     // 近くのイベントをチェック
-    function checkNearbyEvents() {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
+function checkNearbyEvents() {
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
+            
+            console.log('📍 現在地:', userLat, userLng);
+            
+            // 今日のイベントを取得
+            // 今日のイベントを取得（日本時間）
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const todayStr = `${year}-${month}-${day}`;
+            
+            const allEvents = getAllEvents();
+            const todayEvents = allEvents.filter(e => e.date === todayStr);
+            
+            console.log('📅 今日のイベント数:', todayEvents.length);
+            
+            todayEvents.forEach(event => {
+                // 会場の位置情報を取得
+                const venueKey = Object.keys(venueDatabase).find(key => 
+                    event.venue && event.venue.includes(key.split('&')[0].trim())
+                );
                 
-                console.log('📍 現在地:', userLat, userLng);
-                
-                // 今日のイベントを取得
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const todayStr = today.toISOString().split('T')[0];
-                
-                const allEvents = getAllEvents();
-                const todayEvents = allEvents.filter(e => e.date === todayStr);
-                
-                todayEvents.forEach(event => {
-                    // 会場の位置情報を取得
-                    const venueKey = Object.keys(venueDatabase).find(key => 
-                        event.venue && event.venue.includes(key.split('&')[0].trim())
-                    );
+                if (venueKey && venueDatabase[venueKey]) {
+                    const venue = venueDatabase[venueKey];
+                    const distance = calculateDistance(userLat, userLng, venue.lat, venue.lng);
                     
-                    if (venueKey && venueDatabase[venueKey]) {
-                        const venue = venueDatabase[venueKey];
-                        const distance = calculateDistance(userLat, userLng, venue.lat, venue.lng);
-                        
-                        console.log(`📏 ${event.name}まで: ${distance.toFixed(1)}km`);
-                        
-                        // 500m以内なら通知
-                        if (distance <= 0.5) {
-                            sendLocationNotification(event, distance);
-                        }
+                    console.log(`📏 ${event.name}まで: ${distance.toFixed(1)}km`);
+                    
+                    // 500m以内なら通知
+                    if (distance <= 0.5) {
+                        sendLocationNotification(event, distance);
                     }
-                });
-            },
-            (error) => {
-                console.log('位置情報取得エラー:', error.message);
-            }
-        );
+                }
+            });
+        },
+        (error) => {
+            console.log('位置情報取得エラー:', error.message);
+        }
+    );
+}
+
+// 2地点間の距離を計算（Haversine formula）
+function calculateDistance(lat1, lng1, lat2, lng2) {
+    const R = 6371; // 地球の半径（km）
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+// 位置情報通知を送信
+function sendLocationNotification(event, distance) {
+    if (Notification.permission !== 'granted') return;
+    
+    // 同じイベントで既に通知済みかチェック
+    const notificationKey = `location-${event.id || event.name}-${event.date}`;
+    const alreadySent = localStorage.getItem(notificationKey);
+    
+    if (alreadySent) {
+        console.log('⚠️ 既に通知済み:', event.name);
+        return;
     }
+    
+    const notification = new Notification('📍 会場が近くです！', {
+        body: `${event.name}の会場まで直線で約${(distance * 1000).toFixed(0)}mです！\n${event.time || ''}`,
+        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">📍</text></svg>',
+        tag: notificationKey,
+        requireInteraction: false
+    });
+    
+    notification.onclick = function() {
+        window.focus();
+        
+        const allEvents = getAllEvents();
+        const eventIndex = allEvents.findIndex(e => 
+            (e.id || e.name) === (event.id || event.name) && e.date === event.date
+        );
+        
+        if (eventIndex >= 0) {
+            showEventDetail(eventIndex);
+        }
+        
+        notification.close();
+    };
+    
+    // 通知済みフラグを保存
+    localStorage.setItem(notificationKey, new Date().toISOString());
+    
+    console.log(`📢 位置情報通知送信: ${event.name}`);
+}
+
+
+    
 
     // 2地点間の距離を計算（Haversine formula）
     function calculateDistance(lat1, lng1, lat2, lng2) {
@@ -6659,47 +6724,47 @@ let eventCounter = 0;
     }
 
     // 現在地から会場への経路検索（Google Maps）
-function routeFromCurrentLocation(destination, venueName) {
-    if ('geolocation' in navigator) {
-        // ローディング表示
-        const button = event.target;
-        const originalText = button.innerHTML;
-        button.innerHTML = '📍 現在地取得中...';
-        button.disabled = true;
-        
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                
-                // Google Mapsで経路検索
-                const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=transit`;
-                window.open(url, '_blank');
-                
-                // ボタンを元に戻す
-                button.innerHTML = originalText;
-                button.disabled = false;
-                
-                console.log(`📍 現在地 (${lat}, ${lng}) から ${venueName} への経路を表示`);
-            },
-            (error) => {
-                alert('位置情報の取得に失敗しました。\n設定で位置情報を許可してください。');
-                console.error('位置情報エラー:', error);
-                
-                // ボタンを元に戻す
-                button.innerHTML = originalText;
-                button.disabled = false;
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 60000
-            }
-        );
-    } else {
-        alert('このブラウザは位置情報に対応していません。');
+    function routeFromCurrentLocation(destination, venueName) {
+        if ('geolocation' in navigator) {
+            // ローディング表示
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '📍 現在地取得中...';
+            button.disabled = true;
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    // Google Mapsで経路検索
+                    const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=transit`;
+                    window.open(url, '_blank');
+                    
+                    // ボタンを元に戻す
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    
+                    console.log(`📍 現在地 (${lat}, ${lng}) から ${venueName} への経路を表示`);
+                },
+                (error) => {
+                    alert('位置情報の取得に失敗しました。\n設定で位置情報を許可してください。');
+                    console.error('位置情報エラー:', error);
+                    
+                    // ボタンを元に戻す
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                }
+            );
+        } else {
+            alert('このブラウザは位置情報に対応していません。');
+        }
     }
-}
 
     // 現在地からYahoo!乗換案内
     function yahooTransitFromCurrentLocation(destination) {
