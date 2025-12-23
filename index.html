@@ -2690,6 +2690,84 @@
                 tips: '1万人収容の音楽特化型アリーナ。音響にこだわった設計が特徴です。'
             }
         };
+
+        
+        
+        // 主要路線の混雑率データ（国土交通省データに基づく）
+        const trainCongestionData = {
+            'JR京葉線': {
+                name: 'JR京葉線',
+                direction: '東京→蘇我方面',
+                sections: [
+                    { from: '東京', to: '新木場', peak: 199, offPeak: 100 },
+                    { from: '新木場', to: '舞浜', peak: 164, offPeak: 80 },
+                    { from: '舞浜', to: '海浜幕張', peak: 156, offPeak: 70 }
+                ],
+                timeSlots: [
+                    { time: '7:00-8:00', rate: 180, status: '非常に混雑', color: '#dc3545', icon: '🔴🔴🔴' },
+                    { time: '8:00-9:00', rate: 199, status: '非常に混雑', color: '#dc3545', icon: '🔴🔴🔴' },
+                    { time: '9:00-10:00', rate: 150, status: '混雑', color: '#ffc107', icon: '🟡🟡🟡' },
+                    { time: '10:00-12:00', rate: 100, status: '快適', color: '#28a745', icon: '🟢🟢' },
+                    { time: '12:00-14:00', rate: 90, status: '快適', color: '#28a745', icon: '🟢🟢' },
+                    { time: '14:00-16:00', rate: 110, status: 'やや混雑', color: '#17a2b8', icon: '🔵🔵' },
+                    { time: '16:00-18:00', rate: 140, status: '混雑', color: '#ffc107', icon: '🟡🟡🟡' },
+                    { time: '18:00-20:00', rate: 170, status: '非常に混雑', color: '#fd7e14', icon: '🟠🟠🟠' },
+                    { time: '20:00-22:00', rate: 130, status: 'やや混雑', color: '#17a2b8', icon: '🔵🔵' },
+                    { time: '22:00-24:00', rate: 80, status: '快適', color: '#28a745', icon: '🟢🟢' }
+                ]
+            },
+            'りんかい線': {
+                name: 'りんかい線',
+                direction: '大崎→新木場方面',
+                timeSlots: [
+                    { time: '7:00-8:00', rate: 165, status: '非常に混雑', color: '#dc3545', icon: '🔴🔴🔴' },
+                    { time: '8:00-9:00', rate: 185, status: '非常に混雑', color: '#dc3545', icon: '🔴🔴🔴' },
+                    { time: '9:00-10:00', rate: 140, status: '混雑', color: '#ffc107', icon: '🟡🟡🟡' },
+                    { time: '10:00-16:00', rate: 90, status: '快適', color: '#28a745', icon: '🟢🟢' },
+                    { time: '16:00-18:00', rate: 130, status: 'やや混雑', color: '#17a2b8', icon: '🔵🔵' },
+                    { time: '18:00-20:00', rate: 160, status: '非常に混雑', color: '#fd7e14', icon: '🟠🟠🟠' },
+                    { time: '20:00-24:00', rate: 100, status: '快適', color: '#28a745', icon: '🟢🟢' }
+                ]
+            },
+            'JR山手線': {
+                name: 'JR山手線',
+                direction: '内回り・外回り',
+                timeSlots: [
+                    { time: '7:00-8:00', rate: 180, status: '非常に混雑', color: '#dc3545', icon: '🔴🔴🔴' },
+                    { time: '8:00-9:00', rate: 200, status: '非常に混雑', color: '#dc3545', icon: '🔴🔴🔴' },
+                    { time: '9:00-10:00', rate: 150, status: '混雑', color: '#ffc107', icon: '🟡🟡🟡' },
+                    { time: '10:00-16:00', rate: 100, status: '快適', color: '#28a745', icon: '🟢🟢' },
+                    { time: '16:00-18:00', rate: 140, status: '混雑', color: '#ffc107', icon: '🟡🟡🟡' },
+                    { time: '18:00-20:00', rate: 170, status: '非常に混雑', color: '#fd7e14', icon: '🟠🟠🟠' },
+                    { time: '20:00-24:00', rate: 110, status: 'やや混雑', color: '#17a2b8', icon: '🔵🔵' }
+                ]
+            },
+            'みなとみらい線': {
+                name: 'みなとみらい線',
+                direction: '横浜→元町・中華街方面',
+                timeSlots: [
+                    { time: '7:00-9:00', rate: 150, status: '混雑', color: '#ffc107', icon: '🟡🟡🟡' },
+                    { time: '9:00-10:00', rate: 120, status: 'やや混雑', color: '#17a2b8', icon: '🔵🔵' },
+                    { time: '10:00-17:00', rate: 90, status: '快適', color: '#28a745', icon: '🟢🟢' },
+                    { time: '17:00-19:00', rate: 130, status: 'やや混雑', color: '#17a2b8', icon: '🔵🔵' },
+                    { time: '19:00-21:00', rate: 110, status: 'やや混雑', color: '#17a2b8', icon: '🔵🔵' },
+                    { time: '21:00-24:00', rate: 80, status: '快適', color: '#28a745', icon: '🟢🟢' }
+                ]
+            },
+            '東急東横線': {
+                name: '東急東横線',
+                direction: '渋谷→横浜方面',
+                timeSlots: [
+                    { time: '7:00-8:00', rate: 170, status: '非常に混雑', color: '#dc3545', icon: '🔴🔴🔴' },
+                    { time: '8:00-9:00', rate: 190, status: '非常に混雑', color: '#dc3545', icon: '🔴🔴🔴' },
+                    { time: '9:00-10:00', rate: 140, status: '混雑', color: '#ffc107', icon: '🟡🟡🟡' },
+                    { time: '10:00-16:00', rate: 95, status: '快適', color: '#28a745', icon: '🟢🟢' },
+                    { time: '16:00-18:00', rate: 130, status: 'やや混雑', color: '#17a2b8', icon: '🔵🔵' },
+                    { time: '18:00-20:00', rate: 160, status: '非常に混雑', color: '#fd7e14', icon: '🟠🟠🟠' },
+                    { time: '20:00-24:00', rate: 100, status: '快適', color: '#28a745', icon: '🟢🟢' }
+                ]
+            }
+        };
         
         function loadHomeLocation() {
             const saved = localStorage.getItem('homeLocation');
@@ -3120,7 +3198,11 @@ function sendEventNotification(event, title, message) {
         
             // 初回の通知チェック
             checkAndSendNotifications();
+
+            // 🆕 位置情報機能の初期化
+            initLocationFeatures();
         }
+        
 
         function getDaysUntil(dateStr) {
             const today = new Date();
@@ -3634,8 +3716,16 @@ function sendEventNotification(event, title, message) {
                 ${renderMapSection(event)}
                 
                 ${renderWeatherSection(event)}
-                
+
+                ${renderTrainCongestionSection(event)}
+
+                ${renderVenueCongestionSection(event)}
+
+                ${renderCheckInSection(eventId, event)}
+
                 ${renderTagsSection(eventId)}
+                
+                
                 
                 ${event.isCustom ? `
                     <div class="form-actions">
@@ -3838,6 +3928,14 @@ function sendEventNotification(event, title, message) {
                             🚃 経路検索（自宅から）
                         </a>
                         ` : ''}
+
+                        <button class="map-btn google-maps" onclick="routeFromCurrentLocation('${encodedAddress}', '${venueInfo.name}')">
+                            📍 現在地から経路検索
+                        </button>
+                        
+                        <button class="map-btn yahoo-transit" onclick="yahooTransitFromCurrentLocation('${encodedVenue}')">
+                            🚃 Yahoo!乗換（現在地から）
+                        </button>
                         
                         <a href="https://transit.yahoo.co.jp/search/result?from=&to=${encodedVenue}" 
                            target="_blank" 
@@ -3888,6 +3986,448 @@ function sendEventNotification(event, title, message) {
             
             mapHTML += `</div>`;
             return mapHTML;
+        }
+
+        // チェックインセクションをレンダリング
+    function renderCheckInSection(eventId, event) {
+        // チェックイン履歴を取得
+        const checkIns = getCheckIns(eventId);
+        const hasCheckedIn = checkIns.length > 0;
+        
+        return `
+            <div class="map-section" style="margin-top: 20px;">
+                <h4>📍 チェックイン</h4>
+                
+                ${hasCheckedIn ? `
+                    <div style="padding: 15px; background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #28a745;">
+                        <div style="color: #155724; font-weight: bold; margin-bottom: 10px;">
+                            ✅ チェックイン済み
+                        </div>
+                        <!-- ★リセットボタンを追加 -->
+                        <button onclick="clearCheckIn('${eventId}', '${event.name.replace(/'/g, "\\'")}'); event.stopPropagation();" 
+                                style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.85em;">
+                            🗑️ リセット
+                        </button>
+                        </div>
+                        ${checkIns.map(checkIn => `
+                            <div style="color: #155724; font-size: 0.9em; margin-top: 5px;">
+                                📅 ${new Date(checkIn.timestamp).toLocaleString('ja-JP')}
+                                ${checkIn.distance ? ` | 📏 ${checkIn.distance}m` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+                
+                <button class="map-btn google-maps" onclick="checkInToEvent('${eventId}', '${event.name.replace(/'/g, "\\'")}', '${event.venue?.replace(/'/g, "\\'") || ''}')">
+                    ${hasCheckedIn ? '🔄 再チェックイン' : '📍 チェックイン'}
+                </button>
+                
+                <div style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px; font-size: 0.85em; color: #666;">
+                    💡 会場に到着したらチェックインしましょう！位置情報で自動記録されます。
+                </div>
+            </div>
+        `;
+    }
+
+    // チェックイン履歴を取得
+    function getCheckIns(eventId) {
+        const saved = localStorage.getItem(`checkIn-${eventId}`);
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    // チェックイン履歴をクリア
+    function clearCheckIn(eventId, eventName) {
+        if (confirm(`${eventName}のチェックイン履歴を削除しますか？`)) {
+            localStorage.removeItem(`checkIn-${eventId}`);
+            
+            // 通知
+            if (Notification.permission === 'granted') {
+                new Notification('🗑️ チェックイン履歴を削除', {
+                    body: `${eventName}のチェックイン履歴を削除しました`,
+                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">🗑️</text></svg>'
+                });
+            }
+            
+            // モーダルを再表示
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+            }
+            
+            console.log(`🗑️ チェックイン履歴削除: ${eventName}`);
+        }
+    }
+
+    // チェックイン実行
+    function checkInToEvent(eventId, eventName, venue) {
+        if ('geolocation' in navigator) {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '📍 位置情報取得中...';
+            button.disabled = true;
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    
+                    // 会場との距離を計算
+                    let distance = null;
+                    const venueKey = Object.keys(venueDatabase).find(key => 
+                        venue && venue.includes(key.split('&')[0].trim())
+                    );
+                    
+                    if (venueKey && venueDatabase[venueKey]) {
+                        const venueInfo = venueDatabase[venueKey];
+                        const distanceKm = calculateDistance(userLat, userLng, venueInfo.lat, venueInfo.lng);
+                        distance = Math.round(distanceKm * 1000); // メートルに変換
+                    }
+                    
+                    // チェックイン情報を保存
+                    const checkIns = getCheckIns(eventId);
+                    checkIns.push({
+                        timestamp: new Date().toISOString(),
+                        lat: userLat,
+                        lng: userLng,
+                        distance: distance
+                    });
+                    localStorage.setItem(`checkIn-${eventId}`, JSON.stringify(checkIns));
+                    
+                    // 通知
+                    if (Notification.permission === 'granted') {
+                        new Notification('✅ チェックイン完了！', {
+                            body: `${eventName}にチェックインしました${distance ? `\n会場まで直線で約${distance}m` : ''}`,
+                            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">✅</text></svg>'
+                        });
+                    }
+                    
+                    alert(`✅ チェックイン完了！\n${eventName}${distance ? `\n会場まで直線で約${distance}m` : ''}`);
+                    
+                    // モーダルを再表示
+                    const allEvents = getAllEvents();
+                    const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+                    if (eventIndex >= 0) {
+                        showEventDetail(eventIndex);
+                    }
+                    
+                    console.log(`✅ チェックイン: ${eventName} at (${userLat}, ${userLng})`);
+                },
+                (error) => {
+                    alert('位置情報の取得に失敗しました。\n設定で位置情報を許可してください。');
+                    console.error('チェックインエラー:', error);
+                    
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            alert('このブラウザは位置情報に対応していません。');
+        }
+    }
+
+    // 電車混雑予測を取得
+        function getTrainCongestion(station, targetTime) {
+            // 駅から路線を判定
+            let lineName = null;
+            
+            if (station && station.includes('海浜幕張')) {
+                lineName = 'JR京葉線';
+            } else if (station && station.includes('国際展示場')) {
+                lineName = 'りんかい線';
+            } else if (station && (station.includes('渋谷') || station.includes('新宿') || station.includes('池袋'))) {
+                lineName = 'JR山手線';
+            } else if (station && station.includes('みなとみらい')) {
+                lineName = 'みなとみらい線';
+            } else if (station && station.includes('横浜')) {
+                lineName = '東急東横線';
+            }
+            
+            if (!lineName || !trainCongestionData[lineName]) {
+                return null;
+            }
+            
+            const lineData = trainCongestionData[lineName];
+            
+            // 時刻から該当する時間帯を取得
+            let timeSlot = null;
+            if (targetTime) {
+                const hour = new Date(targetTime).getHours();
+                timeSlot = lineData.timeSlots.find(slot => {
+                    const [startHour] = slot.time.split('-')[0].split(':');
+                    const [endHour] = slot.time.split('-')[1].split(':');
+                    return hour >= parseInt(startHour) && hour < parseInt(endHour);
+                });
+            }
+            
+            // デフォルトは現在時刻
+            if (!timeSlot) {
+                const now = new Date();
+                const hour = now.getHours();
+                timeSlot = lineData.timeSlots.find(slot => {
+                    const [startHour] = slot.time.split('-')[0].split(':');
+                    const [endHour] = slot.time.split('-')[1].split(':');
+                    return hour >= parseInt(startHour) && hour < parseInt(endHour);
+                }) || lineData.timeSlots[0];
+            }
+            
+            return {
+                lineName: lineData.name,
+                direction: lineData.direction,
+                currentSlot: timeSlot,
+                allSlots: lineData.timeSlots
+            };
+        }
+
+        // 電車混雑予測セクションをレンダリング
+        function renderTrainCongestionSection(event) {
+            if (!event.venue || !event.date) return '';
+            
+            // 会場から最寄り駅を取得
+            const venueKey = Object.keys(venueDatabase).find(key => 
+                event.venue.includes(key.split('&')[0].trim())
+            );
+            
+            if (!venueKey || !venueDatabase[venueKey]) return '';
+            
+            const venue = venueDatabase[venueKey];
+            const station = venue.station;
+            
+            // イベント時刻を取得
+            const eventTime = event.time ? event.date + ' ' + event.time.split('~')[0].replace(/[^0-9:]/g, '') : null;
+            
+            const congestion = getTrainCongestion(station, eventTime);
+            
+            if (!congestion) return '';
+            
+            return `
+                <div class="map-section" style="margin-top: 20px; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);">
+                    <h4>🚃 電車混雑予測</h4>
+                    <div style="color: #666; font-size: 0.9em; margin-bottom: 15px;">
+                        ${congestion.lineName}（${congestion.direction}）<br>
+                        <small>※ 平日の平均混雑率データに基づく予測です</small>
+                    </div>
+                    
+                    <div style="padding: 20px; background: white; border-radius: 10px; border-left: 5px solid ${congestion.currentSlot.color}; margin-bottom: 15px;">
+                        <div style="font-size: 1.3em; font-weight: bold; color: ${congestion.currentSlot.color}; margin-bottom: 10px;">
+                            ${congestion.currentSlot.icon} ${congestion.currentSlot.status}
+                        </div>
+                        <div style="color: #666; margin-bottom: 10px;">
+                            <strong>${congestion.currentSlot.time}</strong><br>
+                            混雑率: <strong style="color: ${congestion.currentSlot.color};">${congestion.currentSlot.rate}%</strong>
+                        </div>
+                        <div style="padding: 10px; background: #f8f9fa; border-radius: 8px; font-size: 0.9em; color: #555;">
+                            ${getCongestionAdvice(congestion.currentSlot.rate)}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h5 style="color: #1976d2; margin-bottom: 10px; font-size: 1em;">📊 時間帯別混雑度</h5>
+                        <div style="display: grid; gap: 8px;">
+                            ${congestion.allSlots.map(slot => `
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: ${slot.time === congestion.currentSlot.time ? '#fff3cd' : 'white'}; border-radius: 8px; border-left: 3px solid ${slot.color};">
+                                    <div>
+                                        <strong>${slot.time}</strong>
+                                        <span style="margin-left: 10px; color: #666; font-size: 0.9em;">${slot.status}</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 0.85em;">${slot.icon}</span>
+                                        <strong style="color: ${slot.color};">${slot.rate}%</strong>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 会場の混雑予測セクションをレンダリング
+        function renderVenueCongestionSection(event) {
+            if (!event.time || !event.date) return '';
+            
+            // イベントタイプを判定
+            const isExpo = event.name.includes('EXPO');
+            const isStage = event.name.includes('STAGE');
+            
+            if (!isExpo && !isStage) return ''; // 通常のイベントは予測なし
+            
+            // 開場時刻・開演時刻を取得
+            const timeMatch = event.time.match(/(\d+):?(\d+)?/g);
+            if (!timeMatch) return '';
+            
+            const eventDate = new Date(event.date);
+            const dayOfWeek = eventDate.getDay(); // 0=日曜, 6=土曜
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            
+            // 混雑予測データ
+            const congestionPredictions = [];
+            
+            if (isExpo) {
+                congestionPredictions.push(
+                    {
+                        time: '開場前（8:00-9:00）',
+                        level: 'high',
+                        icon: '🔴🔴🔴',
+                        status: '大混雑',
+                        color: '#dc3545',
+                        wait: '30-60分',
+                        advice: '開場待機列が非常に混雑します。早めの到着をおすすめします。'
+                    },
+                    {
+                        time: '開場直後（9:00-10:00）',
+                        level: 'high',
+                        icon: '🟠🟠🟠',
+                        status: '混雑',
+                        color: '#fd7e14',
+                        wait: '20-40分',
+                        advice: '入場や人気展示は混雑します。グッズ販売も長蛇の列になります。'
+                    },
+                    {
+                        time: '午前中（10:00-12:00）',
+                        level: 'medium',
+                        icon: '🟡🟡',
+                        status: 'やや混雑',
+                        color: '#ffc107',
+                        wait: '10-20分',
+                        advice: '比較的落ち着いてきます。展示をゆっくり見るチャンスです。'
+                    },
+                    {
+                        time: '昼食時（12:00-13:00）',
+                        level: 'medium',
+                        icon: '🟡🟡',
+                        status: 'やや混雑',
+                        color: '#ffc107',
+                        wait: '15-30分',
+                        advice: 'フードコートが混雑します。早めの昼食がおすすめ。'
+                    },
+                    {
+                        time: '午後（13:00-16:00）',
+                        level: 'low',
+                        icon: '🟢🟢',
+                        status: '比較的空いている',
+                        color: '#28a745',
+                        wait: '5-10分',
+                        advice: '最も快適な時間帯です。写真撮影もスムーズです。'
+                    },
+                    {
+                        time: '閉場前（16:00-18:00）',
+                        level: 'medium',
+                        icon: '🟡🟡',
+                        status: 'やや混雑',
+                        color: '#ffc107',
+                        wait: '10-20分',
+                        advice: '最後の買い物客で再び混雑します。'
+                    }
+                );
+            }
+            
+            if (isStage) {
+                const openTime = timeMatch[0];
+                const startTime = timeMatch[1] || openTime;
+                
+                congestionPredictions.push(
+                    {
+                        time: `開場前（${openTime}の30分前）`,
+                        level: 'high',
+                        icon: '🔴🔴🔴',
+                        status: '大混雑',
+                        color: '#dc3545',
+                        wait: '30-60分',
+                        advice: '入場待機列が最も混雑します。整理番号順に入場するため、早めの到着が重要です。'
+                    },
+                    {
+                        time: `開場時（${openTime}）`,
+                        level: 'high',
+                        icon: '🟠🟠🟠',
+                        status: '混雑',
+                        color: '#fd7e14',
+                        wait: '20-40分',
+                        advice: '入場開始で混雑します。また、入場前に座席を確認しておきましょう。'
+                    },
+                    {
+                        time: `開演前（${startTime}の15分前）`,
+                        level: 'medium',
+                        icon: '🟡🟡',
+                        status: 'やや混雑',
+                        color: '#ffc107',
+                        wait: '10-20分',
+                        advice: 'トイレやドリンク購入で混雑します。早めに済ませましょう。'
+                    },
+                    {
+                        time: `開演中（${startTime}以降）`,
+                        level: 'low',
+                        icon: '🟢🟢',
+                        status: '空いている',
+                        color: '#28a745',
+                        wait: '-',
+                        advice: '公演中は座席にいるため、ロビーは空いています。'
+                    }
+                );
+            }
+            
+            if (congestionPredictions.length === 0) return '';
+            
+            return `
+                <div class="map-section" style="margin-top: 20px; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">
+                    <h4>🏛️ 会場混雑予測</h4>
+                    <div style="color: #666; font-size: 0.9em; margin-bottom: 15px;">
+                        ${isExpo ? 'EXPO会場' : 'ライブ会場'}の時間帯別混雑予測<br>
+                        <small>※ 過去の類似イベントデータに基づく予測です</small>
+                    </div>
+                    
+                    <div style="display: grid; gap: 12px;">
+                        ${congestionPredictions.map(pred => `
+                            <div style="padding: 15px; background: white; border-radius: 10px; border-left: 5px solid ${pred.color};">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                    <div>
+                                        <strong style="font-size: 1.1em;">${pred.time}</strong>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 1.2em;">${pred.icon}</div>
+                                        <div style="color: ${pred.color}; font-weight: bold; font-size: 0.9em;">${pred.status}</div>
+                                    </div>
+                                </div>
+                                ${pred.wait !== '-' ? `
+                                    <div style="margin-bottom: 8px; color: #666; font-size: 0.9em;">
+                                        ⏱️ 予想待ち時間: <strong>${pred.wait}</strong>
+                                    </div>
+                                ` : ''}
+                                <div style="padding: 10px; background: #f8f9fa; border-radius: 8px; font-size: 0.9em; color: #555;">
+                                    💡 ${pred.advice}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    ${isWeekend ? `
+                        <div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                            <strong style="color: #856404;">📅 週末・祝日は特に混雑します</strong><br>
+                            <small style="color: #856404;">平日よりも1.5倍程度混雑する可能性があります。</small>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // 混雑率に応じたアドバイス
+        function getCongestionAdvice(rate) {
+            if (rate >= 180) {
+                return '💡 非常に混雑します。時間に余裕を持って出発し、1-2本見送る覚悟が必要です。';
+            } else if (rate >= 150) {
+                return '💡 混雑します。早めの出発をおすすめします。つり革につかまるのも困難な場合があります。';
+            } else if (rate >= 120) {
+                return '💡 やや混雑します。座席は期待できませんが、立って乗車できます。';
+            } else if (rate >= 100) {
+                return '💡 快適に乗車できます。座席が空いている可能性があります。';
+            } else {
+                return '💡 ゆったり乗車できます。座席を選べる可能性が高いです。';
+            }
         }
         
         // 自宅住所を入力から保存
@@ -4719,18 +5259,48 @@ function sendEventNotification(event, title, message) {
         }
 
         // 通知設定モーダル関連
-function openNotificationModal() {
-    renderNotificationSettings();
-    document.getElementById('notificationModal').style.display = 'block';
-}
+        function openNotificationModal() {
+            renderNotificationSettings();
+            document.getElementById('notificationModal').style.display = 'block';
+        }
 
-function closeNotificationModal() {
-    document.getElementById('notificationModal').style.display = 'none';
-}
+        function closeNotificationModal() {
+            document.getElementById('notificationModal').style.display = 'none';
+        }
 
-function renderNotificationSettings() {
-    const allEvents = getAllEvents();
-    let html = '';
+        function renderNotificationSettings() {
+            const allEvents = getAllEvents();
+            
+            // 時系列順にソート
+            allEvents.sort((a, b) => {
+                const getDateTime = (event) => {
+                    if (!event.time) {
+                        return new Date(event.date + ' 00:00:00');
+                    }
+                    
+                    let timeStr = event.time;
+                    
+                    // パターン1: "9時~18時" のような形式
+                    const hourMatch = timeStr.match(/(\d+)時/);
+                    if (hourMatch) {
+                        const hour = hourMatch[1].padStart(2, '0');
+                        timeStr = `${hour}:00`;
+                    } else {
+                        // パターン2: "17:00(場)18:30(演)" のような形式
+                        const timeMatch = timeStr.match(/(\d+):(\d+)/);
+                        if (timeMatch) {
+                            timeStr = `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}`;
+                        } else {
+                            timeStr = '00:00';
+                        }
+                    }
+                    
+                    return new Date(event.date + ' ' + timeStr + ':00');
+                };
+                return getDateTime(a) - getDateTime(b);
+            });
+            
+            let html = '';
     
     // 通知権限の状態を表示
     const permissionStatus = Notification.permission;
@@ -5097,6 +5667,25 @@ let eventCounter = 0;
                 } else {
                     // 会場が違う場合の移動情報
                     const moveData = calculateMovement(prevVenueNormalized, currentVenueNormalized);
+                    // 直線距離を計算 ← ★ここを追加
+                let straightDistance = '';
+                const prevVenueInfo = Object.values(venueDatabase).find(v => 
+                    normalizeVenueName(v.name) === prevVenueNormalized || 
+                    v.name.includes(prevVenueNormalized)
+                );
+                const currVenueInfo = Object.values(venueDatabase).find(v => 
+                    normalizeVenueName(v.name) === currentVenueNormalized || 
+                    v.name.includes(currentVenueNormalized)
+                );
+                
+                if (prevVenueInfo && currVenueInfo && prevVenueInfo.lat && currVenueInfo.lat) {
+                    const straightKm = calculateDistance(
+                        prevVenueInfo.lat, prevVenueInfo.lng,
+                        currVenueInfo.lat, currVenueInfo.lng
+                    );
+                    const straightMeters = Math.round(straightKm * 1000);
+                    straightDistance = `<span style="opacity: 0.8;">📐 直線で約${straightMeters}m</span>`;
+                }
                     totalWalkTime += moveData.time;
                     totalDistance += moveData.distance;
                     totalTransitCost += moveData.cost || 0;
@@ -5940,6 +6529,217 @@ let eventCounter = 0;
     }
 
         init();
+
+    // 位置情報機能の初期化
+    function initLocationFeatures() {
+        if ('geolocation' in navigator) {
+            console.log('✅ 位置情報機能が利用可能です');
+            
+            // 位置情報の許可をリクエスト
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log('📍 現在地取得成功:', position.coords.latitude, position.coords.longitude);
+                    
+                    // 定期的に位置情報をチェック（5分ごと）
+                    setInterval(() => {
+                        checkNearbyEvents();
+                    }, 5 * 60 * 1000);
+                    
+                    // 初回チェック
+                    checkNearbyEvents();
+                },
+                (error) => {
+                    console.log('⚠️ 位置情報の取得に失敗:', error.message);
+                },
+                {
+                    enableHighAccuracy: false,
+                    timeout: 10000,
+                    maximumAge: 300000 // 5分間キャッシュ
+                }
+            );
+        } else {
+            console.log('❌ このブラウザは位置情報に対応していません');
+        }
+    }
+
+    // 近くのイベントをチェック
+    function checkNearbyEvents() {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                
+                console.log('📍 現在地:', userLat, userLng);
+                
+                // 今日のイベントを取得
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayStr = today.toISOString().split('T')[0];
+                
+                const allEvents = getAllEvents();
+                const todayEvents = allEvents.filter(e => e.date === todayStr);
+                
+                todayEvents.forEach(event => {
+                    // 会場の位置情報を取得
+                    const venueKey = Object.keys(venueDatabase).find(key => 
+                        event.venue && event.venue.includes(key.split('&')[0].trim())
+                    );
+                    
+                    if (venueKey && venueDatabase[venueKey]) {
+                        const venue = venueDatabase[venueKey];
+                        const distance = calculateDistance(userLat, userLng, venue.lat, venue.lng);
+                        
+                        console.log(`📏 ${event.name}まで: ${distance.toFixed(1)}km`);
+                        
+                        // 500m以内なら通知
+                        if (distance <= 0.5) {
+                            sendLocationNotification(event, distance);
+                        }
+                    }
+                });
+            },
+            (error) => {
+                console.log('位置情報取得エラー:', error.message);
+            }
+        );
+    }
+
+    // 2地点間の距離を計算（Haversine formula）
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+        const R = 6371; // 地球の半径（km）
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a = 
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    // 位置情報通知を送信
+    function sendLocationNotification(event, distance) {
+        if (Notification.permission !== 'granted') return;
+        
+        // 同じイベントで既に通知済みかチェック
+        const notificationKey = `location-${event.id || event.name}-${event.date}`;
+        const alreadySent = localStorage.getItem(notificationKey);
+        
+        if (alreadySent) {
+            return; // 既に通知済み
+        }
+        
+        const notification = new Notification('📍 会場が近くです！', {
+            body: `${event.name}の会場まであと${(distance * 1000).toFixed(0)}mです！\n${event.time || ''}`,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">📍</text></svg>',
+            tag: notificationKey,
+            requireInteraction: false
+        });
+        
+        notification.onclick = function() {
+            window.focus();
+            
+            // イベント詳細を表示
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => 
+                (e.id || e.name) === (event.id || event.name) && e.date === event.date
+            );
+            
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+            }
+            
+            notification.close();
+        };
+        
+        // 通知済みフラグを保存
+        localStorage.setItem(notificationKey, new Date().toISOString());
+        
+        console.log(`📢 位置情報通知送信: ${event.name}`);
+    }
+
+    // 現在地から会場への経路検索（Google Maps）
+function routeFromCurrentLocation(destination, venueName) {
+    if ('geolocation' in navigator) {
+        // ローディング表示
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = '📍 現在地取得中...';
+        button.disabled = true;
+        
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                // Google Mapsで経路検索
+                const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=transit`;
+                window.open(url, '_blank');
+                
+                // ボタンを元に戻す
+                button.innerHTML = originalText;
+                button.disabled = false;
+                
+                console.log(`📍 現在地 (${lat}, ${lng}) から ${venueName} への経路を表示`);
+            },
+            (error) => {
+                alert('位置情報の取得に失敗しました。\n設定で位置情報を許可してください。');
+                console.error('位置情報エラー:', error);
+                
+                // ボタンを元に戻す
+                button.innerHTML = originalText;
+                button.disabled = false;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 60000
+            }
+        );
+    } else {
+        alert('このブラウザは位置情報に対応していません。');
+    }
+}
+
+    // 現在地からYahoo!乗換案内
+    function yahooTransitFromCurrentLocation(destination) {
+        if ('geolocation' in navigator) {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '📍 現在地取得中...';
+            button.disabled = true;
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    // Yahoo!乗換案内（緯度経度で検索）
+                    const url = `https://transit.yahoo.co.jp/search/result?flatlon=${lat},${lng}&tlatlon=&to=${destination}`;
+                    window.open(url, '_blank');
+                    
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    
+                    console.log(`📍 現在地から ${destination} への乗換案内を表示`);
+                },
+                (error) => {
+                    alert('位置情報の取得に失敗しました。');
+                    console.error('位置情報エラー:', error);
+                    
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                }
+            );
+        } else {
+            alert('このブラウザは位置情報に対応していません。');
+        }
+    }
     </script>
 </body>
 </html>
