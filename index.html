@@ -2100,6 +2100,9 @@
         <div class="view-toggle">
             <button class="active" onclick="switchView('calendar')">📅 カレンダービュー</button>
             <button onclick="switchView('list')">📋 リストビュー</button>
+            <button id="pastEventsToggle" class="notification-btn" onclick="togglePastEvents()">
+                📦 終了した予定を表示
+            </button>
             <button class="notification-btn" onclick="openNotificationModal()">🔔 通知設定</button>
             <button class="route-btn" onclick="openRouteModal()">🗺️ ルート最適化</button>
             <button class="theme-btn" onclick="openThemeModal()">🎨 テーマ変更</button>
@@ -2453,6 +2456,7 @@
         let homeLocation = '';
         let eventTags = {};
         let activeTagFilter = null;
+        let showPastEvents = false; 
         
         const tagSuggestions = [
             '🎤 推し出演',
@@ -3359,9 +3363,16 @@ function sendEventNotification(event, title, message) {
         
         function renderSummary() {
             const allEvents = getAllEvents();
+            const today = new Date();  // ← 追加
+            today.setHours(0, 0, 0, 0);  // ← 追加
             const totalEvents = allEvents.filter(e => !e.name.includes('交通費') && !e.name.includes('グッズ')).length;
             const totalCost = allEvents.reduce((sum, e) => sum + e.price, 0) + 67609;
-            const upcomingEvents = allEvents.filter(e => e.status === '開始前' || e.isCustom).length;
+            // 未来のイベントのみカウント ← この6行に変更
+            const upcomingEvents = allEvents.filter(e => {
+                const eventDate = new Date(e.date);
+                eventDate.setHours(23, 59, 59, 999);
+                return eventDate >= today && (e.status === '開始前' || e.isCustom);
+            }).length;
             const notificationsOn = Object.values(notificationSettings).filter(s => s.enabled).length;
             
             document.getElementById('summary').innerHTML = `
@@ -3374,8 +3385,8 @@ function sendEventNotification(event, title, message) {
                     <div class="value">¥${totalCost.toLocaleString()}</div>
                 </div>
                 <div class="summary-card">
-                    <h3>開始前</h3>
-                    <div class="value">${upcomingEvents}</div>
+                <h3>今後の予定</h3>  <!-- ← ここを変更 -->
+                <div class="value">${upcomingEvents}</div>
                 </div>
                 <div class="summary-card">
                     <h3>通知ON</h3>
@@ -3397,7 +3408,17 @@ function sendEventNotification(event, title, message) {
             const dateFilter = document.getElementById('dateFilter').value;
             
             const allEvents = getAllEvents();
+            const today = new Date();  // ← 追加
+            today.setHours(0, 0, 0, 0);  // ← 追加
+
             let filtered = allEvents.filter(e => {
+                    if (!showPastEvents) {
+                const eventDate = new Date(e.date);
+                eventDate.setHours(23, 59, 59, 999);
+                if (eventDate < today) {
+                    return false;
+                }
+            }
                 if (searchTerm && !e.name.toLowerCase().includes(searchTerm)) return false;
                 if (dateFilter && e.date !== dateFilter) return false;
                 
@@ -3422,6 +3443,11 @@ function sendEventNotification(event, title, message) {
             Object.keys(grouped).sort().forEach(date => {
                 const events = grouped[date];
                 const dayTotal = events.reduce((sum, e) => sum + e.price, 0);
+
+                // 過去の日付かチェック ← この4行を追加
+                const eventDate = new Date(date);
+                eventDate.setHours(0, 0, 0, 0);
+                const isPast = eventDate < today;
                 
                 html += `
                     <div class="day-card">
@@ -3440,9 +3466,9 @@ function sendEventNotification(event, title, message) {
             if (html) {
                 calendarView.innerHTML = html;
             } else {
-                calendarView.innerHTML = '<p style="text-align:center;color:white;padding:50px;">イベントが見つかりません</p>';
-            }
-        }
+                const message = showPastEvents ? 'イベントが見つかりません' : '今後の予定がありません';
+                calendarView.innerHTML = `<p style="text-align:center;color:white;padding:50px;">${message}</p>`;
+            }}
         
         function renderEventCard(event) {
             const allEvents = getAllEvents();
@@ -3569,7 +3595,18 @@ function sendEventNotification(event, title, message) {
             const dateFilter = document.getElementById('dateFilter').value;
             
             const allEvents = getAllEvents();
+            const today = new Date();  // ← 追加
+            today.setHours(0, 0, 0, 0);  // ← 追加
+
             let filtered = allEvents.filter(e => {
+                // 終了した予定のフィルタリング ← この6行を追加
+                if (!showPastEvents) {
+                    const eventDate = new Date(e.date);
+                    eventDate.setHours(23, 59, 59, 999);
+                    if (eventDate < today) {
+                        return false;
+                    }
+                }
                 if (searchTerm && !e.name.toLowerCase().includes(searchTerm)) return false;
                 if (dateFilter && e.date !== dateFilter) return false;
                 return true;
@@ -3620,6 +3657,12 @@ function sendEventNotification(event, title, message) {
                             const allEvs = getAllEvents();
                             const idx = allEvs.indexOf(event);
                             const customBadge = event.isCustom ? ' <span style="color:#48c774">📝</span>' : '';
+                            // 過去の日付かチェック ← この5行を追加
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0);
+                            const eventDate = new Date(event.date);
+                            eventDate.setHours(0, 0, 0, 0);
+                            const isPast = eventDate < today;
                             return `
                             <tr onclick="showEventDetail(${idx})">
                                 <td><strong>${event.name}${customBadge}</strong></td>
@@ -4599,109 +4642,250 @@ function sendEventNotification(event, title, message) {
         }
         
         // スケジュール最適化を表示
-        function renderScheduleOptimization() {
-            const allEvents = getAllEvents();
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            // 未来のイベントのみ
-            const upcomingEvents = allEvents
-                .filter(e => new Date(e.date) >= today)
-                .sort((a, b) => new Date(a.date) - new Date(b.date));
-            
-            if (upcomingEvents.length === 0) {
-                document.getElementById('scheduleOptimization').style.display = 'none';
-                return;
-            }
-            
-            // 時間が重複しているイベントを検出
-            const conflicts = [];
-            for (let i = 0; i < upcomingEvents.length; i++) {
-                for (let j = i + 1; j < upcomingEvents.length; j++) {
-                    if (upcomingEvents[i].date === upcomingEvents[j].date) {
-                        // 同じ日のイベントで時間が重複している可能性
-                        conflicts.push({
-                            event1: upcomingEvents[i],
-                            event2: upcomingEvents[j]
-                        });
-                    }
-                }
-            }
-            
-            // 連続イベントを検出（2日以上連続）
-            const consecutiveDays = [];
-            for (let i = 0; i < upcomingEvents.length - 1; i++) {
-                const date1 = new Date(upcomingEvents[i].date);
-                const date2 = new Date(upcomingEvents[i + 1].date);
-                const diffDays = (date2 - date1) / (1000 * 60 * 60 * 24);
-                
-                if (diffDays === 1) {
-                    consecutiveDays.push({
-                        events: [upcomingEvents[i], upcomingEvents[i + 1]]
-                    });
-                }
-            }
-            
-            const optDiv = document.getElementById('scheduleOptimization');
-            let html = '<h3>📅 スケジュール最適化</h3>';
-            
-            // 重複警告
-            if (conflicts.length > 0) {
-                html += '<div class="conflict-warning">';
-                html += '<h4>⚠️ 時間が重複している可能性があります</h4>';
-                conflicts.forEach(c => {
-                    html += `<p>• ${c.event1.name} と ${c.event2.name} が同じ日（${formatDate(c.event1.date)}）</p>`;
-                });
-                html += '</div>';
-            }
-            
-            html += '<div class="optimization-options">';
-            
-            // 連続イベントのアドバイス
-            if (consecutiveDays.length > 0) {
-                html += `
-                    <div class="optimization-card">
-                        <h4>🏨 宿泊を検討してみては？</h4>
-                        <p>連続するイベントがあります。宿泊すると移動が楽になります。</p>
-                        <span class="optimization-badge info">${consecutiveDays.length}件の連続イベント</span>
-                    </div>
-                `;
-            }
-            
-            // 予算アドバイス
-            const totalCost = upcomingEvents.reduce((sum, e) => sum + e.price, 0);
-            if (totalCost > 50000) {
-                html += `
-                    <div class="optimization-card">
-                        <h4>💰 予算管理のアドバイス</h4>
-                        <p>今後のイベントで合計 ¥${totalCost.toLocaleString()} の支出が予定されています。</p>
-                        <span class="optimization-badge warning">高額</span>
-                    </div>
-                `;
-            }
-            
-            // 準備期間のアドバイス
-            if (upcomingEvents.length > 0) {
-                const nextEvent = upcomingEvents[0];
-                const daysUntil = getDaysUntil(nextEvent.date);
-                
-                if (daysUntil <= 7 && daysUntil > 0) {
-                    html += `
-                        <div class="optimization-card">
-                            <h4>⏰ もうすぐです！</h4>
-                            <p>${nextEvent.name} まであと ${daysUntil}日。チェックリストの確認をお忘れなく！</p>
-                            <span class="optimization-badge">準備期間</span>
-                        </div>
-                    `;
-                }
-            }
-            
-            html += '</div>';
-            
-            optDiv.innerHTML = html;
-            optDiv.style.display = 'block';
+        // スケジュール最適化を表示
+    function renderScheduleOptimization() {
+        const allEvents = getAllEvents();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        // 未来のイベントのみ
+        const upcomingEvents = allEvents
+            .filter(e => new Date(e.date) >= today)
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        if (upcomingEvents.length === 0) {
+            document.getElementById('scheduleOptimization').style.display = 'none';
+            return;
         }
         
+        // 時間が重複しているイベントを検出（同じ日＋時間帯が重なる）
+        const conflicts = [];
+        for (let i = 0; i < upcomingEvents.length; i++) {
+            for (let j = i + 1; j < upcomingEvents.length; j++) {
+                const event1 = upcomingEvents[i];
+                const event2 = upcomingEvents[j];
+                
+                // 同じ日かチェック
+                if (event1.date !== event2.date) continue;
+                
+                // 時間帯の重複をチェック
+        const time1 = getEventTimeRange(event1);
+        const time2 = getEventTimeRange(event2);
+
+        if (time1 && time2 && isTimeOverlap(time1, time2)) {
+        // 同じエリア（会場）かチェック ← ★追加
+        const venue1 = normalizeVenueName(event1.venue || '');
+        const venue2 = normalizeVenueName(event2.venue || '');
+    
+            // 同じエリアなら重複として扱わない（徒歩で移動できる範囲）← ★追加
+            if (venue1 && venue2 && venue1 === venue2) {
+                continue; // この重複はスキップ
+            }
+            
+            conflicts.push({
+                event1: event1,
+                event2: event2,
+                time1: time1,
+                time2: time2
+            });
+        }
+            }
+        }
+        
+        // 連続イベントを検出（2日以上連続）
+        const consecutiveDays = [];
+        for (let i = 0; i < upcomingEvents.length - 1; i++) {
+            const date1 = new Date(upcomingEvents[i].date);
+            const date2 = new Date(upcomingEvents[i + 1].date);
+            const diffDays = (date2 - date1) / (1000 * 60 * 60 * 24);
+            
+            if (diffDays === 1) {
+                consecutiveDays.push({
+                    events: [upcomingEvents[i], upcomingEvents[i + 1]]
+                });
+            }
+        }
+        
+        const optDiv = document.getElementById('scheduleOptimization');
+        let html = '<h3>📅 スケジュール最適化</h3>';
+        
+        // 重複警告（より詳細に）
+        if (conflicts.length > 0) {
+            html += `
+                <div style="background: linear-gradient(135deg, #ffe8e8 0%, #ffd6d6 100%); border-left: 5px solid #dc3545; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                        <div style="font-size: 2.5em;">⚠️</div>
+                        <div>
+                            <h4 style="color: #721c24; margin: 0; font-size: 1.3em;">時間が重複しています！</h4>
+                            <p style="color: #721c24; margin: 5px 0 0 0; font-size: 0.95em; opacity: 0.9;">以下のイベントは同時刻に開催されます</p>
+                        </div>
+                    </div>
+            `;
+            
+            conflicts.forEach((c, index) => {
+                const overlapMinutes = calculateOverlapMinutes(c.time1, c.time2);
+                html += `
+                    <div style="background: white; padding: 18px; border-radius: 10px; margin-bottom: ${index < conflicts.length - 1 ? '12px' : '0'}; border-left: 4px solid #dc3545;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <span style="background: #dc3545; color: white; padding: 5px 12px; border-radius: 15px; font-weight: bold; font-size: 0.85em;">重複 ${index + 1}</span>
+                            <span style="color: #dc3545; font-weight: bold;">⏱️ ${overlapMinutes}分間重複</span>
+                        </div>
+                        
+                        <div style="display: grid; gap: 12px;">
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 3px solid #667eea;">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px; font-size: 1.05em;">📍 ${c.event1.name}</div>
+                                <div style="color: #555; font-size: 0.95em; display: flex; gap: 15px; flex-wrap: wrap;">
+                                    <span>🕐 ${formatTimeRange(c.time1.start, c.time1.end)}</span>
+                                    <span>📍 ${c.event1.venue || '会場未定'}</span>
+                                </div>
+                            </div>
+                            
+                            <div style="text-align: center; color: #dc3545; font-weight: bold; font-size: 1.2em;">
+                                ⚡ 同時開催のため参加不可 ⚡
+                            </div>
+                            
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 3px solid #764ba2;">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px; font-size: 1.05em;">📍 ${c.event2.name}</div>
+                                <div style="color: #555; font-size: 0.95em; display: flex; gap: 15px; flex-wrap: wrap;">
+                                    <span>🕐 ${formatTimeRange(c.time2.start, c.time2.end)}</span>
+                                    <span>📍 ${c.event2.venue || '会場未定'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 3px solid #ffc107;">
+                            <div style="color: #856404; font-size: 0.9em; line-height: 1.6;">
+                                <strong>💡 対処法:</strong><br>
+                                • どちらかのイベントを諦める<br>
+                                • チケットの譲渡・交換を検討する<br>
+                                • 開演時間のずれを確認する（開場と開演の違いなど）
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+        }
+        
+        html += '<div class="optimization-options">';
+        
+        // 連続イベントのアドバイス
+        if (consecutiveDays.length > 0) {
+            html += `
+                <div class="optimization-card">
+                    <h4>🏨 宿泊を検討してみては？</h4>
+                    <p>連続するイベントがあります。宿泊すると移動が楽になります。</p>
+                    <span class="optimization-badge info">${consecutiveDays.length}件の連続イベント</span>
+                </div>
+            `;
+        }
+        
+        // 予算アドバイス
+        const totalCost = upcomingEvents.reduce((sum, e) => sum + e.price, 0);
+        if (totalCost > 50000) {
+            html += `
+                <div class="optimization-card">
+                    <h4>💰 予算管理のアドバイス</h4>
+                    <p>今後のイベントで合計 ¥${totalCost.toLocaleString()} の支出が予定されています。</p>
+                    <span class="optimization-badge warning">高額</span>
+                </div>
+            `;
+        }
+        
+        // 準備期間のアドバイス
+        if (upcomingEvents.length > 0) {
+            const nextEvent = upcomingEvents[0];
+            const daysUntil = getDaysUntil(nextEvent.date);
+            
+            if (daysUntil <= 7 && daysUntil > 0) {
+                html += `
+                    <div class="optimization-card">
+                        <h4>⏰ もうすぐです！</h4>
+                        <p>${nextEvent.name} まであと ${daysUntil}日。チェックリストの確認をお忘れなく！</p>
+                        <span class="optimization-badge">準備期間</span>
+                    </div>
+                `;
+            }
+        }
+        
+        html += '</div>';
+        
+        optDiv.innerHTML = html;
+        optDiv.style.display = 'block';
+    }
+
+    // イベントの時間帯を取得
+    function getEventTimeRange(event) {
+        if (!event.time || event.time === '---------') return null;
+        
+        const timeStr = event.time.replace(/[(（]場[)）]|[(（]演[)）]/g, '');
+        
+        // パターン1: "9時~18時"
+        const hourRangeMatch = timeStr.match(/(\d+)時[~〜～](\d+)時/);
+        if (hourRangeMatch) {
+            return {
+                start: parseInt(hourRangeMatch[1]),
+                end: parseInt(hourRangeMatch[2])
+            };
+        }
+        
+        // パターン2: "17:00~19:00" または "17:00(場)18:30(演)"
+        const timeRangeMatch = timeStr.match(/(\d+):(\d+)[^0-9]*(\d+):(\d+)/);
+        if (timeRangeMatch) {
+            const startHour = parseInt(timeRangeMatch[1]);
+            const startMin = parseInt(timeRangeMatch[2]);
+            const endHour = parseInt(timeRangeMatch[3]);
+            const endMin = parseInt(timeRangeMatch[4]);
+            
+            return {
+                start: startHour + startMin / 60,
+                end: endHour + endMin / 60
+            };
+        }
+        
+        // パターン3: 開始時間のみ "17:00" → 3時間後と仮定
+        const singleTimeMatch = timeStr.match(/(\d+):(\d+)/);
+        if (singleTimeMatch) {
+            const startHour = parseInt(singleTimeMatch[1]);
+            const startMin = parseInt(singleTimeMatch[2]);
+            return {
+                start: startHour + startMin / 60,
+                end: startHour + startMin / 60 + 3
+            };
+        }
+        
+        return null;
+    }
+        // 時間帯の重複チェック
+        function isTimeOverlap(time1, time2) {
+            // time1が time2より前に始まる場合
+            if (time1.start < time2.start) {
+                return time1.end > time2.start;
+            }
+            // time2が time1より前に始まる場合
+            else {
+                return time2.end > time1.start;
+            }
+        }
+
+        // 重複時間（分）を計算
+        function calculateOverlapMinutes(time1, time2) {
+            const overlapStart = Math.max(time1.start, time2.start);
+            const overlapEnd = Math.min(time1.end, time2.end);
+            const overlapHours = overlapEnd - overlapStart;
+            return Math.round(overlapHours * 60);
+        }
+        
+        // 時間範囲をフォーマット
+        function formatTimeRange(start, end) {
+            const formatTime = (time) => {
+                const hour = Math.floor(time);
+                const min = Math.round((time - hour) * 60);
+                return `${hour}:${min.toString().padStart(2, '0')}`;
+            };
+            return `${formatTime(start)}~${formatTime(end)}`;
+        }
         // 天気予報セクションをレンダリング
         // 天気予報セクションをレンダリング（詳細版）
         function renderWeatherSection(event) {
@@ -5167,6 +5351,23 @@ function sendEventNotification(event, title, message) {
         
         document.getElementById('searchInput').addEventListener('input', renderView);
         document.getElementById('dateFilter').addEventListener('change', renderView);
+
+        // 終了した予定の表示切替 ← この関数を追加（16行）
+        function togglePastEvents() {
+            showPastEvents = !showPastEvents;
+            const button = document.getElementById('pastEventsToggle');
+            
+            if (showPastEvents) {
+                button.innerHTML = '📦 終了した予定を非表示';
+                button.style.background = 'linear-gradient(135deg, #6c757d 0%, #495057 100%)';
+            } else {
+                button.innerHTML = '📦 終了した予定を表示';
+                button.style.background = 'linear-gradient(135deg, #feca57 0%, #ff9ff3 100%)';
+            }
+            
+            renderView();
+            console.log('終了した予定の表示:', showPastEvents ? 'ON' : 'OFF');
+        }
         
         // Service Worker登録（PWA対応）
         if ('serviceWorker' in navigator) {
