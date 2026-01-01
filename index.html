@@ -2550,11 +2550,11 @@
             },
             '東京ガーデンシアター': {
                 name: '東京ガーデンシアター',
-                address: '〒135-0063 東京都江東区有明1-3-25',
+                address: '〒135-0063 東京都江東区有明2丁目1-11-1',
                 station: 'ゆりかもめ 有明駅',
                 walkTime: '徒歩約4分',
-                lat: 35.6329,
-                lng: 139.7915,
+                lat: 35.63780,
+                lng: 139.79202,
                 tips: '有明ガーデン内の劇場型ホール。座席が近く臨場感のある会場です。'
             },
             
@@ -2694,6 +2694,245 @@
                 tips: '1万人収容の音楽特化型アリーナ。音響にこだわった設計が特徴です。'
             }
         };
+        // 周辺施設データベース
+        const nearbyPlacesDatabase = {
+            '国際展示場4-8&イベントホール': {
+                convenience: [
+                    { name: 'ローソン 幕張メッセ店', distance: '徒歩2分', description: 'メッセ内のコンビニ' },
+                    { name: 'ファミリーマート 海浜幕張駅前店', distance: '徒歩10分', description: '駅前で便利' }
+                ],
+                restaurants: [
+                    { name: 'イオンモール幕張新都心', distance: '徒歩15分', description: 'フードコート・レストラン多数' },
+                    { name: 'ペリエ海浜幕張', distance: '徒歩8分', description: '駅ビル内の飲食店' }
+                ],
+                atm: [
+                    { name: 'セブン銀行ATM（メッセ内）', distance: '徒歩3分', description: '展示場内にあり' },
+                    { name: '千葉銀行 海浜幕張駅前支店', distance: '徒歩9分', description: '駅近く' }
+                ],
+                lockers: [
+                    { name: '幕張メッセ 館内コインロッカー', distance: '館内', description: '各ホール付近に設置' },
+                    { name: '海浜幕張駅 コインロッカー', distance: '駅構内', description: '大型あり' }
+                ],
+                parking: [
+                    { name: '幕張メッセ駐車場', distance: '直結', description: '5,500台収容' }
+                ],
+                tips: [
+                    '📍 開演前は駅前のペリエが混雑します',
+                    '🍴 イオンモールは広いので時間に余裕を',
+                    '💰 ATMは早めに済ませましょう',
+                    '🧳 大型ロッカーは数が少ないので早めに確保'
+                ]
+            },
+            '国際展示場1-3': {
+                convenience: [
+                    { name: 'ローソン 幕張メッセ店', distance: '徒歩2分', description: 'メッセ内のコンビニ' },
+                    { name: 'ファミリーマート 海浜幕張駅前店', distance: '徒歩10分', description: '駅前で便利' }
+                ],
+                restaurants: [
+                    { name: 'イオンモール幕張新都心', distance: '徒歩15分', description: 'フードコート・レストラン多数' },
+                    { name: 'ペリエ海浜幕張', distance: '徒歩8分', description: '駅ビル内の飲食店' }
+                ],
+                atm: [
+                    { name: 'セブン銀行ATM（メッセ内）', distance: '徒歩3分', description: '展示場内にあり' },
+                    { name: '千葉銀行 海浜幕張駅前支店', distance: '徒歩9分', description: '駅近く' }
+                ],
+                lockers: [
+                    { name: '幕張メッセ 館内コインロッカー', distance: '館内', description: '各ホール付近に設置' },
+                    { name: '海浜幕張駅 コインロッカー', distance: '駅構内', description: '大型あり' }
+                ],
+                parking: [
+                    { name: '幕張メッセ駐車場', distance: '直結', description: '5,500台収容' }
+                ],
+                tips: [
+                    '📍 開演前は駅前のペリエが混雑します',
+                    '🍴 イオンモールは広いので時間に余裕を',
+                    '💰 ATMは早めに済ませましょう',
+                    '🧳 大型ロッカーは数が少ないので早めに確保'
+                ]
+            },
+            '有明': {
+                convenience: [
+                    { name: 'ローソン 国際展示場前店', distance: '直結',  description: 'ビッグサイト内' },
+                    { name: 'セブンイレブン TOC有明店',  description: '24時間営業' }
+                ],
+                restaurants: [
+                    { name: '有明ガーデン', distance: '徒歩8分',  description: 'レストラン・カフェ多数' },
+                    { name: 'ダイバーシティ東京',distance: '徒歩28分',   description: 'フードコート充実' }
+                ],
+                atm: [
+                    { name: 'セブン銀行ATM', distance: '直結', description: '会議棟1階' },
+                ],
+                lockers: [
+                    { name: '国際展示場駅 コインロッカー',distance: '直結',  description: '数は少なめ' }
+                ],
+                parking: [
+                    { name: '東京ビッグサイト駐車場', distance: '徒歩17分',  description: '約1,800台' },
+                    { name: '有明ガーデン駐車場',distance: '徒歩13分',   description: '1,800台' }
+                ],
+                tips: [
+                    '🚃 りんかい線は混雑するのでゆとりを持って',
+                    '🍴 有明ガーデンは便利だが混雑必至',
+                    '💰 ATMは早めに（イベント時は行列）',
+                    '🧳 ロッカーは開場直後に埋まります'
+                ]
+            },
+            '渋谷': {
+                convenience: [
+                    { name: 'ローソン 渋谷駅前店', distance: '徒歩1分', description: '駅直結' },
+                    { name: 'ファミリーマート 渋谷センター街店', distance: '徒歩3分', description: 'センター街入口' }
+                ],
+                restaurants: [
+                    { name: '渋谷ヒカリエ', distance: '徒歩2分', description: 'レストランフロア充実' },
+                    { name: '渋谷スクランブルスクエア', distance: '徒歩1分', description: 'グルメフロア多彩' },
+                    { name: 'センター街', distance: '徒歩5分', description: 'カジュアルな飲食店多数' }
+                ],
+                atm: [
+                    { name: 'セブン銀行ATM（駅構内）', distance: '駅構内', description: '複数台設置' },
+                    { name: '三菱UFJ銀行 渋谷支店', distance: '徒歩3分', description: '大型店舗' }
+                ],
+                lockers: [
+                    { name: '渋谷駅 コインロッカー', distance: '駅構内各所', description: '数は多いが混雑' },
+                    { name: '渋谷マークシティ ロッカー', distance: '徒歩2分', description: '大型ロッカーあり' }
+                ],
+                parking: [
+                    { name: '渋谷ヒカリエ駐車場', distance: '徒歩2分', description: '310台' },
+                    { name: '渋谷マークシティ駐車場', distance: '徒歩2分', description: '370台' }
+                ],
+                tips: [
+                    '🚃 渋谷駅は迷いやすいので事前確認を',
+                    '🍴 ランチ時は激混み、時間をずらすのが吉',
+                    '💰 ATMは多いが土日は行列',
+                    '🧳 ロッカーは午前中に埋まる可能性大'
+                ]
+            },
+            '新宿': {
+                convenience: [
+                    { name: 'NewDays 新宿駅店', distance: '駅構内', description: '複数店舗あり' },
+                    { name: 'ファミリーマート 新宿駅南口店', distance: '徒歩1分', description: '24時間営業' }
+                ],
+                restaurants: [
+                    { name: '新宿ルミネエスト', distance: '徒歩1分', description: 'レストラン街充実' },
+                    { name: '新宿タカシマヤ', distance: '徒歩5分', description: 'デパ地下・レストラン' },
+                    { name: '歌舞伎町', distance: '徒歩8分', description: '飲食店密集エリア' }
+                ],
+                atm: [
+                    { name: 'セブン銀行ATM（駅構内）', distance: '駅構内', description: '複数箇所に設置' },
+                    { name: 'みずほ銀行 新宿支店', distance: '徒歩3分', description: '大型店舗' }
+                ],
+                lockers: [
+                    { name: '新宿駅 コインロッカー', distance: '駅構内各所', description: '都内最大級の数' },
+                    { name: '小田急百貨店 ロッカー', distance: '徒歩2分', description: '大型あり' }
+                ],
+                parking: [
+                    { name: '新宿タカシマヤ駐車場', distance: '徒歩5分', description: '500台' },
+                    { name: '新宿マルイ本館駐車場', distance: '徒歩3分', description: '180台' }
+                ],
+                tips: [
+                    '🚃 新宿駅は複雑、出口を間違えないように',
+                    '🍴 ランチは激戦区、予約推奨',
+                    '💰 ATMは多いので困らない',
+                    '🧳 ロッカーは数が多いが週末は早めに'
+                ]
+            },
+            '横浜': {
+                convenience: [
+                    { name: 'NewDays 横浜駅店', distance: '駅構内', description: '複数店舗' },
+                    { name: 'ファミリーマート 横浜西口店', distance: '徒歩2分', description: '大型店舗' }
+                ],
+                restaurants: [
+                    { name: '横浜ポルタ', distance: '駅地下直結', description: 'レストラン街' },
+                    { name: '横浜ベイクォーター', distance: '徒歩10分', description: 'ベイサイドの飲食店' },
+                    { name: 'みなとみらい', distance: '徒歩15分', description: 'グルメスポット多数' }
+                ],
+                atm: [
+                    { name: 'セブン銀行ATM（駅構内）', distance: '駅構内', description: '複数箇所' },
+                    { name: '横浜銀行 本店営業部', distance: '徒歩5分', description: '地元銀行' }
+                ],
+                lockers: [
+                    { name: '横浜駅 コインロッカー', distance: '駅構内各所', description: '大型ロッカー多数' },
+                    { name: 'そごう横浜店 ロッカー', distance: '徒歩3分', description: 'デパート内' }
+                ],
+                parking: [
+                    { name: '横浜駅東口駐車場', distance: '徒歩2分', description: '500台' },
+                    { name: 'そごう横浜店駐車場', distance: '徒歩3分', description: '600台' }
+                ],
+                tips: [
+                    '🚃 横浜駅は広い、移動時間を多めに',
+                    '🍴 ポルタは便利だが混雑',
+                    '💰 ATMは充実している',
+                    '🧳 大型ロッカーは比較的豊富'
+                ]
+            },
+            'みなとみらい': {
+                convenience: [
+                    { name: 'ファミリーマート パシフィコ横浜店', distance: '徒歩3分', description: 'パシフィコ近く' },
+                    { name: 'ローソン みなとみらい駅店', distance: '駅構内', description: '駅直結' }
+                ],
+                restaurants: [
+                    { name: 'ランドマークプラザ', distance: '徒歩8分', description: 'レストランフロア充実' },
+                    { name: 'マークイズみなとみらい', distance: '徒歩5分', description: 'フードコート・レストラン' },
+                    { name: 'クイーンズスクエア', distance: '徒歩10分', description: 'グルメゾーン多彩' }
+                ],
+                atm: [
+                    { name: 'セブン銀行ATM（各施設内）', distance: '各施設', description: '複数箇所' },
+                    { name: '横浜銀行 みなとみらい支店', distance: '徒歩7分', description: 'ランドマークタワー内' }
+                ],
+                lockers: [
+                    { name: 'みなとみらい駅 コインロッカー', distance: '駅構内', description: '大型ロッカーあり' },
+                    { name: 'パシフィコ横浜 ロッカー', distance: '館内', description: 'イベントホール付近' }
+                ],
+                parking: [
+                    { name: 'パシフィコ横浜駐車場', distance: '直結', description: '1,200台' },
+                    { name: 'ランドマークタワー駐車場', distance: '徒歩8分', description: '1,400台' }
+                ],
+                tips: [
+                    '🌊 海風が強い日は上着があると安心',
+                    '🍴 休日のランチは混雑、予約推奨',
+                    '💰 ATMは各施設に充実',
+                    '🧳 イベント時はロッカーが早めに埋まる'
+                ]
+            }
+        };
+
+        // 周辺施設情報を取得
+        function getNearbyPlaces(venueKey) {
+            // 会場キーを正規化してマッチング
+            const normalizedVenue = normalizeVenueName(venueKey);
+            
+            // 完全一致を探す
+            if (nearbyPlacesDatabase[venueKey]) {
+                return nearbyPlacesDatabase[venueKey];
+            }
+            
+            // エリアでマッチング
+            for (const [key, data] of Object.entries(nearbyPlacesDatabase)) {
+                if (normalizeVenueName(key) === normalizedVenue) {
+                    return data;
+                }
+            }
+            
+            // 部分マッチ
+            if (normalizedVenue.includes('幕張')) {
+                return nearbyPlacesDatabase['国際展示場4-8&イベントホール'];
+            }
+            if (normalizedVenue.includes('有明')) {
+                return nearbyPlacesDatabase['有明'];
+            }
+            if (normalizedVenue.includes('渋谷')) {
+                return nearbyPlacesDatabase['渋谷'];
+            }
+            if (normalizedVenue.includes('新宿')) {
+                return nearbyPlacesDatabase['新宿'];
+            }
+            if (normalizedVenue.includes('横浜')) {
+                return nearbyPlacesDatabase['横浜'];
+            }
+            if (normalizedVenue.includes('みなとみらい')) {
+                return nearbyPlacesDatabase['みなとみらい'];
+            }
+            
+            return null;
+        }
 
         
         
@@ -3928,6 +4167,8 @@ function sendEventNotification(event, title, message) {
             
             // 会場情報がある場合
             if (venueInfo) {
+                // 周辺施設情報を取得 ← ★この1行を追加
+                const nearbyPlaces = getNearbyPlaces(venueKey);
                 const encodedAddress = encodeURIComponent(venueInfo.address);
                 const encodedVenue = encodeURIComponent(venueInfo.name);
                 const fromLocation = homeLocation ? encodeURIComponent(homeLocation) : '';
@@ -3972,11 +4213,11 @@ function sendEventNotification(event, title, message) {
                         </a>
                         ` : ''}
 
-                        <button class="map-btn google-maps" onclick="routeFromCurrentLocation('${encodedAddress}', '${venueInfo.name}')">
+                        <button class="map-btn google-maps" onclick="routeFromCurrentLocation('${encodedAddress}', '${venueInfo.name}', this)">
                             📍 現在地から経路検索
                         </button>
                         
-                        <button class="map-btn yahoo-transit" onclick="yahooTransitFromCurrentLocation('${encodedVenue}')">
+                        <button class="map-btn yahoo-transit" onclick="yahooTransitFromCurrentLocation('${encodedVenue}', this)">
                             🚃 Yahoo!乗換（現在地から）
                         </button>
                         
@@ -3992,6 +4233,8 @@ function sendEventNotification(event, title, message) {
                             👁️ ストリートビュー
                         </a>
                     </div>
+
+                    ${nearbyPlaces ? renderNearbyPlacesSection(nearbyPlaces) : ''}
                     
                     ${!homeLocation ? `
                     <div class="home-location-setting">
@@ -4030,6 +4273,116 @@ function sendEventNotification(event, title, message) {
             mapHTML += `</div>`;
             return mapHTML;
         }
+
+        // 周辺施設セクションをレンダリング
+function renderNearbyPlacesSection(places) {
+    return `
+        <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; border: 2px solid #dee2e6;">
+            <h4 style="color: #667eea; margin-bottom: 20px; font-size: 1.2em; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.3em;">🏪</span> 周辺施設情報
+            </h4>
+            
+            <!-- コンビニ -->
+            ${places.convenience && places.convenience.length > 0 ? `
+                <div style="margin-bottom: 20px;">
+                    <h5 style="color: #2c3e50; margin-bottom: 12px; font-size: 1.05em; display: flex; align-items: center; gap: 8px;">
+                        🏪 コンビニ
+                    </h5>
+                    <div style="display: grid; gap: 10px;">
+                        ${places.convenience.map(place => `
+                            <div style="padding: 12px; background: white; border-radius: 8px; border-left: 3px solid #48c774;">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 4px;">${place.name}</div>
+                                <div style="font-size: 0.9em; color: #666;">📏 ${place.distance} | ${place.description}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+            
+            <!-- レストラン -->
+            ${places.restaurants && places.restaurants.length > 0 ? `
+                <div style="margin-bottom: 20px;">
+                    <h5 style="color: #2c3e50; margin-bottom: 12px; font-size: 1.05em; display: flex; align-items: center; gap: 8px;">
+                        🍴 飲食店・レストラン
+                    </h5>
+                    <div style="display: grid; gap: 10px;">
+                        ${places.restaurants.map(place => `
+                            <div style="padding: 12px; background: white; border-radius: 8px; border-left: 3px solid #f39c12;">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 4px;">${place.name}</div>
+                                <div style="font-size: 0.9em; color: #666;">📏 ${place.distance} | ${place.description}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+            
+            <!-- ATM -->
+            ${places.atm && places.atm.length > 0 ? `
+                <div style="margin-bottom: 20px;">
+                    <h5 style="color: #2c3e50; margin-bottom: 12px; font-size: 1.05em; display: flex; align-items: center; gap: 8px;">
+                        💰 ATM・銀行
+                    </h5>
+                    <div style="display: grid; gap: 10px;">
+                        ${places.atm.map(place => `
+                            <div style="padding: 12px; background: white; border-radius: 8px; border-left: 3px solid #3498db;">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 4px;">${place.name}</div>
+                                <div style="font-size: 0.9em; color: #666;">📏 ${place.distance} | ${place.description}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+            
+            <!-- コインロッカー -->
+            ${places.lockers && places.lockers.length > 0 ? `
+                <div style="margin-bottom: 20px;">
+                    <h5 style="color: #2c3e50; margin-bottom: 12px; font-size: 1.05em; display: flex; align-items: center; gap: 8px;">
+                        🧳 コインロッカー
+                    </h5>
+                    <div style="display: grid; gap: 10px;">
+                        ${places.lockers.map(place => `
+                            <div style="padding: 12px; background: white; border-radius: 8px; border-left: 3px solid #9b59b6;">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 4px;">${place.name}</div>
+                                <div style="font-size: 0.9em; color: #666;">📏 ${place.distance} | ${place.description}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+            
+            <!-- 駐車場 -->
+            ${places.parking && places.parking.length > 0 ? `
+                <div style="margin-bottom: 20px;">
+                    <h5 style="color: #2c3e50; margin-bottom: 12px; font-size: 1.05em; display: flex; align-items: center; gap: 8px;">
+                        🅿️ 駐車場
+                    </h5>
+                    <div style="display: grid; gap: 10px;">
+                        ${places.parking.map(place => `
+                            <div style="padding: 12px; background: white; border-radius: 8px; border-left: 3px solid #e74c3c;">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 4px;">${place.name}</div>
+                                <div style="font-size: 0.9em; color: #666;">📏 ${place.distance} | ${place.description}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+            
+            <!-- おすすめポイント -->
+            ${places.tips && places.tips.length > 0 ? `
+                <div style="padding: 15px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 10px; border-left: 4px solid #ffc107;">
+                    <h5 style="color: #856404; margin-bottom: 12px; font-size: 1.05em; display: flex; align-items: center; gap: 8px;">
+                        💡 現地のポイント
+                    </h5>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        ${places.tips.map(tip => `
+                            <div style="color: #856404; font-size: 0.95em; line-height: 1.6;">${tip}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
 
         // チェックインセクションをレンダリング
     function renderCheckInSection(eventId, event) {
@@ -5471,6 +5824,15 @@ function sendEventNotification(event, title, message) {
 
         function renderNotificationSettings() {
             const allEvents = getAllEvents();
+
+            // 今日以降のイベントのみ表示 ← ★この4行を追加
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const upcomingEvents = allEvents.filter(e => {
+                const eventDate = new Date(e.date);
+                eventDate.setHours(23, 59, 59, 999);
+                return eventDate >= today;
+            });
             
             // 時系列順にソート
             allEvents.sort((a, b) => {
@@ -5542,8 +5904,20 @@ function sendEventNotification(event, title, message) {
             </div>
         `;
     }
+
+    // イベントがない場合のメッセージ ← ★この7行を追加（オプション）
+    if (upcomingEvents.length === 0) {
+        html += `
+            <div style="text-align: center; padding: 50px 20px; color: #999;">
+                <div style="font-size: 3em; margin-bottom: 15px;">📅</div>
+                <p style="font-size: 1.1em;">今後の予定がありません</p>
+            </div>
+        `;
+        document.getElementById('notificationSettings').innerHTML = html;
+        return;
+    }
     
-    allEvents.forEach(event => {
+    upcomingEvents.forEach(event => {
         const eventId = event.id || event.name;
         const setting = getNotificationSetting(eventId);
         
@@ -6925,22 +7299,32 @@ function sendLocationNotification(event, distance) {
     }
 
     // 現在地から会場への経路検索（Google Maps）
-    function routeFromCurrentLocation(destination, venueName) {
+    function routeFromCurrentLocation(destination, venueName, buttonElement) {  // ← ★引数追加
         if ('geolocation' in navigator) {
             // ローディング表示
-            const button = event.target;
+            const button = buttonElement;  // ← ★修正
             const originalText = button.innerHTML;
             button.innerHTML = '📍 現在地取得中...';
             button.disabled = true;
+            
+            console.log('🔍 位置情報取得開始...');
             
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     
+                    console.log(`✅ 現在地取得成功: (${lat}, ${lng})`);
+                    
                     // Google Mapsで経路検索
                     const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=transit`;
-                    window.open(url, '_blank');
+                    
+                    // iOSの場合は直接遷移、Androidの場合は新しいタブ
+                    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                        window.location.href = url;  // ← ★iOS対応
+                    } else {
+                        window.open(url, '_blank');
+                    }
                     
                     // ボタンを元に戻す
                     button.innerHTML = originalText;
@@ -6949,8 +7333,27 @@ function sendLocationNotification(event, distance) {
                     console.log(`📍 現在地 (${lat}, ${lng}) から ${venueName} への経路を表示`);
                 },
                 (error) => {
-                    alert('位置情報の取得に失敗しました。\n設定で位置情報を許可してください。');
-                    console.error('位置情報エラー:', error);
+                    console.error('❌ 位置情報取得エラー:', error);
+                    console.error('エラーコード:', error.code);
+                    console.error('エラーメッセージ:', error.message);
+                    
+                    let errorMessage = '位置情報の取得に失敗しました。\n\n';
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage += '位置情報の使用が拒否されています。\nブラウザの設定で位置情報を許可してください。';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage += '位置情報が利用できません。\nGPS・Wi-Fiをオンにしてください。';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage += '位置情報の取得がタイムアウトしました。\nもう一度お試しください。';
+                            break;
+                        default:
+                            errorMessage += '不明なエラーが発生しました。';
+                    }
+                    
+                    alert(errorMessage);
                     
                     // ボタンを元に戻す
                     button.innerHTML = originalText;
@@ -6958,8 +7361,8 @@ function sendLocationNotification(event, distance) {
                 },
                 {
                     enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 60000
+                    timeout: 15000,  // ← ★15秒に延長
+                    maximumAge: 0    // ← ★キャッシュを使わない
                 }
             );
         } else {
@@ -6968,21 +7371,31 @@ function sendLocationNotification(event, distance) {
     }
 
     // 現在地からYahoo!乗換案内
-    function yahooTransitFromCurrentLocation(destination) {
+    function yahooTransitFromCurrentLocation(destination, buttonElement) {
         if ('geolocation' in navigator) {
-            const button = event.target;
+            const button = buttonElement;  // ← ★修正
             const originalText = button.innerHTML;
             button.innerHTML = '📍 現在地取得中...';
             button.disabled = true;
+            
+            console.log('🔍 位置情報取得開始...');
             
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     
+                    console.log(`✅ 現在地取得成功: (${lat}, ${lng})`);
+                    
                     // Yahoo!乗換案内（緯度経度で検索）
                     const url = `https://transit.yahoo.co.jp/search/result?flatlon=${lat},${lng}&tlatlon=&to=${destination}`;
-                    window.open(url, '_blank');
+                    
+                    // iOSの場合は直接遷移、Androidの場合は新しいタブ
+                    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                        window.location.href = url;  // ← ★iOS対応
+                    } else {
+                        window.open(url, '_blank');
+                    }
                     
                     button.innerHTML = originalText;
                     button.disabled = false;
@@ -6990,16 +7403,35 @@ function sendLocationNotification(event, distance) {
                     console.log(`📍 現在地から ${destination} への乗換案内を表示`);
                 },
                 (error) => {
-                    alert('位置情報の取得に失敗しました。');
-                    console.error('位置情報エラー:', error);
+                    console.error('❌ 位置情報取得エラー:', error);
+                    console.error('エラーコード:', error.code);
+                    console.error('エラーメッセージ:', error.message);
+                    
+                    let errorMessage = '位置情報の取得に失敗しました。\n\n';
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage += '位置情報の使用が拒否されています。\nブラウザの設定で位置情報を許可してください。';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage += '位置情報が利用できません。\nGPS・Wi-Fiをオンにしてください。';
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage += '位置情報の取得がタイムアウトしました。\nもう一度お試しください。';
+                            break;
+                        default:
+                            errorMessage += '不明なエラーが発生しました。';
+                    }
+                    
+                    alert(errorMessage);
                     
                     button.innerHTML = originalText;
                     button.disabled = false;
                 },
                 {
                     enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 60000
+                    timeout: 15000,  // ← ★15秒に延長
+                    maximumAge: 0    // ← ★キャッシュを使わない
                 }
             );
         } else {
