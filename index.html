@@ -1195,16 +1195,6 @@
             box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
         }
         
-        .map-btn.jr-east-app {
-            background: #00ac56;
-        }
-
-        .map-btn.jr-east-app:hover {
-            background: #008a45;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 172, 86, 0.4);
-        }
-        
         .map-btn.street-view {
             background: #34a853;
         }
@@ -2058,6 +2048,269 @@
     .apply-custom-btn {
         width: 100%;
         margin-top: 10px;
+    }
+
+    /* アコーディオンスタイル */
+    .accordion-section {
+        margin-top: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .accordion-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 18px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s;
+        user-select: none;
+    }
+
+    .accordion-header:hover {
+        background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+    }
+
+    .accordion-header h4 {
+        margin: 0;
+        font-size: 1.1em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .accordion-arrow {
+        font-size: 1.2em;
+        transition: transform 0.3s;
+    }
+
+    .accordion-arrow.open {
+        transform: rotate(180deg);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        background: white;
+    }
+
+    .accordion-content.open {
+        max-height: 2000px;
+        transition: max-height 0.5s ease-in;
+    }
+
+    .accordion-body {
+        padding: 20px;
+    }
+
+    /* 行程表スタイル */
+    .itinerary-section {
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .itinerary-item {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        border-left: 4px solid #667eea;
+        position: relative;
+    }
+
+    .itinerary-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .itinerary-time {
+        font-weight: bold;
+        color: #667eea;
+        font-size: 1.1em;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .itinerary-content {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .itinerary-type {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.85em;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    .itinerary-type.transit {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .itinerary-type.arrival {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .itinerary-type.event {
+        background: #e0c3fc;
+        color: #5a189a;
+    }
+
+    .itinerary-type.other {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .itinerary-delete-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.85em;
+        transition: all 0.3s;
+    }
+
+    .itinerary-delete-btn:hover {
+        background: #c82333;
+    }
+
+    .add-itinerary-form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 15px;
+    }
+
+    .itinerary-form-group {
+        margin-bottom: 15px;
+    }
+
+    .itinerary-form-group label {
+        display: block;
+        color: #667eea;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 0.9em;
+    }
+
+    .itinerary-form-group input,
+    .itinerary-form-group select,
+    .itinerary-form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 0.95em;
+    }
+
+    .itinerary-form-group input:focus,
+    .itinerary-form-group select:focus,
+    .itinerary-form-group textarea:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .itinerary-form-group textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    .itinerary-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .add-itinerary-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+    }
+
+    .add-itinerary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .itinerary-empty {
+        text-align: center;
+        padding: 30px;
+        color: #999;
+    }
+
+    .itinerary-template-btn {
+        padding: 10px 20px;
+        background: #17a2b8;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-bottom: 15px;
+        transition: all 0.3s;
+    }
+
+    .itinerary-template-btn:hover {
+        background: #138496;
+        transform: translateY(-2px);
+    }
+
+    .itinerary-duration {
+        display: inline-block;
+        margin-left: 10px;
+        padding: 3px 8px;
+        background: #f0f0f0;
+        border-radius: 12px;
+        font-size: 0.8em;
+        color: #666;
+    }
+
+    @media (max-width: 768px) {
+        .itinerary-form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .itinerary-edit-btn {
+    transition: all 0.3s;
+}
+
+    .itinerary-edit-btn:hover {
+        background: #5568d3 !important;
+        transform: translateY(-2px);
+    }
+
+    /* 行程表の編集・削除ボタンのホバーエフェクト */
+    .itinerary-item button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* キャンセルボタンのホバーエフェクト */
+    [id^="itinerary-cancel-btn-"]:hover {
+        background: #5a6268 !important;
     }
     </style>
 </head>
@@ -3115,6 +3368,280 @@
                 eventChecklists = JSON.parse(saved);
             }
         }
+
+        // 行程表データの読み込み
+        let eventItineraries = {};
+
+        function loadItineraries() {
+            const saved = localStorage.getItem('eventItineraries');
+            if (saved) {
+                eventItineraries = JSON.parse(saved);
+            }
+        }
+
+        function saveItineraries() {
+            localStorage.setItem('eventItineraries', JSON.stringify(eventItineraries));
+        }
+
+        function getItinerary(eventId) {
+            if (!eventItineraries[eventId]) {
+                eventItineraries[eventId] = [];
+            }
+            return eventItineraries[eventId];
+        }
+
+        // 行程表アイテムを追加（編集モード対応）
+    function addItineraryItem(eventId) {
+        const time = document.getElementById(`itinerary-time-${eventId}`).value;
+        const type = document.getElementById(`itinerary-type-${eventId}`).value;
+        const title = document.getElementById(`itinerary-title-${eventId}`).value;
+        const details = document.getElementById(`itinerary-details-${eventId}`).value;
+        const editIndex = document.getElementById(`itinerary-edit-index-${eventId}`).value;
+        
+        if (!time || !title) {
+            alert('時刻とタイトルは必須です');
+            return;
+        }
+        
+        const itinerary = getItinerary(eventId);
+        
+        if (editIndex !== '') {
+            // 編集モード
+            const index = parseInt(editIndex);
+            itinerary[index] = {
+                time: time,
+                type: type,
+                title: title,
+                details: details,
+                createdAt: itinerary[index].createdAt, // 作成日時は保持
+                updatedAt: new Date().toISOString() // 更新日時を追加
+            };
+        } else {
+            // 追加モード
+            itinerary.push({
+                time: time,
+                type: type,
+                title: title,
+                details: details,
+                createdAt: new Date().toISOString()
+            });
+        }
+        
+        // 時刻順にソート
+        itinerary.sort((a, b) => a.time.localeCompare(b.time));
+        
+        saveItineraries();
+        
+        // フォームをリセット
+        cancelEditItineraryItem(eventId);
+        
+        // モーダルを再レンダリング
+        const allEvents = getAllEvents();
+        const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+        if (eventIndex >= 0) {
+            showEventDetail(eventIndex);
+            // アコーディオンの状態を復元
+            setTimeout(() => {
+                restoreAccordionStates();
+            }, 100);
+        }
+    }
+
+        // 行程表アイテムを削除
+        function deleteItineraryItem(eventId, index) {
+            if (!confirm('この行程を削除しますか？')) return;
+            
+            const itinerary = getItinerary(eventId);
+            itinerary.splice(index, 1);
+            saveItineraries();
+            
+            // モーダルを再レンダリング
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+                // アコーディオンの状態を復元
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
+            }
+        }
+
+        // 行程表アイテムを編集
+        function editItineraryItem(eventId, index) {
+            const itinerary = getItinerary(eventId);
+            const item = itinerary[index];
+            
+            // フォームに値を設定
+            document.getElementById(`itinerary-time-${eventId}`).value = item.time;
+            document.getElementById(`itinerary-type-${eventId}`).value = item.type;
+            document.getElementById(`itinerary-title-${eventId}`).value = item.title;
+            document.getElementById(`itinerary-details-${eventId}`).value = item.details || '';
+            document.getElementById(`itinerary-edit-index-${eventId}`).value = index;
+            
+            // フォームタイトルとボタンを変更
+            document.getElementById(`itinerary-form-title-${eventId}`).textContent = '✏️ 行程を編集';
+            document.getElementById(`itinerary-submit-btn-${eventId}`).textContent = '更新';
+            document.getElementById(`itinerary-cancel-btn-${eventId}`).style.display = 'block';
+            
+            // 編集中のアイテムをハイライト
+            const allItems = document.querySelectorAll(`[id^="itinerary-item-${eventId}-"]`);
+            allItems.forEach(el => el.style.background = 'white');
+            const editingItem = document.getElementById(`itinerary-item-${eventId}-${index}`);
+            if (editingItem) {
+                editingItem.style.background = '#fff3cd';
+                editingItem.style.borderLeft = '4px solid #ffc107';
+                
+                // フォームまでスクロール
+                document.getElementById(`itinerary-form-title-${eventId}`).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // 編集をキャンセル
+        function cancelEditItineraryItem(eventId) {
+            // フォームをリセット
+            document.getElementById(`itinerary-time-${eventId}`).value = '';
+            document.getElementById(`itinerary-type-${eventId}`).value = 'transit';
+            document.getElementById(`itinerary-title-${eventId}`).value = '';
+            document.getElementById(`itinerary-details-${eventId}`).value = '';
+            document.getElementById(`itinerary-edit-index-${eventId}`).value = '';
+            
+            // フォームタイトルとボタンを元に戻す
+            document.getElementById(`itinerary-form-title-${eventId}`).textContent = '➕ 行程を追加';
+            document.getElementById(`itinerary-submit-btn-${eventId}`).textContent = '追加';
+            document.getElementById(`itinerary-cancel-btn-${eventId}`).style.display = 'none';
+            
+            // ハイライトを解除
+            const allItems = document.querySelectorAll(`[id^="itinerary-item-${eventId}-"]`);
+            allItems.forEach(el => {
+                el.style.background = 'white';
+                el.style.borderLeft = '4px solid #667eea';
+            });
+        }
+
+        // テンプレートから行程表を自動生成
+        function generateItineraryTemplate(eventId, event) {
+            if (!confirm('イベント情報から行程表のテンプレートを生成しますか？\n（既存の行程表は削除されます）')) {
+                return;
+            }
+            
+            const itinerary = [];
+            
+            // 会場情報を取得
+            const venueKey = Object.keys(venueDatabase).find(key => 
+                event.venue && event.venue.includes(key.split('&')[0].trim())
+            );
+            
+            const venueInfo = venueDatabase[venueKey];
+            
+            // イベント開始時刻を取得
+            let eventStartTime = '';
+            if (event.time) {
+                const timeMatch = event.time.match(/(\d+):(\d+)/);
+                if (timeMatch) {
+                    eventStartTime = `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}`;
+                }
+            }
+            
+            if (eventStartTime) {
+                // イベント開始時刻から逆算
+                const [hours, minutes] = eventStartTime.split(':').map(Number);
+                const eventTime = new Date(event.date);
+                eventTime.setHours(hours, minutes, 0);
+                
+                // 2時間前に自宅出発
+                const departTime = new Date(eventTime.getTime() - 120 * 60000);
+                itinerary.push({
+                    time: `${departTime.getHours().toString().padStart(2, '0')}:${departTime.getMinutes().toString().padStart(2, '0')}`,
+                    type: 'other',
+                    title: '🏠 自宅出発',
+                    details: '忘れ物がないか最終チェック',
+                    createdAt: new Date().toISOString()
+                });
+                
+                // 1時間前に最寄り駅到着
+                if (venueInfo) {
+                    const arriveStationTime = new Date(eventTime.getTime() - 60 * 60000);
+                    itinerary.push({
+                        time: `${arriveStationTime.getHours().toString().padStart(2, '0')}:${arriveStationTime.getMinutes().toString().padStart(2, '0')}`,
+                        type: 'transit',
+                        title: `🚃 ${venueInfo.station}到着`,
+                        details: `${venueInfo.walkTime}`,
+                        createdAt: new Date().toISOString()
+                    });
+                    
+                    // 45分前に会場到着
+                    const arriveVenueTime = new Date(eventTime.getTime() - 45 * 60000);
+                    itinerary.push({
+                        time: `${arriveVenueTime.getHours().toString().padStart(2, '0')}:${arriveVenueTime.getMinutes().toString().padStart(2, '0')}`,
+                        type: 'arrival',
+                        title: `📍 ${venueInfo.name}到着`,
+                        details: '開場待機・グッズ購入など',
+                        createdAt: new Date().toISOString()
+                    });
+                }
+                
+                // イベント開始
+                itinerary.push({
+                    time: eventStartTime,
+                    type: 'event',
+                    title: `🎪 ${event.name}開始`,
+                    details: event.description || 'イベント楽しむ！',
+                    createdAt: new Date().toISOString()
+                });
+                
+                // イベント終了（3時間後と仮定）
+                const endTime = new Date(eventTime.getTime() + 180 * 60000);
+                itinerary.push({
+                    time: `${endTime.getHours().toString().padStart(2, '0')}:${endTime.getMinutes().toString().padStart(2, '0')}`,
+                    type: 'other',
+                    title: '🎊 イベント終了',
+                    details: '帰宅準備',
+                    createdAt: new Date().toISOString()
+                });
+            } else {
+                // 時刻情報がない場合の基本テンプレート
+                itinerary.push({
+                    time: '09:00',
+                    type: 'other',
+                    title: '🏠 自宅出発',
+                    details: '',
+                    createdAt: new Date().toISOString()
+                });
+                
+                itinerary.push({
+                    time: '10:00',
+                    type: 'arrival',
+                    title: '📍 会場到着',
+                    details: '',
+                    createdAt: new Date().toISOString()
+                });
+                
+                itinerary.push({
+                    time: '11:00',
+                    type: 'event',
+                    title: `🎪 ${event.name}`,
+                    details: '',
+                    createdAt: new Date().toISOString()
+                });
+            }
+            
+            eventItineraries[eventId] = itinerary;
+            saveItineraries();
+            
+            // モーダルを再レンダリング
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+                // アコーディオンの状態を復元
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
+            }
+            
+            alert('行程表のテンプレートを生成しました！\n必要に応じて編集してください。');
+        }
         
         function saveChecklists() {
             localStorage.setItem('eventChecklists', JSON.stringify(eventChecklists));
@@ -3418,6 +3945,7 @@ function sendEventNotification(event, title, message) {
         function init() {
             loadCustomEvents();
             loadChecklists();
+            loadItineraries(); 
             loadHomeLocation();
             loadTags();
             loadTheme();  // ← この行を追加
@@ -3931,101 +4459,211 @@ function sendEventNotification(event, title, message) {
             document.getElementById('modalDate').textContent = formatDate(event.date);
             
             let bodyHtml = `
-                <div class="modal-info-grid">
-                    ${event.status && event.status !== '---------' ? `
-                    <div class="modal-info-item">
-                        <div class="icon">🎫</div>
-                        <div class="content">
-                            <h4>チケット状況</h4>
-                            <p>${event.status}</p>
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    ${event.time && event.time !== '---------' ? `
-                    <div class="modal-info-item">
-                        <div class="icon">🕐</div>
-                        <div class="content">
-                            <h4>開催時間</h4>
-                            <p>${event.time}</p>
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    ${event.venue && event.venue !== '---------' ? `
-                    <div class="modal-info-item">
-                        <div class="icon">📍</div>
-                        <div class="content">
-                            <h4>会場</h4>
-                            <p>${event.venue}</p>
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    <div class="modal-info-item">
-                        <div class="icon">💰</div>
-                        <div class="content">
-                            <h4>料金</h4>
-                            <p>¥${event.price.toLocaleString()}</p>
-                        </div>
-                    </div>
-                    
-                    ${event.description ? `
-                    <div class="modal-info-item">
-                        <div class="icon">📝</div>
-                        <div class="content">
-                            <h4>詳細</h4>
-                            <p>${event.description}</p>
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    ${event.artists ? `
-                    <div class="modal-info-item">
-                        <div class="icon">🎤</div>
-                        <div class="content">
-                            <h4>出演アーティスト (${event.artists.length}名)</h4>
-                            <div class="artist-list">
-                                ${event.artists.map(artist => `
-                                    <span class="artist-badge">${artist.ja}</span>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    ` : ''}
+            <!-- 基本情報アコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>📋 基本情報</h4>
+                    <span class="accordion-arrow">▼</span>
                 </div>
-                
-                ${renderChecklistSection(eventId)}
-                
-                ${renderMapSection(event)}
-                
-                ${renderWeatherSection(event)}
-
-                ${renderTrainCongestionSection(event)}
-
-                ${renderVenueCongestionSection(event)}
-
-                ${renderCheckInSection(eventId, event)}
-
-                ${renderTagsSection(eventId)}
-                
-                
-                
-                ${event.isCustom ? `
-                    <div class="form-actions">
-                        <button class="btn-secondary btn-edit" onclick="closeModal(); editCustomEvent('${event.id}')">✏️ 編集</button>
-                        <button class="btn-secondary btn-delete" onclick="closeModal(); deleteCustomEvent('${event.id}')">🗑️ 削除</button>
+                <div class="accordion-content open" data-section="basic">
+                    <div class="accordion-body">
+                        <div class="modal-info-grid">
+                            ${event.status && event.status !== '---------' ? `
+                            <div class="modal-info-item">
+                                <div class="icon">🎫</div>
+                                <div class="content">
+                                    <h4>チケット状況</h4>
+                                    <p>${event.status}</p>
+                                </div>
+                            </div>
+                            ` : ''}
+                            
+                            ${event.time && event.time !== '---------' ? `
+                            <div class="modal-info-item">
+                                <div class="icon">🕐</div>
+                                <div class="content">
+                                    <h4>開催時間</h4>
+                                    <p>${event.time}</p>
+                                </div>
+                            </div>
+                            ` : ''}
+                            
+                            ${event.venue && event.venue !== '---------' ? `
+                            <div class="modal-info-item">
+                                <div class="icon">📍</div>
+                                <div class="content">
+                                    <h4>会場</h4>
+                                    <p>${event.venue}</p>
+                                </div>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="modal-info-item">
+                                <div class="icon">💰</div>
+                                <div class="content">
+                                    <h4>料金</h4>
+                                    <p>¥${event.price.toLocaleString()}</p>
+                                </div>
+                            </div>
+                            
+                            ${event.description ? `
+                            <div class="modal-info-item">
+                                <div class="icon">📝</div>
+                                <div class="content">
+                                    <h4>詳細</h4>
+                                    <p>${event.description}</p>
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
                     </div>
-                ` : ''}
-                
-                ${event.officialUrl ? `
-                    <a href="${event.officialUrl}" target="_blank" class="official-link">
-                        🔗 公式サイトで詳細を見る
-                    </a>
-                ` : ''}
-            `;
+                </div>
+            </div>
             
+            <!-- 出演者アコーディオン -->
+            ${event.artists ? `
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>🎤 出演アーティスト (${event.artists.length}名)</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="artists">
+                    <div class="accordion-body">
+                        <div class="artist-list">
+                            ${event.artists.map(artist => `
+                                <span class="artist-badge">${artist.ja} / ${artist.en}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ` : ''}
+
+            <!-- チェックリストアコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>✓ 準備チェックリスト</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="checklist">
+                    <div class="accordion-body">
+                        ${renderChecklistSection(eventId)}
+                    </div>
+                </div>
+            </div>
+
+            <!-- アクセス・地図アコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>🗺️ アクセス・地図</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="map">
+                    <div class="accordion-body">
+                        ${renderMapSection(event)}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 天気予報アコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>🌤️ 天気予報</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="weather">
+                    <div class="accordion-body">
+                        ${renderWeatherSection(event)}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 電車混雑予測アコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>🚃 電車混雑予測</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="train">
+                    <div class="accordion-body">
+                        ${renderTrainCongestionSection(event)}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 会場混雑予測アコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>🏛️ 会場混雑予測</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="venue">
+                    <div class="accordion-body">
+                        ${renderVenueCongestionSection(event)}
+                    </div>
+                </div>
+            </div>
+
+            <!-- チェックインアコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>📍 チェックイン</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="checkin">
+                    <div class="accordion-body">
+                        ${renderCheckInSection(eventId, event)}
+                    </div>
+                </div>
+            </div>
+
+            <!-- タグアコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>🏷️ タグ</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="tags">
+                    <div class="accordion-body">
+                        ${renderTagsSection(eventId)}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 行程表アコーディオン -->
+            <div class="accordion-section">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <h4>📋 行程表</h4>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="itinerary">
+                    <div class="accordion-body">
+                        ${renderItinerarySection(eventId, event)}
+                    </div>
+                </div>
+            </div>
+            
+            ${event.isCustom ? `
+                <div class="form-actions">
+                    <button class="btn-secondary btn-edit" onclick="closeModal(); editCustomEvent('${event.id}')">✏️ 編集</button>
+                    <button class="btn-secondary btn-delete" onclick="closeModal(); deleteCustomEvent('${event.id}')">🗑️ 削除</button>
+                </div>
+            ` : ''}
+            
+            ${event.officialUrl ? `
+                <a href="${event.officialUrl}" target="_blank" class="official-link">
+                    🔗 公式サイトで詳細を見る
+                </a>
+            ` : ''}
+        `;
+
             document.getElementById('modalBody').innerHTML = bodyHtml;
+            
+            // アコーディオンの状態を復元
+            setTimeout(() => {
+                restoreAccordionStates();
+            }, 50);
+            
             modal.style.display = 'block';
         }
         
@@ -4037,11 +4675,7 @@ function sendEventNotification(event, title, message) {
             const progress = totalCount > 0 ? (completedCount / totalCount * 100).toFixed(0) : 0;
             
             return `
-                <div class="checklist-section">
-                    <h4>
-                        ✓ 準備チェックリスト
-                        ${totalCount > 0 ? `<span style="font-size: 0.9em; color: #999;">(${completedCount}/${totalCount}完了)</span>` : ''}
-                    </h4>
+            <div>
                     
                     ${totalCount > 0 ? `
                         <div class="checklist-progress">
@@ -4099,6 +4733,10 @@ function sendEventNotification(event, title, message) {
             const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
             if (eventIndex >= 0) {
                 showEventDetail(eventIndex);
+                // アコーディオンの状態を復元
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
             }
             
             // カードも更新
@@ -4116,6 +4754,10 @@ function sendEventNotification(event, title, message) {
             const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
             if (eventIndex >= 0) {
                 showEventDetail(eventIndex);
+                // アコーディオンの状態を復元
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
             }
             
             // カードも更新
@@ -4135,6 +4777,10 @@ function sendEventNotification(event, title, message) {
             const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
             if (eventIndex >= 0) {
                 showEventDetail(eventIndex);
+                // アコーディオンの状態を復元
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
             }
             
             // カードも更新
@@ -4219,11 +4865,6 @@ function sendEventNotification(event, title, message) {
                             📍 現在地から経路検索
                         </button>
                         
-                        ${/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? `
-                        <button class="map-btn jr-east-app" onclick="openJREastApp('${encodedVenue}', this)">
-                            🚃 JR東日本アプリ
-                        </button>
-                        ` : ''}
                         
                         <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${venueInfo.lat},${venueInfo.lng}" 
                            target="_blank" 
@@ -4928,10 +5569,15 @@ function renderNearbyPlacesSection(places) {
             saveTags();
             
             // モーダルとビューを更新
+            // モーダルを再レンダリング
             const allEvents = getAllEvents();
             const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
             if (eventIndex >= 0) {
                 showEventDetail(eventIndex);
+                // アコーディオンの状態を復元
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
             }
             renderTagFilter();
             renderView();
@@ -4945,15 +5591,19 @@ function renderNearbyPlacesSection(places) {
                 tags.splice(index, 1);
                 saveTags();
                 
-                // モーダルとビューを更新
-                const allEvents = getAllEvents();
-                const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
-                if (eventIndex >= 0) {
-                    showEventDetail(eventIndex);
-                }
+                // モーダルを再レンダリング
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+                // アコーディオンの状態を復元
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
+            
                 renderTagFilter();
                 renderView();
-            }
+            }}
         }
         
         // タグフィルターをレンダリング
@@ -7436,96 +8086,162 @@ function sendLocationNotification(event, distance) {
             alert('このブラウザは位置情報に対応していません。');
         }
     }
+        
+        // アコーディオンの開閉状態を保存
+let accordionStates = {};
 
-    // JR東日本アプリを開く（スマホのみ）
-function openJREastApp(destination, buttonElement) {
-    if ('geolocation' in navigator) {
-        const button = buttonElement;
-        const originalText = button.innerHTML;
-        button.innerHTML = '📍 現在地取得中...';
-        button.disabled = true;
-        
-        console.log('🔍 位置情報取得開始...');
-        
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                
-                console.log(`✅ 現在地取得成功: (${lat}, ${lng})`);
-                
-                // JR東日本アプリを開く（アプリ内の乗換案内機能を起動）
-                // ※ JR東日本アプリは独自のディープリンクスキームを公開していないため、
-                //    アプリを開くのみとし、経路検索は手動で行う必要があります
-                const appUrl = 'jreast://';
-                
-                // iOSの場合
-                if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                    window.location.href = appUrl;
-                    
-                    // アプリが開かなかった場合はApp Storeへ
-                    setTimeout(() => {
-                        if (confirm('JR東日本アプリを開けませんでした。\nApp Storeで確認しますか？')) {
-                            window.location.href = 'https://apps.apple.com/jp/app/jr%E6%9D%B1%E6%97%A5%E6%9C%AC%E3%82%A2%E3%83%97%E3%83%AA/id1446194696';
-                        }
-                    }, 1500);
-                } 
-                // Androidの場合
-                else if (/Android/i.test(navigator.userAgent)) {
-                    // Androidの場合はパッケージ名で起動を試みる
-                    const androidUrl = 'intent://jp.co.jreast.exapp#Intent;scheme=jreast;package=jp.co.jreast.exapp;end';
-                    window.location.href = androidUrl;
-                    
-                    // アプリが開かなかった場合はGoogle Playへ
-                    setTimeout(() => {
-                        if (confirm('JR東日本アプリを開けませんでした。\nGoogle Playで確認しますか？')) {
-                            window.location.href = 'https://play.google.com/store/apps/details?id=jp.co.jreast.exapp';
-                        }
-                    }, 1500);
-                }
-                
-                button.innerHTML = originalText;
-                button.disabled = false;
-                
-                console.log(`📍 JR東日本アプリを起動`);
-                alert(`現在地: (${lat.toFixed(4)}, ${lng.toFixed(4)})\n目的地: ${decodeURIComponent(destination)}\n\nアプリ内で経路検索を行ってください。`);
-            },
-                    (error) => {
-                        console.error('❌ 位置情報取得エラー:', error);
-                        
-                        let errorMessage = '位置情報の取得に失敗しました。\n\n';
-                        
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED:
-                                errorMessage += '位置情報の使用が拒否されています。\nブラウザの設定で位置情報を許可してください。';
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                errorMessage += '位置情報が利用できません。\nGPS・Wi-Fiをオンにしてください。';
-                                break;
-                            case error.TIMEOUT:
-                                errorMessage += '位置情報の取得がタイムアウトしました。\nもう一度お試しください。';
-                                break;
-                            default:
-                                errorMessage += '不明なエラーが発生しました。';
-                        }
-                        
-                        alert(errorMessage);
-                        
-                        button.innerHTML = originalText;
-                        button.disabled = false;
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 15000,
-                        maximumAge: 0
-                    }
-                );
-            } else {
-                alert('このブラウザは位置情報に対応していません。');
-            }
+// アコーディオンの開閉
+function toggleAccordion(e, header) {
+    e.stopPropagation(); // イベントの伝播を停止
+    
+    const content = header.nextElementSibling;
+    const arrow = header.querySelector('.accordion-arrow');
+    const sectionName = content.getAttribute('data-section');
+    
+    // 現在の状態を切り替え
+    if (content.classList.contains('open')) {
+        content.classList.remove('open');
+        arrow.classList.remove('open');
+        if (sectionName) {
+            accordionStates[sectionName] = false;
         }
+    } else {
+        content.classList.add('open');
+        arrow.classList.add('open');
+        if (sectionName) {
+            accordionStates[sectionName] = true;
+        }
+    }
+}
 
-        
+// アコーディオンの状態を復元
+function restoreAccordionStates() {
+    Object.keys(accordionStates).forEach(sectionName => {
+        const content = document.querySelector(`[data-section="${sectionName}"]`);
+        if (content && accordionStates[sectionName]) {
+            const header = content.previousElementSibling;
+            const arrow = header.querySelector('.accordion-arrow');
+            content.classList.add('open');
+            arrow.classList.add('open');
+        }
+    });
+}
+
+        // 行程表セクションをレンダリング
+// 行程表セクションをレンダリング
+function renderItinerarySection(eventId, event) {
+    const itinerary = getItinerary(eventId);
+    
+    // 総所要時間を計算
+    let totalDuration = '';
+    if (itinerary.length >= 2) {
+        const firstTime = itinerary[0].time;
+        const lastTime = itinerary[itinerary.length - 1].time;
+        const [h1, m1] = firstTime.split(':').map(Number);
+        const [h2, m2] = lastTime.split(':').map(Number);
+        const minutes = (h2 * 60 + m2) - (h1 * 60 + m1);
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        totalDuration = `${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}`;
+    }
+    
+    return `
+        <div>
+            <button class="itinerary-template-btn" onclick="generateItineraryTemplate('${eventId}', ${JSON.stringify(event).replace(/"/g, '&quot;')})">
+                ✨ テンプレートから自動生成
+            </button>
+            
+            ${itinerary.length > 0 ? `
+                <div style="margin-bottom: 15px; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-align: center;">
+                    <strong>📅 総所要時間: ${totalDuration}</strong>
+                </div>
+            ` : ''}
+            
+            <div class="itinerary-section">
+                ${itinerary.length > 0 ? itinerary.map((item, index) => `
+                    <div class="itinerary-item" id="itinerary-item-${eventId}-${index}">
+                        <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 8px; z-index: 10;">
+                            <button onclick="editItineraryItem('${eventId}', ${index})" style="background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8em; transition: all 0.3s; white-space: nowrap;">
+                                ✏️ 編集
+                            </button>
+                            <button onclick="deleteItineraryItem('${eventId}', ${index})" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8em; transition: all 0.3s; white-space: nowrap;">
+                                🗑️ 削除
+                            </button>
+                        </div>
+                        <div class="itinerary-time" style="padding-right: 140px;">
+                            🕐 ${item.time}
+                            ${index > 0 ? (() => {
+                                const prevTime = itinerary[index - 1].time;
+                                const [h1, m1] = prevTime.split(':').map(Number);
+                                const [h2, m2] = item.time.split(':').map(Number);
+                                const diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+                                return `<span class="itinerary-duration">+${diff}分</span>`;
+                            })() : ''}
+                        </div>
+                        <div class="itinerary-content" style="padding-right: 140px;">
+                            <span class="itinerary-type ${item.type}">${getItineraryTypeLabel(item.type)}</span>
+                            <strong>${item.title}</strong>
+                            ${item.details ? `<div style="margin-top: 5px; color: #666; font-size: 0.9em;">${item.details}</div>` : ''}
+                        </div>
+                    </div>
+                `).join('') : `
+                    <div class="itinerary-empty">
+                        <div style="font-size: 3em; margin-bottom: 10px;">📋</div>
+                        <p>行程表がまだありません</p>
+                        <p style="font-size: 0.9em; margin-top: 5px;">下のフォームから追加するか、テンプレートを自動生成してください</p>
+                    </div>
+                `}
+            </div>
+            
+            <div class="add-itinerary-form">
+                <h5 style="color: #667eea; margin-bottom: 15px;" id="itinerary-form-title-${eventId}">➕ 行程を追加</h5>
+                <div class="itinerary-form-row">
+                    <div class="itinerary-form-group">
+                        <label>時刻 *</label>
+                        <input type="time" id="itinerary-time-${eventId}" required>
+                    </div>
+                    <div class="itinerary-form-group">
+                        <label>種類</label>
+                        <select id="itinerary-type-${eventId}">
+                            <option value="transit">🚃 移動中</option>
+                            <option value="departure">🛫 出発</option>
+                            <option value="arrival">📍 到着</option>
+                            <option value="event">🎪 イベント</option>
+                            <option value="other">📝 その他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="itinerary-form-group">
+                    <label>タイトル *</label>
+                    <input type="text" id="itinerary-title-${eventId}" placeholder="例: 渋谷駅到着" required>
+                </div>
+                <div class="itinerary-form-group">
+                    <label>詳細</label>
+                    <textarea id="itinerary-details-${eventId}" placeholder="例: JR山手線で移動（約15分）"></textarea>
+                </div>
+                <input type="hidden" id="itinerary-edit-index-${eventId}" value="">
+                <div style="display: flex; gap: 10px;">
+                    <button class="add-itinerary-btn" id="itinerary-submit-btn-${eventId}" onclick="addItineraryItem('${eventId}')">追加</button>
+                    <button id="itinerary-cancel-btn-${eventId}" onclick="cancelEditItineraryItem('${eventId}')" style="display: none; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95em; transition: all 0.3s;">
+                        キャンセル
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+    // 行程種類のラベルを取得
+    function getItineraryTypeLabel(type) {
+        const labels = {
+            'transit': '🚃 移動',
+            'arrival': '📍 到着',
+            'event': '🎪 イベント',
+            'other': '📝 その他'
+        };
+        return labels[type] || type;
+    }
+            
         
     </script>
 </body>
