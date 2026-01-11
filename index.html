@@ -7438,42 +7438,58 @@ function sendLocationNotification(event, distance) {
     }
 
     // JR東日本アプリを開く（スマホのみ）
-        function openJREastApp(destination, buttonElement) {
-            if ('geolocation' in navigator) {
-                const button = buttonElement;
-                const originalText = button.innerHTML;
-                button.innerHTML = '📍 現在地取得中...';
-                button.disabled = true;
+function openJREastApp(destination, buttonElement) {
+    if ('geolocation' in navigator) {
+        const button = buttonElement;
+        const originalText = button.innerHTML;
+        button.innerHTML = '📍 現在地取得中...';
+        button.disabled = true;
+        
+        console.log('🔍 位置情報取得開始...');
+        
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
                 
-                console.log('🔍 位置情報取得開始...');
+                console.log(`✅ 現在地取得成功: (${lat}, ${lng})`);
                 
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        
-                        console.log(`✅ 現在地取得成功: (${lat}, ${lng})`);
-                        
-                        // JR東日本アプリのディープリンク
-                        const appUrl = `jreast://route?from=${lat},${lng}&to=${destination}`;
-                        
-                        // アプリを開く
-                        window.location.href = appUrl;
-                        
-                        // 数秒後にアプリが開かなかった場合はApp Storeへ
-                        setTimeout(() => {
-                            if (document.hidden === false) {
-                                if (confirm('JR東日本アプリがインストールされていないようです。\nApp Storeで開きますか？')) {
-                                    window.location.href = 'https://apps.apple.com/jp/app/jr%E6%9D%B1%E6%97%A5%E6%9C%AC%E3%82%A2%E3%83%97%E3%83%AA/id1446194696';
-                                }
-                            }
-                        }, 2000);
-                        
-                        button.innerHTML = originalText;
-                        button.disabled = false;
-                        
-                        console.log(`📍 JR東日本アプリで ${destination} への経路を表示`);
-                    },
+                // JR東日本アプリを開く（アプリ内の乗換案内機能を起動）
+                // ※ JR東日本アプリは独自のディープリンクスキームを公開していないため、
+                //    アプリを開くのみとし、経路検索は手動で行う必要があります
+                const appUrl = 'jreast://';
+                
+                // iOSの場合
+                if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    window.location.href = appUrl;
+                    
+                    // アプリが開かなかった場合はApp Storeへ
+                    setTimeout(() => {
+                        if (confirm('JR東日本アプリを開けませんでした。\nApp Storeで確認しますか？')) {
+                            window.location.href = 'https://apps.apple.com/jp/app/jr%E6%9D%B1%E6%97%A5%E6%9C%AC%E3%82%A2%E3%83%97%E3%83%AA/id1446194696';
+                        }
+                    }, 1500);
+                } 
+                // Androidの場合
+                else if (/Android/i.test(navigator.userAgent)) {
+                    // Androidの場合はパッケージ名で起動を試みる
+                    const androidUrl = 'intent://jp.co.jreast.exapp#Intent;scheme=jreast;package=jp.co.jreast.exapp;end';
+                    window.location.href = androidUrl;
+                    
+                    // アプリが開かなかった場合はGoogle Playへ
+                    setTimeout(() => {
+                        if (confirm('JR東日本アプリを開けませんでした。\nGoogle Playで確認しますか？')) {
+                            window.location.href = 'https://play.google.com/store/apps/details?id=jp.co.jreast.exapp';
+                        }
+                    }, 1500);
+                }
+                
+                button.innerHTML = originalText;
+                button.disabled = false;
+                
+                console.log(`📍 JR東日本アプリを起動`);
+                alert(`現在地: (${lat.toFixed(4)}, ${lng.toFixed(4)})\n目的地: ${decodeURIComponent(destination)}\n\nアプリ内で経路検索を行ってください。`);
+            },
                     (error) => {
                         console.error('❌ 位置情報取得エラー:', error);
                         
