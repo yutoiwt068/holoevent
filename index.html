@@ -1195,14 +1195,14 @@
             box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
         }
         
-        .map-btn.yahoo-transit {
-            background: #ff0033;
+        .map-btn.jr-east-app {
+            background: #00ac56;
         }
-        
-        .map-btn.yahoo-transit:hover {
-            background: #cc0029;
+
+        .map-btn.jr-east-app:hover {
+            background: #008a45;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 0, 51, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 172, 86, 0.4);
         }
         
         .map-btn.street-view {
@@ -3444,6 +3444,11 @@ function sendEventNotification(event, title, message) {
 
             // 🆕 位置情報機能の初期化
             initLocationFeatures();
+
+            // スマホでのみJR東日本アプリボタンを表示
+            setTimeout(() => {
+                showJREastButtonOnMobile();
+            }, 500);
         }
         
 
@@ -4217,15 +4222,9 @@ function sendEventNotification(event, title, message) {
                             📍 現在地から経路検索
                         </button>
                         
-                        <button class="map-btn yahoo-transit" onclick="yahooTransitFromCurrentLocation('${encodedVenue}', this)">
-                            🚃 Yahoo!乗換（現在地から）
+                        <button class="map-btn jr-east-app" onclick="openJREastApp('${encodedVenue}', this)" style="display: none;" id="jrEastBtn-${encodedVenue.replace(/[^a-zA-Z0-9]/g, '')}">
+                            🚃 JR東日本アプリ
                         </button>
-                        
-                        <a href="https://transit.yahoo.co.jp/search/result?from=&to=${encodedVenue}" 
-                           target="_blank" 
-                           class="map-btn yahoo-transit">
-                            🚉 Yahoo!乗換案内
-                        </a>
                         
                         <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${venueInfo.lat},${venueInfo.lng}" 
                            target="_blank" 
@@ -7438,6 +7437,88 @@ function sendLocationNotification(event, distance) {
             alert('このブラウザは位置情報に対応していません。');
         }
     }
+
+    // JR東日本アプリを開く（スマホのみ）
+        function openJREastApp(destination, buttonElement) {
+            if ('geolocation' in navigator) {
+                const button = buttonElement;
+                const originalText = button.innerHTML;
+                button.innerHTML = '📍 現在地取得中...';
+                button.disabled = true;
+                
+                console.log('🔍 位置情報取得開始...');
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        
+                        console.log(`✅ 現在地取得成功: (${lat}, ${lng})`);
+                        
+                        // JR東日本アプリのディープリンク
+                        const appUrl = `jreast://route?from=${lat},${lng}&to=${destination}`;
+                        
+                        // アプリを開く
+                        window.location.href = appUrl;
+                        
+                        // 数秒後にアプリが開かなかった場合はApp Storeへ
+                        setTimeout(() => {
+                            if (document.hidden === false) {
+                                if (confirm('JR東日本アプリがインストールされていないようです。\nApp Storeで開きますか？')) {
+                                    window.location.href = 'https://apps.apple.com/jp/app/jr%E6%9D%B1%E6%97%A5%E6%9C%AC%E3%82%A2%E3%83%97%E3%83%AA/id1446194696';
+                                }
+                            }
+                        }, 2000);
+                        
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                        
+                        console.log(`📍 JR東日本アプリで ${destination} への経路を表示`);
+                    },
+                    (error) => {
+                        console.error('❌ 位置情報取得エラー:', error);
+                        
+                        let errorMessage = '位置情報の取得に失敗しました。\n\n';
+                        
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage += '位置情報の使用が拒否されています。\nブラウザの設定で位置情報を許可してください。';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage += '位置情報が利用できません。\nGPS・Wi-Fiをオンにしてください。';
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage += '位置情報の取得がタイムアウトしました。\nもう一度お試しください。';
+                                break;
+                            default:
+                                errorMessage += '不明なエラーが発生しました。';
+                        }
+                        
+                        alert(errorMessage);
+                        
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 15000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                alert('このブラウザは位置情報に対応していません。');
+            }
+        }
+
+        // スマホ判定とボタン表示（初期化時に実行）
+        function showJREastButtonOnMobile() {
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                document.querySelectorAll('[id^="jrEastBtn-"]').forEach(btn => {
+                    btn.style.display = 'flex';
+                });
+            }
+        }
     </script>
 </body>
 </html>
