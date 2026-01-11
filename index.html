@@ -2059,27 +2059,25 @@
     }
 
     .accordion-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 18px 20px;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: all 0.3s;
-        user-select: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s;
+    user-select: none;
     }
 
     .accordion-header:hover {
         background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+        transform: translateX(5px);
     }
 
     .accordion-header h4 {
         margin: 0;
-        font-size: 1.1em;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        font-size: 1.2em;
     }
 
     .accordion-arrow {
@@ -2312,12 +2310,98 @@
     [id^="itinerary-cancel-btn-"]:hover {
         background: #5a6268 !important;
     }
+
+    /* アコーディオンの色分け */
+    .accordion-section.basic .accordion-header {
+        background: linear-gradient(135deg, #4285f4 0%, #0d47a1 100%);
+    }
+
+    .accordion-section.basic .accordion-header:hover {
+        background: linear-gradient(135deg, #3367d6 0%, #0c3d8f 100%);
+    }
+
+    .accordion-section.artists .accordion-header {
+        background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+    }
+
+    .accordion-section.artists .accordion-header:hover {
+        background: linear-gradient(135deg, #d81b60 0%, #ad1457 100%);
+    }
+
+    .accordion-section.checklist .accordion-header {
+        background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+    }
+
+    .accordion-section.checklist .accordion-header:hover {
+        background: linear-gradient(135deg, #43a047 0%, #27632a 100%);
+    }
+
+    .accordion-section.map .accordion-header {
+        background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);
+    }
+
+    .accordion-section.map .accordion-header:hover {
+        background: linear-gradient(135deg, #fb8c00 0%, #d84315 100%);
+    }
+
+    .accordion-section.weather .accordion-header {
+        background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+    }
+
+    .accordion-section.weather .accordion-header:hover {
+        background: linear-gradient(135deg, #00acc1 0%, #00838f 100%);
+    }
+
+    .accordion-section.train .accordion-header {
+        background: linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%);
+    }
+
+    .accordion-section.train .accordion-header:hover {
+        background: linear-gradient(135deg, #8e24aa 0%, #5e1689 100%);
+    }
+
+    .accordion-section.venue .accordion-header {
+        background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+    }
+
+    .accordion-section.venue .accordion-header:hover {
+        background: linear-gradient(135deg, #e53935 0%, #b71c1c 100%);
+    }
+
+    .accordion-section.checkin .accordion-header {
+        background: linear-gradient(135deg, #3f51b5 0%, #283593 100%);
+    }
+
+    .accordion-section.checkin .accordion-header:hover {
+        background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%);
+    }
+
+    .accordion-section.tags .accordion-header {
+        background: linear-gradient(135deg, #ff5722 0%, #d84315 100%);
+    }
+
+    .accordion-section.tags .accordion-header:hover {
+        background: linear-gradient(135deg, #f4511e 0%, #bf360c 100%);
+    }
+
+    .accordion-section.itinerary .accordion-header {
+        background: linear-gradient(135deg, #009688 0%, #00695c 100%);
+    }
+
+    .accordion-section.itinerary .accordion-header:hover {
+        background: linear-gradient(135deg, #00897b 0%, #004d40 100%);
+    }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎪 Hololive EXPO 2026 イベント管理</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h1>🎪 Hololive EXPO 2026 イベント管理</h1>
+                <button onclick="reloadApp()" style="padding: 10px 20px; background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; transition: all 0.3s; white-space: nowrap;">
+                    🔄 更新
+                </button>
+            </div>
             <div id="nextEventCountdown" class="next-event-countdown" style="display: none;"></div>
             <div class="summary" id="summary"></div>
         </header>
@@ -3941,6 +4025,34 @@ function sendEventNotification(event, title, message) {
                 console.log('✅ 未送信の通知はありません');
             }
         }
+
+        // init関数の前に、更新関数を追加
+        function reloadApp() {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '🔄 更新中...';
+            button.disabled = true;
+            
+            // アニメーション付きでリロード
+            document.body.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                location.reload();
+            }, 300);
+        }
+
+        // Service Worker更新チェック関数
+        function checkForUpdates() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistration().then(reg => {
+                    if (reg) {
+                        reg.update().then(() => {
+                            console.log('✅ アップデートをチェックしました');
+                        });
+                    }
+                });
+            }
+        }
         
         function init() {
             loadCustomEvents();
@@ -4460,9 +4572,15 @@ function sendEventNotification(event, title, message) {
             
             let bodyHtml = `
             <!-- 基本情報アコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section basic">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>📋 基本情報</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">📋</div>
+                        <div>
+                            <h4 style="margin: 0;">基本情報</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">イベントの詳細・日時・会場・料金</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content open" data-section="basic">
@@ -4522,9 +4640,15 @@ function sendEventNotification(event, title, message) {
             
             <!-- 出演者アコーディオン -->
             ${event.artists ? `
-            <div class="accordion-section">
+            <div class="accordion-section artists">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>🎤 出演アーティスト (${event.artists.length}名)</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">🎤</div>
+                        <div>
+                            <h4 style="margin: 0;">出演アーティスト</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">${event.artists.length}名の出演者情報</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="artists">
@@ -4540,9 +4664,15 @@ function sendEventNotification(event, title, message) {
             ` : ''}
 
             <!-- チェックリストアコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section checklist">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>✓ 準備チェックリスト</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">✓</div>
+                        <div>
+                            <h4 style="margin: 0;">準備チェックリスト</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">持ち物・準備項目の管理</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="checklist">
@@ -4553,9 +4683,15 @@ function sendEventNotification(event, title, message) {
             </div>
 
             <!-- アクセス・地図アコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section map">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>🗺️ アクセス・地図</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">🗺️</div>
+                        <div>
+                            <h4 style="margin: 0;">アクセス・地図</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">会場への行き方・周辺施設情報</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="map">
@@ -4566,9 +4702,15 @@ function sendEventNotification(event, title, message) {
             </div>
 
             <!-- 天気予報アコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section weather">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>🌤️ 天気予報</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">🌤️</div>
+                        <div>
+                            <h4 style="margin: 0;">天気予報</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">当日の天気・気温・服装アドバイス</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="weather">
@@ -4579,9 +4721,15 @@ function sendEventNotification(event, title, message) {
             </div>
 
             <!-- 電車混雑予測アコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section train">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>🚃 電車混雑予測</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">🚃</div>
+                        <div>
+                            <h4 style="margin: 0;">電車混雑予測</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">路線の混雑状況・時間帯別データ</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="train">
@@ -4592,9 +4740,15 @@ function sendEventNotification(event, title, message) {
             </div>
 
             <!-- 会場混雑予測アコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section venue">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>🏛️ 会場混雑予測</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">🏛️</div>
+                        <div>
+                            <h4 style="margin: 0;">会場混雑予測</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">時間帯別の会場混雑状況</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="venue">
@@ -4605,9 +4759,15 @@ function sendEventNotification(event, title, message) {
             </div>
 
             <!-- チェックインアコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section checkin">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>📍 チェックイン</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">📍</div>
+                        <div>
+                            <h4 style="margin: 0;">チェックイン</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">現在地から会場までの記録</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="checkin">
@@ -4618,9 +4778,15 @@ function sendEventNotification(event, title, message) {
             </div>
 
             <!-- タグアコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section tags">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>🏷️ タグ</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">🏷️</div>
+                        <div>
+                            <h4 style="margin: 0;">タグ</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">イベントの分類・ラベル管理</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="tags">
@@ -4631,9 +4797,15 @@ function sendEventNotification(event, title, message) {
             </div>
 
             <!-- 行程表アコーディオン -->
-            <div class="accordion-section">
+            <div class="accordion-section itinerary">
                 <div class="accordion-header" onclick="toggleAccordion(event, this)">
-                    <h4>📋 行程表</h4>
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">📋</div>
+                        <div>
+                            <h4 style="margin: 0;">行程表</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">当日のタイムスケジュール管理</p>
+                        </div>
+                    </div>
                     <span class="accordion-arrow">▼</span>
                 </div>
                 <div class="accordion-content" data-section="itinerary">
