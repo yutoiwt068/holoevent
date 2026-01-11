@@ -3445,10 +3445,7 @@ function sendEventNotification(event, title, message) {
             // 🆕 位置情報機能の初期化
             initLocationFeatures();
 
-            // スマホでのみJR東日本アプリボタンを表示
-            setTimeout(() => {
-                showJREastButtonOnMobile();
-            }, 500);
+            
         }
         
 
@@ -4222,9 +4219,11 @@ function sendEventNotification(event, title, message) {
                             📍 現在地から経路検索
                         </button>
                         
-                        <button class="map-btn jr-east-app" onclick="openJREastApp('${encodedVenue}', this)" style="display: none;" id="jrEastBtn-${encodedVenue.replace(/[^a-zA-Z0-9]/g, '')}">
+                        ${/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? `
+                        <button class="map-btn jr-east-app" onclick="openJREastApp('${encodedVenue}', this)">
                             🚃 JR東日本アプリ
                         </button>
+                        ` : ''}
                         
                         <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${venueInfo.lat},${venueInfo.lng}" 
                            target="_blank" 
@@ -7510,15 +7509,8 @@ function sendLocationNotification(event, distance) {
             }
         }
 
-        // スマホ判定とボタン表示（初期化時に実行）
-        function showJREastButtonOnMobile() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (isMobile) {
-                document.querySelectorAll('[id^="jrEastBtn-"]').forEach(btn => {
-                    btn.style.display = 'flex';
-                });
-            }
-        }
+        
+        
     </script>
 </body>
 </html>
