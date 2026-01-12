@@ -2437,28 +2437,49 @@
             word-wrap: break-word;
         }
     }
-    /* 移動中のモバイル対応 */
-        @media (max-width: 768px) {
-            .transit-move-info {
-                position: relative !important;
-                padding: 0 !important;
-                margin: 10px 0 !important;
-            }
-            
-            .transit-move-info > div {
-                padding: 40px 15px 12px 15px !important;
-            }
-            
-            .transit-move-info button {
-                padding: 5px 8px !important;
-                font-size: 0.7em !important;
-            }
-        }
+    /* 移動中の中央配置（PC・モバイル共通） */
+    .transit-move-info {
+        margin: 10px 0;
+        width: 100%;
+    }
 
-        /* PC版でも中央配置 */
+    .transit-move-info > div {
+        text-align: center;
+        padding: 15px 15px 12px 15px;
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border-radius: 8px;
+        border-left: 4px solid #ffc107;
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* 移動中のボタン配置 */
+    .transit-move-info .transit-buttons {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: flex;
+        gap: 5px;
+        z-index: 10;
+    }
+
+    /* 移動中のモバイル対応 */
+    @media (max-width: 768px) {
         .transit-move-info {
             margin: 10px 0;
+            padding: 0;
         }
+        
+        .transit-move-info > div {
+            padding: 40px 15px 12px 15px;
+        }
+        
+        .transit-move-info .transit-buttons button {
+            padding: 5px 8px;
+            font-size: 0.7em;
+        }
+    }
     </style>
 </head>
 <body>
@@ -8484,9 +8505,9 @@ function restoreAccordionStates() {
                             }
                             
                             return `
-                                <div class="transit-move-info" style="position: relative; margin: 10px 0;">
-                                    <div style="text-align: center; padding: 15px 15px 12px 15px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 8px; border-left: 4px solid #ffc107; position: relative;">
-                                        <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; z-index: 10;">
+                                <div class="transit-move-info">
+                                    <div>
+                                        <div class="transit-buttons">
                                             <button onclick="editItineraryItem('${eventId}', ${index})" style="background: #667eea; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75em; transition: all 0.3s; white-space: nowrap;">
                                                 ✏️
                                             </button>
@@ -8494,9 +8515,9 @@ function restoreAccordionStates() {
                                                 🗑️
                                             </button>
                                         </div>
-                                        <div style="color: #856404; font-weight: bold; font-size: 1.1em; margin-bottom: 8px; padding-right: 80px;">🚃 移動</div>
-                                        <div style="color: #856404; font-size: 0.95em; font-weight: bold; margin-bottom: 5px; word-wrap: break-word;">${item.title}</div>
-                                        ${item.details ? `<div style="color: #856404; font-size: 0.85em; margin-top: 5px; word-wrap: break-word;">${item.details}</div>` : ''}
+                                        <div style="color: #856404; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">🚃 移動</div>
+                                        <div style="color: #856404; font-size: 0.95em; font-weight: bold; margin-bottom: 5px; word-wrap: break-word; padding: 0 80px;">${item.title}</div>
+                                        ${item.details ? `<div style="color: #856404; font-size: 0.85em; margin-top: 5px; word-wrap: break-word; padding: 0 80px;">${item.details}</div>` : ''}
                                         <div style="color: #856404; font-size: 0.8em; margin-top: 8px; opacity: 0.8;">
                                             🕐 ${item.time}${item.endTime ? ` → ${item.endTime}` : ''}
                                         </div>
