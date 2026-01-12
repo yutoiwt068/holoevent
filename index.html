@@ -2438,25 +2438,27 @@
         }
     }
     /* 移動中のモバイル対応 */
-    @media (max-width: 768px) {
+        @media (max-width: 768px) {
+            .transit-move-info {
+                position: relative !important;
+                padding: 0 !important;
+                margin: 10px 0 !important;
+            }
+            
+            .transit-move-info > div {
+                padding: 40px 15px 12px 15px !important;
+            }
+            
+            .transit-move-info button {
+                padding: 5px 8px !important;
+                font-size: 0.7em !important;
+            }
+        }
+
+        /* PC版でも中央配置 */
         .transit-move-info {
-            position: relative !important;
-            padding-top: 50px !important;
+            margin: 10px 0;
         }
-        
-        .transit-move-info > div[style*="position: absolute"] {
-            position: absolute !important;
-            top: 10px !important;
-            right: 10px !important;
-            display: flex;
-            gap: 5px;
-        }
-        
-        .transit-move-info button {
-            padding: 5px 8px !important;
-            font-size: 0.7em !important;
-        }
-    }
     </style>
 </head>
 <body>
@@ -3541,61 +3543,89 @@
         }
 
         // 行程表アイテムを追加（編集モード対応）
-    function addItineraryItem(eventId) {
-        const time = document.getElementById(`itinerary-time-${eventId}`).value;
-        const type = document.getElementById(`itinerary-type-${eventId}`).value;
-        const title = document.getElementById(`itinerary-title-${eventId}`).value;
-        const details = document.getElementById(`itinerary-details-${eventId}`).value;
-        const editIndex = document.getElementById(`itinerary-edit-index-${eventId}`).value;
-        
-        if (!time || !title) {
-            alert('時刻とタイトルは必須です');
-            return;
+    // 行程表アイテムを追加（編集モード対応・終了時刻対応）
+        function addItineraryItem(eventId) {
+            const time = document.getElementById(`itinerary-time-${eventId}`).value;
+            const endTime = document.getElementById(`itinerary-end-time-${eventId}`).value;
+            const type = document.getElementById(`itinerary-type-${eventId}`).value;
+            const title = document.getElementById(`itinerary-title-${eventId}`).value;
+            const details = document.getElementById(`itinerary-details-${eventId}`).value;
+            const editIndex = document.getElementById(`itinerary-edit-index-${eventId}`).value;
+            
+            if (!time || !title) {
+                alert('開始時刻とタイトルは必須です');
+                return;
+            }
+            
+            if (type === 'transit' && !endTime) {
+                alert('移動中の場合は終了時刻も必須です');
+                return;
+            }
+            
+            // 移動中の場合、所要時間を自動計算
+            let calculatedDetails = details;
+            if (type === 'transit' && endTime) {
+                const [startH, startM] = time.split(':').map(Number);
+                const [endH, endM] = endTime.split(':').map(Number);
+                const totalMinutes = (endH * 60 + endM) - (startH * 60 + startM);
+                
+                if (totalMinutes <= 0) {
+                    alert('終了時刻は開始時刻より後にしてください');
+                    return;
+                }
+                
+                const hours = Math.floor(totalMinutes / 60);
+                const mins = totalMinutes % 60;
+                const durationText = `所要時間: ${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}`;
+                
+                calculatedDetails = details ? `${details} (${durationText})` : durationText;
+            }
+            
+            const itinerary = getItinerary(eventId);
+            
+            if (editIndex !== '') {
+                // 編集モード
+                const index = parseInt(editIndex);
+                itinerary[index] = {
+                    time: time,
+                    endTime: endTime || null,
+                    type: type,
+                    title: title,
+                    details: calculatedDetails,
+                    createdAt: itinerary[index].createdAt,
+                    updatedAt: new Date().toISOString()
+                };
+            } else {
+                // 追加モード
+                itinerary.push({
+                    time: time,
+                    endTime: endTime || null,
+                    type: type,
+                    title: title,
+                    details: calculatedDetails,
+                    createdAt: new Date().toISOString()
+                });
+            }
+            
+            // 時刻順にソート
+            itinerary.sort((a, b) => a.time.localeCompare(b.time));
+            
+            saveItineraries();
+            
+            // フォームをリセット
+            cancelEditItineraryItem(eventId);
+            
+            // モーダルを再レンダリング
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+                // アコーディオンの状態を復元
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
+            }
         }
-        
-        const itinerary = getItinerary(eventId);
-        
-        if (editIndex !== '') {
-            // 編集モード
-            const index = parseInt(editIndex);
-            itinerary[index] = {
-                time: time,
-                type: type,
-                title: title,
-                details: details,
-                createdAt: itinerary[index].createdAt, // 作成日時は保持
-                updatedAt: new Date().toISOString() // 更新日時を追加
-            };
-        } else {
-            // 追加モード
-            itinerary.push({
-                time: time,
-                type: type,
-                title: title,
-                details: details,
-                createdAt: new Date().toISOString()
-            });
-        }
-        
-        // 時刻順にソート
-        itinerary.sort((a, b) => a.time.localeCompare(b.time));
-        
-        saveItineraries();
-        
-        // フォームをリセット
-        cancelEditItineraryItem(eventId);
-        
-        // モーダルを再レンダリング
-        const allEvents = getAllEvents();
-        const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
-        if (eventIndex >= 0) {
-            showEventDetail(eventIndex);
-            // アコーディオンの状態を復元
-            setTimeout(() => {
-                restoreAccordionStates();
-            }, 100);
-        }
-    }
 
         // 行程表アイテムを削除
         function deleteItineraryItem(eventId, index) {
@@ -3618,48 +3648,70 @@
         }
 
         // 行程表アイテムを編集
-    function editItineraryItem(eventId, index) {
-        const itinerary = getItinerary(eventId);
-        const item = itinerary[index];
-        
-        // フォームに値を設定
-        document.getElementById(`itinerary-time-${eventId}`).value = item.time;
-        document.getElementById(`itinerary-type-${eventId}`).value = item.type;
-        document.getElementById(`itinerary-title-${eventId}`).value = item.title;
-        document.getElementById(`itinerary-details-${eventId}`).value = item.details || '';
-        document.getElementById(`itinerary-edit-index-${eventId}`).value = index;
-        
-        // フォームタイトルとボタンを変更
-        document.getElementById(`itinerary-form-title-${eventId}`).textContent = '✏️ 行程を編集';
-        document.getElementById(`itinerary-submit-btn-${eventId}`).textContent = '更新';
-        document.getElementById(`itinerary-cancel-btn-${eventId}`).style.display = 'block';
-        
-        // 編集中のアイテムをハイライト
-        const allItems = document.querySelectorAll(`[id^="itinerary-item-${eventId}-"]`);
-        allItems.forEach(el => {
-            el.style.background = 'white';
-            el.style.borderLeft = '4px solid #667eea';
-        });
-        
-        // 通常の行程アイテムの場合
-        const editingItem = document.getElementById(`itinerary-item-${eventId}-${index}`);
-        if (editingItem) {
-            editingItem.style.background = '#fff3cd';
-            editingItem.style.borderLeft = '4px solid #ffc107';
+    // 行程表アイテムを編集
+        function editItineraryItem(eventId, index) {
+            const itinerary = getItinerary(eventId);
+            const item = itinerary[index];
+            
+            // フォームに値を設定
+            document.getElementById(`itinerary-time-${eventId}`).value = item.time;
+            document.getElementById(`itinerary-type-${eventId}`).value = item.type;
+            document.getElementById(`itinerary-title-${eventId}`).value = item.title;
+            
+            // 詳細から自動計算部分を除去
+            let originalDetails = item.details || '';
+            if (originalDetails.includes('(所要時間:')) {
+                originalDetails = originalDetails.split('(所要時間:')[0].trim();
+            }
+            document.getElementById(`itinerary-details-${eventId}`).value = originalDetails;
+            
+            // 終了時刻を設定
+            if (item.endTime) {
+                document.getElementById(`itinerary-end-time-${eventId}`).value = item.endTime;
+            }
+            
+            // 移動中の場合は終了時刻フィールドを表示
+            toggleEndTimeField(eventId);
+            
+            document.getElementById(`itinerary-edit-index-${eventId}`).value = index;
+            
+            // フォームタイトルとボタンを変更
+            document.getElementById(`itinerary-form-title-${eventId}`).textContent = '✏️ 行程を編集';
+            document.getElementById(`itinerary-submit-btn-${eventId}`).textContent = '更新';
+            document.getElementById(`itinerary-cancel-btn-${eventId}`).style.display = 'block';
+            
+            // 編集中のアイテムをハイライト
+            const allItems = document.querySelectorAll(`[id^="itinerary-item-${eventId}-"]`);
+            allItems.forEach(el => {
+                el.style.background = 'white';
+                el.style.borderLeft = '4px solid #667eea';
+            });
+            
+            // 通常の行程アイテムの場合
+            const editingItem = document.getElementById(`itinerary-item-${eventId}-${index}`);
+            if (editingItem) {
+                editingItem.style.background = '#fff3cd';
+                editingItem.style.borderLeft = '4px solid #ffc107';
+            }
+            
+            // フォームまでスクロール
+            document.getElementById(`itinerary-form-title-${eventId}`).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
-        
-        // フォームまでスクロール
-        document.getElementById(`itinerary-form-title-${eventId}`).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
 
+        // 編集をキャンセル
         // 編集をキャンセル
         function cancelEditItineraryItem(eventId) {
             // フォームをリセット
             document.getElementById(`itinerary-time-${eventId}`).value = '';
-            document.getElementById(`itinerary-type-${eventId}`).value = 'transit';
+            document.getElementById(`itinerary-end-time-${eventId}`).value = '';
+            document.getElementById(`itinerary-type-${eventId}`).value = 'departure';
             document.getElementById(`itinerary-title-${eventId}`).value = '';
             document.getElementById(`itinerary-details-${eventId}`).value = '';
             document.getElementById(`itinerary-edit-index-${eventId}`).value = '';
+            
+            // 終了時刻フィールドを非表示
+            document.getElementById(`itinerary-end-time-group-${eventId}`).style.display = 'none';
+            document.getElementById(`itinerary-end-time-${eventId}`).required = false;
             
             // フォームタイトルとボタンを元に戻す
             document.getElementById(`itinerary-form-title-${eventId}`).textContent = '➕ 行程を追加';
@@ -8441,7 +8493,7 @@ function restoreAccordionStates() {
                         
                         return `
                             <div class="transit-move-info" style="position: relative; margin: 10px 0;">
-                                <div style="text-align: center; padding: 15px 15px 12px 15px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 8px; border-left: 4px solid #ffc107; position: relative;">
+                                <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 8px; border-left: 4px solid #ffc107; position: relative;">
                                     <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; z-index: 10;">
                                         <button onclick="editItineraryItem('${eventId}', ${index})" style="background: #667eea; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75em; transition: all 0.3s; white-space: nowrap;">
                                             ✏️
@@ -8450,7 +8502,7 @@ function restoreAccordionStates() {
                                             🗑️
                                         </button>
                                     </div>
-                                    <div style="color: #856404; font-weight: bold; font-size: 1.1em; margin-bottom: 8px; padding-right: 80px;">🚃 移動</div>
+                                    <div style="color: #856404; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">🚃 移動</div>
                                     <div style="color: #856404; font-size: 0.95em; font-weight: bold; margin-bottom: 5px; word-wrap: break-word;">${item.title}</div>
                                     ${item.details ? `<div style="color: #856404; font-size: 0.85em; margin-top: 5px; word-wrap: break-word;">${item.details}</div>` : ''}
                                     <div style="color: #856404; font-size: 0.8em; margin-top: 8px; opacity: 0.8;">🕐 ${item.time}</div>
@@ -8533,38 +8585,43 @@ function restoreAccordionStates() {
             </div>
             
             <div class="add-itinerary-form">
-                <h5 style="color: #667eea; margin-bottom: 15px;" id="itinerary-form-title-${eventId}">➕ 行程を追加</h5>
-                <div class="itinerary-form-row">
-                    <div class="itinerary-form-group">
-                        <label>時刻 *</label>
-                        <input type="time" id="itinerary-time-${eventId}" required>
-                    </div>
-                    <div class="itinerary-form-group">
-                        <label>種類</label>
-                        <select id="itinerary-type-${eventId}">
-                            <option value="departure">🛫 出発</option>
-                            <option value="transit">🚃 移動中</option>
-                            <option value="arrival">📍 到着</option>
-                            <option value="event">🎪 イベント</option>
-                            <option value="other">📝 その他</option>
-                        </select>
-                    </div>
-                </div>
+            <h5 style="color: #667eea; margin-bottom: 15px;" id="itinerary-form-title-${eventId}">➕ 行程を追加</h5>
+            <div class="itinerary-form-row">
                 <div class="itinerary-form-group">
-                    <label>タイトル *</label>
-                    <input type="text" id="itinerary-title-${eventId}" placeholder="例: 渋谷駅→海浜幕張駅" required>
+                    <label>開始時刻 *</label>
+                    <input type="time" id="itinerary-time-${eventId}" required>
                 </div>
+                <div class="itinerary-form-group" id="itinerary-end-time-group-${eventId}" style="display: none;">
+                    <label>終了時刻 *</label>
+                    <input type="time" id="itinerary-end-time-${eventId}">
+                </div>
+            </div>
+            <div class="itinerary-form-row">
                 <div class="itinerary-form-group">
-                    <label>詳細</label>
-                    <textarea id="itinerary-details-${eventId}" placeholder="例: JR山手線・京葉線で移動（約45分）"></textarea>
+                    <label>種類</label>
+                    <select id="itinerary-type-${eventId}" onchange="toggleEndTimeField('${eventId}')">
+                        <option value="departure">🛫 出発</option>
+                        <option value="transit">🚃 移動中</option>
+                        <option value="arrival">📍 到着</option>
+                        <option value="event">🎪 イベント</option>
+                        <option value="other">📝 その他</option>
+                    </select>
                 </div>
-                <input type="hidden" id="itinerary-edit-index-${eventId}" value="">
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="add-itinerary-btn" id="itinerary-submit-btn-${eventId}" onclick="addItineraryItem('${eventId}')" style="flex: 1; min-width: 120px;">追加</button>
-                    <button id="itinerary-cancel-btn-${eventId}" onclick="cancelEditItineraryItem('${eventId}')" style="display: none; flex: 1; min-width: 120px; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95em; transition: all 0.3s;">
-                        キャンセル
-                    </button>
-                </div>
+            </div>
+            <div class="itinerary-form-group">
+                <label>タイトル *</label>
+                <input type="text" id="itinerary-title-${eventId}" placeholder="例: 渋谷駅→海浜幕張駅" required>
+            </div>
+            <div class="itinerary-form-group">
+                <label>詳細</label>
+                <textarea id="itinerary-details-${eventId}" placeholder="例: JR山手線・京葉線で移動"></textarea>
+            </div>
+            <input type="hidden" id="itinerary-edit-index-${eventId}" value="">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="add-itinerary-btn" id="itinerary-submit-btn-${eventId}" onclick="addItineraryItem('${eventId}')" style="flex: 1; min-width: 120px;">追加</button>
+                <button id="itinerary-cancel-btn-${eventId}" onclick="cancelEditItineraryItem('${eventId}')" style="display: none; flex: 1; min-width: 120px; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95em; transition: all 0.3s;">
+                    キャンセル
+                </button>
             </div>
         </div>
     `;
@@ -8581,7 +8638,22 @@ function restoreAccordionStates() {
         };
         return labels[type] || type;
     }
+        
+        // 移動中選択時に終了時刻フィールドを表示/非表示
+        function toggleEndTimeField(eventId) {
+            const typeSelect = document.getElementById(`itinerary-type-${eventId}`);
+            const endTimeGroup = document.getElementById(`itinerary-end-time-group-${eventId}`);
+            const endTimeInput = document.getElementById(`itinerary-end-time-${eventId}`);
             
+            if (typeSelect.value === 'transit') {
+                endTimeGroup.style.display = 'block';
+                endTimeInput.required = true;
+            } else {
+                endTimeGroup.style.display = 'none';
+                endTimeInput.required = false;
+                endTimeInput.value = '';
+            }
+        }
         
     </script>
 </body>
