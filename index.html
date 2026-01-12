@@ -2395,7 +2395,9 @@
     }
 
     /* 行程表のモバイル対応 */
+    /* 移動中のモバイル対応（最小限） */
     @media (max-width: 768px) {
+        /* 通常の行程表のスタイルはそのまま */
         .itinerary-item {
             padding: 12px;
             padding-right: 10px;
@@ -8505,9 +8507,9 @@ function restoreAccordionStates() {
                             }
                             
                             return `
-                                <div class="transit-move-info">
-                                    <div>
-                                        <div class="transit-buttons">
+                                <div style="position: relative; margin: 10px 0;">
+                                    <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 8px; border-left: 4px solid #ffc107; position: relative;">
+                                        <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; z-index: 10;">
                                             <button onclick="editItineraryItem('${eventId}', ${index})" style="background: #667eea; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75em; transition: all 0.3s; white-space: nowrap;">
                                                 ✏️
                                             </button>
@@ -8516,8 +8518,8 @@ function restoreAccordionStates() {
                                             </button>
                                         </div>
                                         <div style="color: #856404; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">🚃 移動</div>
-                                        <div style="color: #856404; font-size: 0.95em; font-weight: bold; margin-bottom: 5px; word-wrap: break-word; padding: 0 80px;">${item.title}</div>
-                                        ${item.details ? `<div style="color: #856404; font-size: 0.85em; margin-top: 5px; word-wrap: break-word; padding: 0 80px;">${item.details}</div>` : ''}
+                                        <div style="color: #856404; font-size: 0.95em; font-weight: bold; margin-bottom: 5px; word-wrap: break-word;">${item.title}</div>
+                                        ${item.details ? `<div style="color: #856404; font-size: 0.85em; margin-top: 5px; word-wrap: break-word;">${item.details}</div>` : ''}
                                         <div style="color: #856404; font-size: 0.8em; margin-top: 8px; opacity: 0.8;">
                                             🕐 ${item.time}${item.endTime ? ` → ${item.endTime}` : ''}
                                         </div>
