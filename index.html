@@ -8424,208 +8424,192 @@ function restoreAccordionStates() {
 
         // 行程表セクションをレンダリング
     function renderItinerarySection(eventId, event) {
-    const itinerary = getItinerary(eventId);
-    
-    // 総所要時間を計算
-    let totalDuration = '';
-    if (itinerary.length >= 2) {
-        const firstTime = itinerary[0].time;
-        const lastTime = itinerary[itinerary.length - 1].time;
-        const [h1, m1] = firstTime.split(':').map(Number);
-        const [h2, m2] = lastTime.split(':').map(Number);
-        const minutes = (h2 * 60 + m2) - (h1 * 60 + m1);
-        const hours = Math.floor(minutes / 60);
-        const mins = minutes % 60;
-        totalDuration = `${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}`;
-    }
-    
-    return `
-        <div>
-            <button class="itinerary-template-btn" onclick="generateItineraryTemplate('${eventId}', ${JSON.stringify(event).replace(/"/g, '&quot;')})">
-                ✨ テンプレートから自動生成
-            </button>
-            
-            ${itinerary.length > 0 ? `
-                <div style="margin-bottom: 15px; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-align: center;">
-                    <strong>📅 総所要時間: ${totalDuration}</strong>
-                </div>
-            ` : ''}
-            
-            <div class="itinerary-section">
-                ${itinerary.length > 0 ? itinerary.map((item, index) => {
-                    // 移動中の場合は特別な表示
-                    if (item.type === 'transit') {
-                        // 移動中の後に自由時間があるかチェック
-                        let afterTransitInfo = '';
+        const itinerary = getItinerary(eventId);
+        
+        // 総所要時間を計算
+        let totalDuration = '';
+        if (itinerary.length >= 2) {
+            const firstTime = itinerary[0].time;
+            const lastTime = itinerary[itinerary.length - 1].time;
+            const [h1, m1] = firstTime.split(':').map(Number);
+            const [h2, m2] = lastTime.split(':').map(Number);
+            const minutes = (h2 * 60 + m2) - (h1 * 60 + m1);
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            totalDuration = `${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}`;
+        }
+        
+        return `
+            <div>
+                <button class="itinerary-template-btn" onclick="generateItineraryTemplate('${eventId}', ${JSON.stringify(event).replace(/"/g, '&quot;')})">
+                    ✨ テンプレートから自動生成
+                </button>
+                
+                ${itinerary.length > 0 ? `
+                    <div style="margin-bottom: 15px; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-align: center;">
+                        <strong>📅 総所要時間: ${totalDuration}</strong>
+                    </div>
+                ` : ''}
+                
+                <div class="itinerary-section">
+                    ${itinerary.length > 0 ? itinerary.map((item, index) => {
+                        // 移動中の場合は特別な表示
+                        if (item.type === 'transit') {
+                            // 移動中の後に自由時間があるかチェック
+                            let afterTransitInfo = '';
+                            if (index < itinerary.length - 1) {
+                                const nextItem = itinerary[index + 1];
+                                
+                                // 移動の終了時刻を取得（endTimeがあればそれを、なければ開始時刻を使用）
+                                const transitEndTime = item.endTime || item.time;
+                                const nextTime = nextItem.time;
+                                
+                                const [h1, m1] = transitEndTime.split(':').map(Number);
+                                const [h2, m2] = nextTime.split(':').map(Number);
+                                const diffMinutes = (h2 * 60 + m2) - (h1 * 60 + m1);
+                                
+                                if (diffMinutes > 10) {
+                                    // 自由時間（移動終了から次の行程までの時間）
+                                    const hours = Math.floor(diffMinutes / 60);
+                                    const mins = diffMinutes % 60;
+                                    const timeStr = `${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}`;
+                                    
+                                    afterTransitInfo = `
+                                        <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%); border-radius: 8px; margin: 10px 0; border-left: 4px solid #666;">
+                                            <div style="color: #333; font-weight: bold;">⏱️ 自由時間</div>
+                                            <div style="color: #555; font-size: 0.9em; margin-top: 3px;">${timeStr}</div>
+                                        </div>
+                                    `;
+                                }
+                            }
+                            
+                            return `
+                                <div class="transit-move-info" style="position: relative; margin: 10px 0;">
+                                    <div style="text-align: center; padding: 15px 15px 12px 15px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 8px; border-left: 4px solid #ffc107; position: relative;">
+                                        <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; z-index: 10;">
+                                            <button onclick="editItineraryItem('${eventId}', ${index})" style="background: #667eea; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75em; transition: all 0.3s; white-space: nowrap;">
+                                                ✏️
+                                            </button>
+                                            <button onclick="deleteItineraryItem('${eventId}', ${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75em; transition: all 0.3s; white-space: nowrap;">
+                                                🗑️
+                                            </button>
+                                        </div>
+                                        <div style="color: #856404; font-weight: bold; font-size: 1.1em; margin-bottom: 8px; padding-right: 80px;">🚃 移動</div>
+                                        <div style="color: #856404; font-size: 0.95em; font-weight: bold; margin-bottom: 5px; word-wrap: break-word;">${item.title}</div>
+                                        ${item.details ? `<div style="color: #856404; font-size: 0.85em; margin-top: 5px; word-wrap: break-word;">${item.details}</div>` : ''}
+                                        <div style="color: #856404; font-size: 0.8em; margin-top: 8px; opacity: 0.8;">
+                                            🕐 ${item.time}${item.endTime ? ` → ${item.endTime}` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                                ${afterTransitInfo}
+                            `;
+                        }
+                        
+                        // 次の行程との間の情報を計算（移動中でない場合のみ）
+                        let moveInfo = '';
+                        
                         if (index < itinerary.length - 1) {
                             const nextItem = itinerary[index + 1];
-                            const currentTime = item.time;
-                            const nextTime = nextItem.time;
-                            const [h1, m1] = currentTime.split(':').map(Number);
-                            const [h2, m2] = nextTime.split(':').map(Number);
-                            const diffMinutes = (h2 * 60 + m2) - (h1 * 60 + m1);
                             
-                            // 同じ会場かチェック
-                            const currentVenue = normalizeVenueName(item.title);
-                            const nextVenue = normalizeVenueName(nextItem.title);
-                            
-                            if (currentVenue === nextVenue || (event.venue && nextItem.title.includes(event.venue))) {
-                                afterTransitInfo = `
-                                    <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-radius: 8px; margin: 10px 0; border-left: 4px solid #28a745;">
-                                        <div style="color: #155724; font-weight: bold;">📍 同じ会場内</div>
-                                        <div style="color: #155724; font-size: 0.9em; margin-top: 3px;">移動なし・そのまま滞在</div>
-                                    </div>
-                                `;
-                            } else if (diffMinutes > 10) {
-                                // 自由時間
-                                const hours = Math.floor(diffMinutes / 60);
-                                const mins = diffMinutes % 60;
-                                const timeStr = `${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}`;
+                            // 次が移動中でない場合のみ自由時間をチェック
+                            if (nextItem.type !== 'transit') {
+                                const currentTime = item.time;
+                                const nextTime = nextItem.time;
+                                const [h1, m1] = currentTime.split(':').map(Number);
+                                const [h2, m2] = nextTime.split(':').map(Number);
+                                const diffMinutes = (h2 * 60 + m2) - (h1 * 60 + m1);
                                 
-                                afterTransitInfo = `
-                                    <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%); border-radius: 8px; margin: 10px 0; border-left: 4px solid #666;">
-                                        <div style="color: #333; font-weight: bold;">⏱️ 自由時間</div>
-                                        <div style="color: #555; font-size: 0.9em; margin-top: 3px;">${timeStr}</div>
-                                    </div>
-                                `;
+                                if (diffMinutes > 10) {
+                                    // 自由時間
+                                    const hours = Math.floor(diffMinutes / 60);
+                                    const mins = diffMinutes % 60;
+                                    const timeStr = `${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}`;
+                                    
+                                    moveInfo = `
+                                        <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%); border-radius: 8px; margin: 10px 0; border-left: 4px solid #666;">
+                                            <div style="color: #333; font-weight: bold;">⏱️ 自由時間</div>
+                                            <div style="color: #555; font-size: 0.9em; margin-top: 3px;">${timeStr}</div>
+                                        </div>
+                                    `;
+                                }
                             }
                         }
                         
+                        // 通常の行程表示
                         return `
-                            <div class="transit-move-info" style="position: relative; margin: 10px 0;">
-                                <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); border-radius: 8px; border-left: 4px solid #ffc107; position: relative;">
-                                    <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 5px; z-index: 10;">
-                                        <button onclick="editItineraryItem('${eventId}', ${index})" style="background: #667eea; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75em; transition: all 0.3s; white-space: nowrap;">
-                                            ✏️
-                                        </button>
-                                        <button onclick="deleteItineraryItem('${eventId}', ${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75em; transition: all 0.3s; white-space: nowrap;">
-                                            🗑️
-                                        </button>
-                                    </div>
-                                    <div style="color: #856404; font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">🚃 移動</div>
-                                    <div style="color: #856404; font-size: 0.95em; font-weight: bold; margin-bottom: 5px; word-wrap: break-word;">${item.title}</div>
-                                    ${item.details ? `<div style="color: #856404; font-size: 0.85em; margin-top: 5px; word-wrap: break-word;">${item.details}</div>` : ''}
-                                    <div style="color: #856404; font-size: 0.8em; margin-top: 8px; opacity: 0.8;">🕐 ${item.time}</div>
+                            <div class="itinerary-item" id="itinerary-item-${eventId}-${index}">
+                                <div style="display: flex; gap: 5px; margin-bottom: 10px; justify-content: flex-end;">
+                                    <button onclick="editItineraryItem('${eventId}', ${index})" style="background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8em; transition: all 0.3s; white-space: nowrap;">
+                                        ✏️ 編集
+                                    </button>
+                                    <button onclick="deleteItineraryItem('${eventId}', ${index})" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8em; transition: all 0.3s; white-space: nowrap;">
+                                        🗑️ 削除
+                                    </button>
+                                </div>
+                                <div class="itinerary-time">
+                                    🕐 ${item.time}
+                                </div>
+                                <div class="itinerary-content">
+                                    <span class="itinerary-type ${item.type}">${getItineraryTypeLabel(item.type)}</span>
+                                    <strong style="display: block; margin-top: 5px; word-wrap: break-word;">${item.title}</strong>
+                                    ${item.details ? `<div style="margin-top: 5px; color: #666; font-size: 0.9em; word-wrap: break-word;">${item.details}</div>` : ''}
                                 </div>
                             </div>
-                            ${afterTransitInfo}
+                            ${moveInfo}
                         `;
-                    }
-                    
-                    // 次の行程との間の情報を計算（移動中でない場合のみ）
-                    let moveInfo = '';
-                    
-                    if (index < itinerary.length - 1) {
-                        const nextItem = itinerary[index + 1];
-                        
-                        // 次が移動中でない場合のみチェック
-                        if (nextItem.type !== 'transit') {
-                            const currentTime = item.time;
-                            const nextTime = nextItem.time;
-                            const [h1, m1] = currentTime.split(':').map(Number);
-                            const [h2, m2] = nextTime.split(':').map(Number);
-                            const diffMinutes = (h2 * 60 + m2) - (h1 * 60 + m1);
-                            
-                            // 同じ会場かチェック
-                            const currentVenue = normalizeVenueName(item.title);
-                            const nextVenue = normalizeVenueName(nextItem.title);
-                            
-                            if (currentVenue === nextVenue || (event.venue && item.title.includes(event.venue) && nextItem.title.includes(event.venue))) {
-                                moveInfo = `
-                                    <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-radius: 8px; margin: 10px 0; border-left: 4px solid #28a745;">
-                                        <div style="color: #155724; font-weight: bold;">📍 同じ会場内</div>
-                                        <div style="color: #155724; font-size: 0.9em; margin-top: 3px;">移動なし・そのまま滞在</div>
-                                    </div>
-                                `;
-                            } else if (diffMinutes > 10) {
-                                // 自由時間
-                                const hours = Math.floor(diffMinutes / 60);
-                                const mins = diffMinutes % 60;
-                                const timeStr = `${hours > 0 ? `${hours}時間` : ''}${mins > 0 ? `${mins}分` : ''}`;
-                                
-                                moveInfo = `
-                                    <div style="text-align: center; padding: 12px; background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%); border-radius: 8px; margin: 10px 0; border-left: 4px solid #666;">
-                                        <div style="color: #333; font-weight: bold;">⏱️ 自由時間</div>
-                                        <div style="color: #555; font-size: 0.9em; margin-top: 3px;">${timeStr}</div>
-                                    </div>
-                                `;
-                            }
-                        }
-                    }
-                    
-                    // 通常の行程表示
-                    return `
-                        <div class="itinerary-item" id="itinerary-item-${eventId}-${index}">
-                            <div style="display: flex; gap: 5px; margin-bottom: 10px; justify-content: flex-end;">
-                                <button onclick="editItineraryItem('${eventId}', ${index})" style="background: #667eea; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8em; transition: all 0.3s; white-space: nowrap;">
-                                    ✏️ 編集
-                                </button>
-                                <button onclick="deleteItineraryItem('${eventId}', ${index})" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8em; transition: all 0.3s; white-space: nowrap;">
-                                    🗑️ 削除
-                                </button>
-                            </div>
-                            <div class="itinerary-time">
-                                🕐 ${item.time}
-                            </div>
-                            <div class="itinerary-content">
-                                <span class="itinerary-type ${item.type}">${getItineraryTypeLabel(item.type)}</span>
-                                <strong style="display: block; margin-top: 5px; word-wrap: break-word;">${item.title}</strong>
-                                ${item.details ? `<div style="margin-top: 5px; color: #666; font-size: 0.9em; word-wrap: break-word;">${item.details}</div>` : ''}
-                            </div>
+                    }).join('') : `
+                        <div class="itinerary-empty">
+                            <div style="font-size: 3em; margin-bottom: 10px;">📋</div>
+                            <p>行程表がまだありません</p>
+                            <p style="font-size: 0.9em; margin-top: 5px;">下のフォームから追加するか、テンプレートを自動生成してください</p>
                         </div>
-                        ${moveInfo}
-                    `;
-                }).join('') : `
-                    <div class="itinerary-empty">
-                        <div style="font-size: 3em; margin-bottom: 10px;">📋</div>
-                        <p>行程表がまだありません</p>
-                        <p style="font-size: 0.9em; margin-top: 5px;">下のフォームから追加するか、テンプレートを自動生成してください</p>
+                    `}
+                </div>
+                
+                <div class="add-itinerary-form">
+                    <h5 style="color: #667eea; margin-bottom: 15px;" id="itinerary-form-title-${eventId}">➕ 行程を追加</h5>
+                    <div class="itinerary-form-row">
+                        <div class="itinerary-form-group">
+                            <label>開始時刻 *</label>
+                            <input type="time" id="itinerary-time-${eventId}" required>
+                        </div>
+                        <div class="itinerary-form-group" id="itinerary-end-time-group-${eventId}" style="display: none;">
+                            <label>終了時刻 *</label>
+                            <input type="time" id="itinerary-end-time-${eventId}">
+                        </div>
                     </div>
-                `}
-            </div>
-            
-            <div class="add-itinerary-form">
-            <h5 style="color: #667eea; margin-bottom: 15px;" id="itinerary-form-title-${eventId}">➕ 行程を追加</h5>
-            <div class="itinerary-form-row">
-                <div class="itinerary-form-group">
-                    <label>開始時刻 *</label>
-                    <input type="time" id="itinerary-time-${eventId}" required>
+                    <div class="itinerary-form-row">
+                        <div class="itinerary-form-group">
+                            <label>種類</label>
+                            <select id="itinerary-type-${eventId}" onchange="toggleEndTimeField('${eventId}')">
+                                <option value="departure">🛫 出発</option>
+                                <option value="transit">🚃 移動中</option>
+                                <option value="arrival">📍 到着</option>
+                                <option value="event">🎪 イベント</option>
+                                <option value="other">📝 その他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="itinerary-form-group">
+                        <label>タイトル *</label>
+                        <input type="text" id="itinerary-title-${eventId}" placeholder="例: 渋谷駅→海浜幕張駅" required>
+                    </div>
+                    <div class="itinerary-form-group">
+                        <label>詳細</label>
+                        <textarea id="itinerary-details-${eventId}" placeholder="例: JR山手線・京葉線で移動"></textarea>
+                    </div>
+                    <input type="hidden" id="itinerary-edit-index-${eventId}" value="">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="add-itinerary-btn" id="itinerary-submit-btn-${eventId}" onclick="addItineraryItem('${eventId}')" style="flex: 1; min-width: 120px;">追加</button>
+                        <button id="itinerary-cancel-btn-${eventId}" onclick="cancelEditItineraryItem('${eventId}')" style="display: none; flex: 1; min-width: 120px; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95em; transition: all 0.3s;">
+                            キャンセル
+                        </button>
+                    </div>
                 </div>
-                <div class="itinerary-form-group" id="itinerary-end-time-group-${eventId}" style="display: none;">
-                    <label>終了時刻 *</label>
-                    <input type="time" id="itinerary-end-time-${eventId}">
-                </div>
             </div>
-            <div class="itinerary-form-row">
-                <div class="itinerary-form-group">
-                    <label>種類</label>
-                    <select id="itinerary-type-${eventId}" onchange="toggleEndTimeField('${eventId}')">
-                        <option value="departure">🛫 出発</option>
-                        <option value="transit">🚃 移動中</option>
-                        <option value="arrival">📍 到着</option>
-                        <option value="event">🎪 イベント</option>
-                        <option value="other">📝 その他</option>
-                    </select>
-                </div>
-            </div>
-            <div class="itinerary-form-group">
-                <label>タイトル *</label>
-                <input type="text" id="itinerary-title-${eventId}" placeholder="例: 渋谷駅→海浜幕張駅" required>
-            </div>
-            <div class="itinerary-form-group">
-                <label>詳細</label>
-                <textarea id="itinerary-details-${eventId}" placeholder="例: JR山手線・京葉線で移動"></textarea>
-            </div>
-            <input type="hidden" id="itinerary-edit-index-${eventId}" value="">
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button class="add-itinerary-btn" id="itinerary-submit-btn-${eventId}" onclick="addItineraryItem('${eventId}')" style="flex: 1; min-width: 120px;">追加</button>
-                <button id="itinerary-cancel-btn-${eventId}" onclick="cancelEditItineraryItem('${eventId}')" style="display: none; flex: 1; min-width: 120px; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95em; transition: all 0.3s;">
-                    キャンセル
-                </button>
-            </div>
-        </div>
-    `;
-}
+        `;
+    }
 
     // 行程種類のラベルを取得
     function getItineraryTypeLabel(type) {
