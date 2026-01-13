@@ -873,60 +873,67 @@
         }
         
         .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 0;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideIn 0.3s;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        .modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 20px 20px 0 0;
-            position: relative;
-        }
-        
-        .modal-header h2 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-        
-        .modal-header .close {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 2em;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        
-        .modal-header .close:hover {
-            transform: scale(1.2);
-        }
-        
-        .modal-body {
-            padding: 30px;
-        }
+    background: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s;
+    display: flex;  /* ← 追加 */
+    flex-direction: column;  /* ← 追加 */
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+    .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 20px 20px 0 0;
+        position: sticky;  /* ← relative から sticky に変更 */
+        top: 0;  /* ← 追加 */
+        z-index: 100;  /* ← 追加 */
+        flex-shrink: 0;  /* ← 追加 */
+    }
+
+    .modal-header h2 {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .modal-header .close {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-size: 2em;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+
+    .modal-header .close:hover {
+        transform: scale(1.2);
+    }
+
+    .modal-body {
+        padding: 30px;
+        overflow-y: auto;  /* ← 追加 */
+        flex: 1;  /* ← 追加 */
+    }
         
         .form-group {
             margin-bottom: 20px;
@@ -1901,6 +1908,8 @@
             
             .modal-header {
                 padding: 15px;
+                position: sticky;  /* ← 追加 */
+                top: 0;  /* ← 追加 */
             }
             
             .modal-header h2 {
@@ -1918,7 +1927,10 @@
             
             .modal-body {
                 padding: 15px;
+                overflow-y: auto;  /* ← 追加 */
+                max-height: calc(94vh - 80px);  /* ← 追加 */
             }
+        }
             
             .modal-info-item {
                 padding: 12px;
@@ -2004,7 +2016,7 @@
             .weather-temp-large {
                 font-size: 2.5em;
             }
-        }
+        
         
         .theme-btn {
         width: 100%;
@@ -2302,6 +2314,31 @@
         transform: translateY(-2px);
     }
 
+    /* 行程表のスクロール対応 */
+    .itinerary-section {
+        max-height: 500px;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+
+    .itinerary-section::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .itinerary-section::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .itinerary-section::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+
+    .itinerary-section::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
     /* 行程表の編集・削除ボタンのホバーエフェクト */
     .itinerary-item button:hover {
         transform: translateY(-2px);
@@ -2480,6 +2517,228 @@
         .transit-move-info .transit-buttons button {
             padding: 5px 8px;
             font-size: 0.7em;
+        }
+    }
+
+    /* フォトアルバムのスタイル */
+    .photos-section {
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .photo-item {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s;
+        background: white;
+    }
+
+    .photo-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+    .photo-item img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .photo-item-title {
+        padding: 10px;
+        font-size: 0.9em;
+        color: #333;
+        background: white;
+        word-wrap: break-word;
+    }
+
+    .photo-item-date {
+        padding: 0 10px 10px 10px;
+        font-size: 0.75em;
+        color: #999;
+    }
+
+    .photo-item-actions {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+        gap: 5px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .photo-item:hover .photo-item-actions {
+        opacity: 1;
+    }
+
+    .photo-item-actions button {
+        padding: 5px 8px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.8em;
+        transition: all 0.3s;
+    }
+
+    .photo-btn-view {
+        background: #667eea;
+        color: white;
+    }
+
+    .photo-btn-delete {
+        background: #dc3545;
+        color: white;
+    }
+
+    .photo-upload-form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .photo-upload-form h5 {
+        color: #667eea;
+        margin-bottom: 15px;
+    }
+
+    .photo-input-group {
+        margin-bottom: 15px;
+    }
+
+    .photo-input-group label {
+        display: block;
+        color: #667eea;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 0.9em;
+    }
+
+    .photo-input-group input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 0.95em;
+    }
+
+    .photo-input-group input[type="text"],
+    .photo-input-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 0.95em;
+    }
+
+    .photo-input-group textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    .photo-upload-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .photo-upload-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .photo-empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+    }
+
+    .photo-modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+    }
+
+    .photo-modal-content {
+        position: relative;
+        margin: auto;
+        padding: 20px;
+        width: 90%;
+        max-width: 900px;
+        max-height: 90vh;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .photo-modal-content img {
+        width: 100%;
+        height: auto;
+        max-height: 70vh;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+    .photo-modal-info {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .photo-modal-close {
+        position: absolute;
+        top: 10px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .photo-modal-close:hover {
+        color: #ccc;
+    }
+
+    .accordion-section.photos .accordion-header {
+        background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+    }
+
+    .accordion-section.photos .accordion-header:hover {
+        background: linear-gradient(135deg, #e55a8a 0%, #b23c5e 100%);
+    }
+
+    /* モバイル対応 */
+    @media (max-width: 768px) {
+        .photo-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        
+        .photo-item img {
+            height: 120px;
         }
     }
     </style>
@@ -2885,6 +3144,7 @@
         let eventTags = {};
         let activeTagFilter = null;
         let showPastEvents = false; 
+        let eventPhotos = {};  // ← 追加
         
         const tagSuggestions = [
             '🎤 推し出演',
@@ -4204,6 +4464,7 @@ function sendEventNotification(event, title, message) {
             loadCustomEvents();
             loadChecklists();
             loadItineraries(); 
+            loadPhotos();  // ← この行を追加
             loadHomeLocation();
             loadTags();
             loadTheme();  // ← この行を追加
@@ -4960,6 +5221,26 @@ function sendEventNotification(event, title, message) {
                     </div>
                 </div>
             </div>
+
+            <!-- フォトアルバムアコーディオン -->
+            <div class="accordion-section photos">
+                <div class="accordion-header" onclick="toggleAccordion(event, this)">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2em;">📷</div>
+                        <div>
+                            <h4 style="margin: 0;">フォトアルバム</h4>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9;">写真・画像の保存と管理</p>
+                        </div>
+                    </div>
+                    <span class="accordion-arrow">▼</span>
+                </div>
+                <div class="accordion-content" data-section="photos">
+                    <div class="accordion-body">
+                        ${renderPhotosSection(eventId)}
+                    </div>
+                </div>
+            </div>
+
             
             ${event.isCustom ? `
                 <div class="form-actions">
@@ -8474,7 +8755,7 @@ function restoreAccordionStates() {
                     </div>
                 ` : ''}
                 
-                <div class="itinerary-section">
+                <div class="itinerary-section" style="max-height: 600px; overflow-y: auto;">
                     ${itinerary.length > 0 ? itinerary.map((item, index) => {
                         // 移動中の場合は特別な表示
                         if (item.type === 'transit') {
@@ -8581,7 +8862,7 @@ function restoreAccordionStates() {
                             </div>
                             ${moveInfo}
                         `;
-                    }).join('') : `
+                        }).join('') : `
                         <div class="itinerary-empty">
                             <div style="font-size: 3em; margin-bottom: 10px;">📋</div>
                             <p>行程表がまだありません</p>
@@ -8659,6 +8940,188 @@ function restoreAccordionStates() {
                 endTimeGroup.style.display = 'none';
                 endTimeInput.required = false;
                 endTimeInput.value = '';
+            }
+        }
+
+        // フォトアルバムデータ
+        // フォトアルバム関数
+        function loadPhotos() {
+            const saved = localStorage.getItem('eventPhotos');
+            if (saved) {
+                eventPhotos = JSON.parse(saved);
+            }
+        }
+
+        function savePhotos() {
+            localStorage.setItem('eventPhotos', JSON.stringify(eventPhotos));
+        }
+
+        function getPhotos(eventId) {
+            if (!eventPhotos[eventId]) {
+                eventPhotos[eventId] = [];
+            }
+            return eventPhotos[eventId];
+        }
+
+        // フォトアルバムセクションをレンダリング
+        function renderPhotosSection(eventId) {
+            const photos = getPhotos(eventId);
+            
+            return `
+                <div class="photos-section">
+                    <div class="photo-upload-form">
+                        <h5>📷 写真をアップロード</h5>
+                        <div class="photo-input-group">
+                            <label>写真を選択 *</label>
+                            <input type="file" id="photo-file-${eventId}" accept="image/*" multiple>
+                        </div>
+                        <div class="photo-input-group">
+                            <label>タイトル</label>
+                            <input type="text" id="photo-title-${eventId}" placeholder="例: 会場の様子、グッズ写真、など">
+                        </div>
+                        <div class="photo-input-group">
+                            <label>メモ</label>
+                            <textarea id="photo-memo-${eventId}" placeholder="写真についてのメモや説明"></textarea>
+                        </div>
+                        <button class="photo-upload-btn" onclick="uploadPhotos('${eventId}')">アップロード</button>
+                    </div>
+                    
+                    ${photos.length > 0 ? `
+                        <div class="photo-grid">
+                            ${photos.map((photo, index) => `
+                                <div class="photo-item">
+                                    <img src="${photo.data}" alt="${photo.title || '写真'}" onclick="viewPhoto('${eventId}', ${index})">
+                                    <div class="photo-item-actions">
+                                        <button class="photo-btn-view" onclick="viewPhoto('${eventId}', ${index})">👁️</button>
+                                        <button class="photo-btn-delete" onclick="deletePhoto('${eventId}', ${index})">🗑️</button>
+                                    </div>
+                                    ${photo.title ? `<div class="photo-item-title">${photo.title}</div>` : ''}
+                                    <div class="photo-item-date">${new Date(photo.uploadedAt).toLocaleDateString('ja-JP')}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : `
+                        <div class="photo-empty">
+                            <div style="font-size: 3em; margin-bottom: 10px;">📷</div>
+                            <p>まだ写真がありません</p>
+                            <p style="font-size: 0.9em; margin-top: 5px;">上のフォームから写真をアップロードしてください</p>
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        // 写真をアップロード
+        function uploadPhotos(eventId) {
+            const fileInput = document.getElementById(`photo-file-${eventId}`);
+            const title = document.getElementById(`photo-title-${eventId}`).value;
+            const memo = document.getElementById(`photo-memo-${eventId}`).value;
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('写真を選択してください');
+                return;
+            }
+            
+            const photos = getPhotos(eventId);
+            let uploadCount = 0;
+            
+            Array.from(fileInput.files).forEach((file, index) => {
+                if (!file.type.startsWith('image/')) {
+                    alert(`${file.name}は画像ファイルではありません`);
+                    return;
+                }
+                
+                // ファイルサイズチェック（5MB以下）
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`${file.name}のサイズが大きすぎます（5MB以下にしてください）`);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photos.push({
+                        data: e.target.result,
+                        title: fileInput.files.length === 1 ? title : (title ? `${title} (${index + 1})` : ''),
+                        memo: memo,
+                        filename: file.name,
+                        uploadedAt: new Date().toISOString()
+                    });
+                    
+                    uploadCount++;
+                    
+                    if (uploadCount === fileInput.files.length) {
+                        savePhotos();
+                        
+                        // フォームをリセット
+                        fileInput.value = '';
+                        document.getElementById(`photo-title-${eventId}`).value = '';
+                        document.getElementById(`photo-memo-${eventId}`).value = '';
+                        
+                        // モーダルを再レンダリング
+                        const allEvents = getAllEvents();
+                        const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+                        if (eventIndex >= 0) {
+                            showEventDetail(eventIndex);
+                            setTimeout(() => {
+                                restoreAccordionStates();
+                            }, 100);
+                        }
+                        
+                        alert(`${uploadCount}枚の写真をアップロードしました`);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // 写真を表示
+        function viewPhoto(eventId, index) {
+            const photos = getPhotos(eventId);
+            const photo = photos[index];
+            
+            const modal = document.createElement('div');
+            modal.className = 'photo-modal';
+            modal.innerHTML = `
+                <span class="photo-modal-close" onclick="this.parentElement.remove()">&times;</span>
+                <div class="photo-modal-content">
+                    <img src="${photo.data}" alt="${photo.title || '写真'}">
+                    ${photo.title || photo.memo ? `
+                        <div class="photo-modal-info">
+                            ${photo.title ? `<h3 style="color: #667eea; margin-bottom: 10px;">${photo.title}</h3>` : ''}
+                            ${photo.memo ? `<p style="color: #555; margin-bottom: 10px;">${photo.memo}</p>` : ''}
+                            <p style="color: #999; font-size: 0.9em;">アップロード日: ${new Date(photo.uploadedAt).toLocaleString('ja-JP')}</p>
+                            <p style="color: #999; font-size: 0.9em;">ファイル名: ${photo.filename}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+            
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            };
+        }
+
+        // 写真を削除
+        function deletePhoto(eventId, index) {
+            if (!confirm('この写真を削除しますか？')) return;
+            
+            const photos = getPhotos(eventId);
+            photos.splice(index, 1);
+            savePhotos();
+            
+            // モーダルを再レンダリング
+            const allEvents = getAllEvents();
+            const eventIndex = allEvents.findIndex(e => (e.id || e.name) === eventId);
+            if (eventIndex >= 0) {
+                showEventDetail(eventIndex);
+                setTimeout(() => {
+                    restoreAccordionStates();
+                }, 100);
             }
         }
         
